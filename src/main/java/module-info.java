@@ -4,7 +4,8 @@ module ma.fstt.applicationgestionstockit {
 
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
 
-    opens ma.fstt.applicationgestionstockit to javafx.fxml;
-    exports ma.fstt.applicationgestionstockit;
+    opens ma.fstt to javafx.fxml;
+    exports ma.fstt;
 }
