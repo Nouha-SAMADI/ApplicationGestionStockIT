@@ -18,7 +18,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 458, 404);
 //        stage.setTitle("Hello!");
 
-        stage.initStyle(StageStyle.TRANSPARENT);
+        // stage.initStyle(StageStyle.TRANSPARENT);
 
         stage.setScene(scene);
         stage.show();
