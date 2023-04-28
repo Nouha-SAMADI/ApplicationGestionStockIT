@@ -29,7 +29,7 @@ public class LoginController {
         try{
             LoginDAO ldao = new LoginDAO();
             if(ldao.authentifier(username.getText(), password.getText()) && ldao.userType == 0){
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("admin-view.fxml"));
             try {
                 Scene myScene = new Scene(loader.load(), 750, 470);
                 HelloApplication.setScene(myScene);
