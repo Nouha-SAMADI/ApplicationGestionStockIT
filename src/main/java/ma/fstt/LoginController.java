@@ -31,7 +31,7 @@ public class LoginController {
             if(ldao.authentifier(username.getText(), password.getText()) && ldao.userType == 0){
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("admin-view.fxml"));
             try {
-                Scene myScene = new Scene(loader.load(), 750, 470);
+                Scene myScene = new Scene(loader.load(), 1100, 616);
                 HelloApplication.setScene(myScene);
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
