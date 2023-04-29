@@ -24,6 +24,10 @@ public class ParametrageDeReference {
         this.serialNumber = serialNumber;
     }
 
+    public ParametrageDeReference(long id, String type, String categorie, int quantity, int stockMax, int stockMin, String reference, String brand) {
+        this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,0);
+    }
+
     public long getId() {
         return id;
     }
