@@ -155,10 +155,33 @@ public class AdminController implements Initializable {
         try {
             ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
 
-            ParametrageDeReference ref = new ParametrageDeReference(0l , (String)type_comboBox.getSelectionModel().getSelectedItem() ,(String) category_comboBox.getSelectionModel().getSelectedItem(),Integer.parseInt(quantity.getText()),Integer.parseInt(stock_max.getText()),Integer.parseInt(stock_min.getText()),reference.getText(),marque.getText(),Integer.parseInt(num_serie.getText()));
+            int serialNumberValue = 0;
+            if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
+                serialNumberValue = Integer.parseInt(num_serie.getText());
+            }
 
+            ParametrageDeReference ref;
+            if (serialNumberValue != 0) {
+                ref = new ParametrageDeReference(0l,
+                        (String) type_comboBox.getSelectionModel().getSelectedItem(),
+                        (String) category_comboBox.getSelectionModel().getSelectedItem(),
+                        Integer.parseInt(quantity.getText()),
+                        Integer.parseInt(stock_max.getText()),
+                        Integer.parseInt(stock_min.getText()),
+                        reference.getText(),
+                        marque.getText(),
+                        serialNumberValue);
+            } else {
+                ref = new ParametrageDeReference(0l,
+                        (String) type_comboBox.getSelectionModel().getSelectedItem(),
+                        (String) category_comboBox.getSelectionModel().getSelectedItem(),
+                        Integer.parseInt(quantity.getText()),
+                        Integer.parseInt(stock_max.getText()),
+                        Integer.parseInt(stock_min.getText()),
+                        reference.getText(),
+                        marque.getText());
+            }
             paramDAO.save(ref);
-
 
             UpdateTable();
 
@@ -182,6 +205,14 @@ public class AdminController implements Initializable {
 
         ObservableList listData = FXCollections.observableArrayList(listT);
         type_comboBox.setItems(listData);
+
+        type_comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue.equals("Matériel")) {
+                num_serie.setDisable(false);
+            } else {
+                num_serie.setDisable(true);
+            }
+        });
     }
 
     private String[] listCategorie = {"Ordinateur","Imprimante","Cable"};

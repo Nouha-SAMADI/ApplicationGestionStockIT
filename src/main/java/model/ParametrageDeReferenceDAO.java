@@ -3,6 +3,7 @@ package model;
 import ma.fstt.ParametrageDeReference;
 
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,13 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
 
         this.preparedStatement.setString(7 , object.getBrand());
 
-        this.preparedStatement.setInt(8 , object.getSerialNumber());
+        if(object.getSerialNumber() != 0){
+            this.preparedStatement.setInt(8 , object.getSerialNumber());
+        }else {
+            this.preparedStatement.setNull(8, Types.INTEGER);
+        }
+
+
 
 
 
