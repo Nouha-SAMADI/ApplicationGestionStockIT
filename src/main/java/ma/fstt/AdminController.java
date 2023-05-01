@@ -17,10 +17,7 @@ import model.ParametrageDeReferenceDAO;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminController implements Initializable {
 
@@ -147,6 +144,28 @@ public class AdminController implements Initializable {
     }
 
 
+
+    @FXML
+    private Button resetButton;
+
+    @FXML
+    void onResetButtonClick() {
+        // Clear the text fields
+        num_serie.setText("");
+        type_comboBox.getSelectionModel().clearSelection();
+        category_comboBox.getSelectionModel().clearSelection();
+        quantity.setText("");
+        stock_max.setText("");
+        stock_min.setText("");
+        reference.setText("");
+        marque.setText("");
+
+        // Clear the table selection
+        parametrageRef_table.getSelectionModel().clearSelection();
+    }
+
+
+
     @FXML
     protected void onSaveButtonClick() {
 
@@ -171,6 +190,7 @@ public class AdminController implements Initializable {
                         reference.getText(),
                         marque.getText(),
                         serialNumberValue);
+
             } else {
                 ref = new ParametrageDeReference(0l,
                         (String) type_comboBox.getSelectionModel().getSelectedItem(),
@@ -185,6 +205,15 @@ public class AdminController implements Initializable {
 
             UpdateTable();
 
+            num_serie.setText("");
+            type_comboBox.getSelectionModel().clearSelection();
+            category_comboBox.getSelectionModel().clearSelection();
+            quantity.setText("");
+            stock_max.setText("");
+            stock_min.setText("");
+            reference.setText("");
+            marque.setText("");
+
 
 
 
@@ -195,6 +224,86 @@ public class AdminController implements Initializable {
 
     }
 
+    @FXML
+    protected void onUpdateButtonClick() {
+        // get the selected item from the table
+        ParametrageDeReference selectedRef = parametrageRef_table.getSelectionModel().getSelectedItem();
+
+
+            try {
+                // update the record in the database with the new values from the text fields
+                selectedRef.setType(type_comboBox.getValue());
+                selectedRef.setCategorie(category_comboBox.getValue());
+                selectedRef.setQuantity(Integer.parseInt(quantity.getText()));
+                selectedRef.setStockMax(Integer.parseInt(stock_max.getText()));
+                selectedRef.setStockMin(Integer.parseInt(stock_min.getText()));
+                selectedRef.setReference(reference.getText());
+                selectedRef.setBrand(marque.getText());
+
+                if (type_comboBox.getValue().equals("Matériel")) {
+                    
+                    selectedRef.setSerialNumber(0);
+                } else {
+                    // otherwise, update the serial number from the text field
+                    if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
+                        selectedRef.setSerialNumber(Integer.parseInt(num_serie.getText()));
+                    } else {
+                        selectedRef.setSerialNumber(0);
+                    }
+                }
+
+
+                ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
+                paramDAO.update(selectedRef);
+
+                // update the table view
+                UpdateTable();
+
+
+                num_serie.setText("");
+                type_comboBox.getSelectionModel().clearSelection();
+                category_comboBox.getSelectionModel().clearSelection();
+                quantity.setText("");
+                stock_max.setText("");
+                stock_min.setText("");
+                reference.setText("");
+                marque.setText("");
+
+
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+    }
+
+
+
+    @FXML
+    protected void onDeleteButtonClick() {
+
+        ParametrageDeReference selectedItem = parametrageRef_table.getSelectionModel().getSelectedItem();
+
+
+
+        try {
+            ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
+
+            paramDAO.delete(selectedItem);
+            UpdateTable();
+
+            num_serie.setText("");
+            type_comboBox.getSelectionModel().clearSelection();
+            category_comboBox.getSelectionModel().clearSelection();
+            quantity.setText("");
+            stock_max.setText("");
+            stock_min.setText("");
+            reference.setText("");
+            marque.setText("");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private String[] listType = {"Consommable","Matériel"};
     public void addRefListType(){
         List<String> listT = new ArrayList<>();
@@ -206,8 +315,20 @@ public class AdminController implements Initializable {
         ObservableList listData = FXCollections.observableArrayList(listT);
         type_comboBox.setItems(listData);
 
+        Map<String, List<String>> categories = new HashMap<>();
+        categories.put("Consommable", Arrays.asList("Ordinateur", "Imprimante", "Cable"));
+        categories.put("Matériel", Arrays.asList("Clavier", "Souris", "Toner"));
+
+        // Add an event listener to the type combo box to update the categories combo box
+        type_comboBox.setOnAction(event -> {
+            String selectedType = type_comboBox.getSelectionModel().getSelectedItem();
+            List<String> selectedCategories = categories.get(selectedType);
+            category_comboBox.getItems().clear();
+            category_comboBox.getItems().addAll(selectedCategories);
+        });
+
         type_comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue.equals("Matériel")) {
+            if (newValue != null && newValue.equals("Consommable")) {
                 num_serie.setDisable(false);
             } else {
                 num_serie.setDisable(true);
@@ -215,17 +336,10 @@ public class AdminController implements Initializable {
         });
     }
 
-    private String[] listCategorie = {"Ordinateur","Imprimante","Cable"};
     public void addRefListCategorie(){
-        List<String> listCat = new ArrayList<>();
-
-        for(String data: listCategorie ){
-            listCat .add(data);
-        }
-
-        ObservableList <String> listData = FXCollections.observableArrayList(listCat );
-        category_comboBox.setItems(listData);
+        // This method is not needed anymore since the categories are being populated dynamically based on the selected type
     }
+
     public void switchForm(ActionEvent event){
 
         if(event.getSource() == paramButton){
@@ -298,6 +412,25 @@ public class AdminController implements Initializable {
         addRefListCategorie();
         addRefListType();
         UpdateTable();
+
+
+        update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
+        delete_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
+
+        //display the info of a selected item in the textFields
+        parametrageRef_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Set the values of the selected item to the text fields
+                num_serie.setText(String.valueOf(newSelection.getSerialNumber()));
+                type_comboBox.getSelectionModel().select(newSelection.getType());
+                category_comboBox.getSelectionModel().select(newSelection.getCategorie());
+                quantity.setText(String.valueOf(newSelection.getQuantity()));
+                stock_max.setText(String.valueOf(newSelection.getStockMax()));
+                stock_min.setText(String.valueOf(newSelection.getStockMin()));
+                reference.setText(newSelection.getReference());
+                marque.setText(newSelection.getBrand());
+            }
+        });
 
     }
 }
