@@ -1,4 +1,4 @@
-package ma.fstt.applicationgestionstockit;
+package ma.fstt;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

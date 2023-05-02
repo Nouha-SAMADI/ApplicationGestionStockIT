@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane fx:id="addTypeGridPane" alignment="center" hgap="10" prefHeight="112.0" prefWidth="501.0" vgap="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
+
+    <Label text="New Type Name: " GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <TextField fx:id="typeNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+    <Label text="New Category Names (separated by commas): " GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <TextField fx:id="categoryNamesTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+    <Button fx:id="saveButton" text="Save" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Button fx:id="cancelButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+
+</GridPane>
