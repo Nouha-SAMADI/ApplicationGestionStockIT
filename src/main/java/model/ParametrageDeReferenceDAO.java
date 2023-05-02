@@ -50,13 +50,38 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
 
     }
 
-    @Override
     public void update(ParametrageDeReference object) throws SQLException {
+        String request = "update parametrageRef set type = ?, categorie = ?, quantity = ?, stockMax = ?, stockMin = ?, reference = ?, brand = ?, serialNumber = ? where id = ?";
 
+        this.preparedStatement = this.connection.prepareStatement(request);
+        // mapping
+        this.preparedStatement.setString(1, object.getType());
+        this.preparedStatement.setString(2, object.getCategorie());
+        this.preparedStatement.setInt(3, object.getQuantity());
+        this.preparedStatement.setInt(4, object.getStockMax());
+        this.preparedStatement.setInt(5, object.getStockMin());
+        this.preparedStatement.setString(6, object.getReference());
+        this.preparedStatement.setString(7, object.getBrand());
+
+        if (object.getSerialNumber() != 0) {
+            this.preparedStatement.setInt(8, object.getSerialNumber());
+        } else {
+            this.preparedStatement.setNull(8, Types.INTEGER);
+        }
+
+        this.preparedStatement.setLong(9, object.getId());
+
+        this.preparedStatement.executeUpdate();
     }
+
 
     @Override
     public void delete(ParametrageDeReference object) throws SQLException {
+
+        String request = "delete from parametrageRef where id=?";
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setLong(1, object.getId());
+        this.preparedStatement.executeUpdate();
 
     }
 
