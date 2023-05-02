@@ -53,7 +53,7 @@
                            <children>
                               <ComboBox fx:id="type_comboBox" layoutX="1.0" layoutY="25.0" onAction="#addRefListType" prefHeight="25.0" prefWidth="138.0" promptText="choisir" />
                               <Label layoutX="3.0" prefHeight="17.0" prefWidth="121.0" text="Type :" />
-                              <Button fx:id="addType_button" layoutX="144.0" layoutY="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="29.0" text="+" />
+                              <Button fx:id="addType_btn" layoutX="144.0" layoutY="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="29.0" text="+" />
                               <Label layoutY="66.0" prefHeight="17.0" prefWidth="146.0" text="Catégorie :" />
                               <Label layoutX="4.0" layoutY="200.0" prefHeight="17.0" prefWidth="87.0" text="Description:">
                                  <font>
