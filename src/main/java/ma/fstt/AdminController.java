@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.ParametrageDeReferenceDAO;
 
@@ -241,7 +242,7 @@ public class AdminController implements Initializable {
                 selectedRef.setBrand(marque.getText());
 
                 if (type_comboBox.getValue().equals("Matériel")) {
-                    
+
                     selectedRef.setSerialNumber(0);
                 } else {
                     // otherwise, update the serial number from the text field
@@ -304,22 +305,20 @@ public class AdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    private String[] listType = {"Consommable","Matériel"};
-    public void addRefListType(){
-        List<String> listT = new ArrayList<>();
+    private Map<String, List<String>> categories = new HashMap<>();
 
-        for(String data: listType){
-            listT.add(data);
-        }
+    private String[] listType = {"Consommable", "Matériel"};
 
-        ObservableList listData = FXCollections.observableArrayList(listT);
-        type_comboBox.setItems(listData);
-
-        Map<String, List<String>> categories = new HashMap<>();
+    public void addRefListType() {
+        // Initialize the categories map with the pre-defined categories
         categories.put("Consommable", Arrays.asList("Ordinateur", "Imprimante", "Cable"));
         categories.put("Matériel", Arrays.asList("Clavier", "Souris", "Toner"));
 
-        // Add an event listener to the type combo box to update the categories combo box
+        // Set up the type combo box with the pre-defined types
+        ObservableList<String> typeList = FXCollections.observableArrayList(listType);
+        type_comboBox.setItems(typeList);
+
+        // Set up the categories combo box based on the selected type
         type_comboBox.setOnAction(event -> {
             String selectedType = type_comboBox.getSelectionModel().getSelectedItem();
             List<String> selectedCategories = categories.get(selectedType);
@@ -327,6 +326,7 @@ public class AdminController implements Initializable {
             category_comboBox.getItems().addAll(selectedCategories);
         });
 
+        // Disable the num_serie field for the "Matériel" type
         type_comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && newValue.equals("Consommable")) {
                 num_serie.setDisable(false);
@@ -334,11 +334,60 @@ public class AdminController implements Initializable {
                 num_serie.setDisable(true);
             }
         });
+
+        // Set up the button to allow the user to add a new type and categories
+        addType_btn.setOnAction(event -> {
+            // Create a new dialog to get the type and categories from the user
+            Dialog<Map.Entry<String, List<String>>> dialog = new Dialog<>();
+            dialog.setTitle("Ajouter nouveau type");
+            dialog.setHeaderText("Entrez le nouveau type et ses catégories");
+
+            // Set up the form to get the type and categories from the user
+            Label typeLabel = new Label("Type:");
+            TextField typeTextField = new TextField();
+            Label categoriesLabel = new Label("Catégories (separée par des virgules):");
+            TextField categoriesTextField = new TextField();
+            GridPane grid = new GridPane();
+            grid.add(typeLabel, 1, 1);
+            grid.add(typeTextField, 2, 1);
+            grid.add(categoriesLabel, 1, 2);
+            grid.add(categoriesTextField, 2, 2);
+            dialog.getDialogPane().setContent(grid);
+
+            // Add buttons to allow the user to submit or cancel the form
+            ButtonType submitButtonType = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(submitButtonType, ButtonType.CANCEL);
+
+            // Convert the categories input into a list of categories
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == submitButtonType) {
+                    String type = typeTextField.getText();
+                    String[] categories = categoriesTextField.getText().split(",");
+                    List<String> categoryList = Arrays.asList(categories);
+                    return new AbstractMap.SimpleEntry<>(type, categoryList);
+                }
+                return null;
+            });
+
+            // Show the dialog and add the new type and categories if the user submits the form
+            Optional<Map.Entry<String, List<String>>> result = dialog.showAndWait();
+            result.ifPresent(typeAndCategories -> {
+                categories.put(typeAndCategories.getKey(), typeAndCategories.getValue());
+                typeList.add(typeAndCategories.getKey());
+            });
+        });
+
     }
 
-    public void addRefListCategorie(){
+
+
+
+        public void addRefListCategorie(){
         // This method is not needed anymore since the categories are being populated dynamically based on the selected type
     }
+
+
+
 
     public void switchForm(ActionEvent event){
 
