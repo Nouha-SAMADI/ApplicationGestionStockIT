@@ -3,6 +3,8 @@ package model;
 import ma.fstt.Login;
 
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginDAO extends BaseDAO<Login>{
@@ -10,26 +12,82 @@ public class LoginDAO extends BaseDAO<Login>{
         super();
     }
 
-    public Long userType;
+    public String userType;
 
     @Override
     public void save(Login object) throws SQLException {
+        String request = "insert into login (username,password,userType,emailAddress) values (? , ?, ?, ?)";
+
+        // mapping objet table
+
+        this.preparedStatement = this.connection.prepareStatement(request);
+        // mapping
+        this.preparedStatement.setString(1 , object.getUsername());
+
+        this.preparedStatement.setString(2 , object.getPassword());
+
+        this.preparedStatement.setString(3, object.getUserType());
+
+        this.preparedStatement.setString(4 , object.getEmailAddress());
+
+
+
+
+        this.preparedStatement.execute();
 
     }
 
     @Override
     public void update(Login object) throws SQLException {
+        String request = "update login set  username = ?, password = ?, userType = ?, emailAddress = ? where id = ?";
 
+        this.preparedStatement = this.connection.prepareStatement(request);
+        // mapping
+        this.preparedStatement.setString(1, object.getUsername());
+        this.preparedStatement.setString(2, object.getPassword());
+        this.preparedStatement.setString(3, object.getUserType());
+        this.preparedStatement.setString(4, object.getEmailAddress());
+        this.preparedStatement.setLong(5, object.getId());
+
+
+        this.preparedStatement.executeUpdate();
     }
 
     @Override
     public void delete(Login object) throws SQLException {
+        String request = "delete from login where id=?";
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setLong(1, object.getId());
+        this.preparedStatement.executeUpdate();
 
     }
 
     @Override
     public List<Login> getAll() throws SQLException {
-        return null;
+        List<Login> mylist = new ArrayList<Login>();
+
+        String request = "select * from login ";
+
+        this.statement = this.connection.createStatement();
+
+        this.resultSet =   this.statement.executeQuery(request);
+
+// parcours de la table
+        while ( this.resultSet.next()){
+
+// mapping table objet
+            mylist.add(new Login(this.resultSet.getLong(1)
+                    ,this.resultSet.getString(2)
+                    ,this.resultSet.getString(3)
+                    ,this.resultSet.getString(4)
+                    ,this.resultSet.getString(5)
+            ));
+
+
+        }
+
+
+        return mylist;
     }
 
     @Override
@@ -46,8 +104,8 @@ public class LoginDAO extends BaseDAO<Login>{
         while(this.resultSet.next()){
             System.out.println(this.resultSet.getString(1));
             System.out.println(this.resultSet.getString(2));
-            System.out.println(this.resultSet.getLong(3));
-             userType = this.resultSet.getLong(3);
+            System.out.println(this.resultSet.getString(3));
+             userType = this.resultSet.getString(3);
             if (password.equals(this.resultSet.getString(2))){
                 return true;
             }

@@ -28,7 +28,7 @@ public class LoginController {
 
         try{
             LoginDAO ldao = new LoginDAO();
-            if(ldao.authentifier(username.getText(), password.getText()) && ldao.userType == 0){
+            if(ldao.authentifier(username.getText(), password.getText()) && ldao.userType.equals("admin")){
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("admin-view.fxml"));
             try {
                 Scene myScene = new Scene(loader.load(), 1100, 616);
@@ -44,7 +44,7 @@ public class LoginController {
                 alert.showAndWait();
                 throw new RuntimeException(e);
             }
-        }else if(ldao.authentifier(username.getText(), password.getText()) && ldao.userType == 1){
+        }else if(ldao.authentifier(username.getText(), password.getText()) && ldao.userType.equals("user")){
                 FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
                 try {
                     Scene myScene = new Scene(loader.load(), 750, 470);

@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="1125.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
+<AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="1125.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -26,7 +19,7 @@
                   <Button fx:id="paramButton" layoutX="9.0" layoutY="143.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Paramétrage de référence" />
                   <Button layoutX="10.0" layoutY="197.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="190.0" text="Gestion des entrés" />
                   <Button layoutX="10.0" layoutY="254.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="190.0" text="Gestion des sorties" />
-                  <Button layoutX="9.0" layoutY="310.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="190.0" text="Gestion des utilisateurs" />
+                  <Button fx:id="userButton" layoutX="9.0" layoutY="310.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des utilisateurs" />
                   <Button layoutX="9.0" layoutY="365.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="190.0" text="Tableau de bord" />
                   <Button fx:id="historyButton" layoutX="10.0" layoutY="417.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Historique" />
                   <Button fx:id="log" layoutX="10.0" layoutY="466.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="190.0" text="Log out" />
@@ -43,7 +36,7 @@
                <children>
                   <AnchorPane fx:id="historique_form" prefHeight="532.0" prefWidth="726.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="23.0" layoutY="18.0" prefHeight="466.0" prefWidth="253.0" style="-fx-background-color: red;" />
+                        <AnchorPane layoutX="23.0" layoutY="18.0" prefHeight="466.0" prefWidth="253.0" style="-fx-background-color: red;" visible="false" />
                         <AnchorPane layoutX="327.0" layoutY="28.0" prefHeight="444.0" prefWidth="377.0" style="-fx-background-color: green;" />
                      </children>
                   </AnchorPane>
@@ -95,6 +88,44 @@
                         <Button fx:id="reset_button" layoutX="320.0" layoutY="537.0" mnemonicParsing="false" onAction="#onResetButtonClick" text="Annuler" />
 
 
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="user_form" layoutX="76.0" layoutY="78.0" prefHeight="616.0" prefWidth="907.3333333333334" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane layoutX="24.0" layoutY="16.0" prefHeight="505.0" prefWidth="341.0">
+                           <children>
+                              <Label layoutX="26.0" layoutY="50.0" prefHeight="11.0" prefWidth="58.0" text="username :" />
+                              <TextField fx:id="username" layoutX="26.0" layoutY="72.0" prefWidth="167.0" />
+                              <Label layoutX="26.0" layoutY="113.0" prefHeight="10.0" prefWidth="64.0" text="password :" />
+                              <TextField fx:id="password" layoutX="27.0" layoutY="141.0" prefHeight="0.0" prefWidth="165.0" />
+                              <Label layoutX="24.0" layoutY="187.0" prefHeight="17.0" prefWidth="97.0" text="Email Address :" />
+                              <TextField fx:id="email" layoutX="26.0" layoutY="212.0" prefHeight="25.0" prefWidth="167.0" />
+                              <Label layoutX="24.0" layoutY="247.0" prefHeight="20.0" prefWidth="97.0" text="Statut :" />
+                              <TextField fx:id="statut" layoutX="26.0" layoutY="274.0" prefHeight="17.0" prefWidth="167.0" />
+                              <Label layoutX="18.0" layoutY="7.0" prefHeight="27.0" prefWidth="233.0" text="Ajouter un nouveau utilisateur : ">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="ajouter" layoutX="20.0" layoutY="340.0" mnemonicParsing="false" onAction="#onAjouterButtonClick" prefHeight="25.0" prefWidth="70.0" text="Ajouter" />
+                              <Button fx:id="modifier" layoutX="100.0" layoutY="340.0" mnemonicParsing="false" onAction="#ModifierButtonClick" prefHeight="25.0" prefWidth="71.0" text="Modifier" />
+                              <Button fx:id="supprimer" layoutX="175.0" layoutY="340.0" mnemonicParsing="false" onAction="#supprimerButtonClick" prefHeight="25.0" prefWidth="75.0" text="Supprimer" />
+                              <Button fx:id="annuler" layoutX="257.0" layoutY="340.0" mnemonicParsing="false" onAction="#onAnnulerButtonClick" prefHeight="25.0" prefWidth="69.0" text="Annuler" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="348.0" layoutY="16.0" prefHeight="491.0" prefWidth="567.0">
+                           <children>
+                              <TableView fx:id="gestionutili_table" layoutX="32.0" layoutY="20.0" prefHeight="283.0" prefWidth="485.0">
+                                <columns>
+                                  <TableColumn fx:id="col_id" prefWidth="52.33331298828125" text="id" />
+                                  <TableColumn fx:id="col_user" prefWidth="104.66668701171875" text="Username" />
+                                    <TableColumn fx:id="col_password" prefWidth="100.6666259765625" text="Password" />
+                                    <TableColumn fx:id="col_statut" prefWidth="100.0" text="Statut" />
+                                    <TableColumn fx:id="col_email" prefWidth="126.3333740234375" text="EmailAddress" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </AnchorPane>
                </children>

@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import model.LoginDAO;
 import model.ParametrageDeReferenceDAO;
 
 import java.net.URL;
@@ -25,6 +26,9 @@ public class AdminController implements Initializable {
 
     @FXML
     private Button addType_btn;
+
+    @FXML
+    private Button userButton;
 
     @FXML
     private TableColumn<ParametrageDeReference, String> category_col;
@@ -104,7 +108,38 @@ public class AdminController implements Initializable {
 
     @FXML
     private Button update_button;
+    @FXML
+    private Button ajouter;
 
+    @FXML
+    private Button annuler;
+    @FXML
+    private TableColumn<Login, String> col_email;
+
+    @FXML
+    private TableColumn<Login, Long> col_id;
+
+    @FXML
+    private TableColumn<Login, String> col_password;
+
+    @FXML
+    private TableColumn<Login, String> col_statut;
+
+    @FXML
+    private TableColumn<Login, String> col_user;
+    @FXML
+    private TextField statut;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField password;
+    @FXML
+    private TextField username;
+    @FXML
+    private TableView<Login> gestionutili_table;
+
+    @FXML
+    private AnchorPane user_form;
     private double x =0 ;
     private double y=0;
 
@@ -391,9 +426,11 @@ public class AdminController implements Initializable {
 
     public void switchForm(ActionEvent event){
 
+
         if(event.getSource() == paramButton){
             parametrageRef_form.setVisible(true);
             historique_form.setVisible(false);
+            user_form.setVisible(false);
 
             addRefListType();
             addRefListCategorie();
@@ -401,10 +438,150 @@ public class AdminController implements Initializable {
         } else if (event.getSource() == historyButton) {
             parametrageRef_form.setVisible(false);
             historique_form.setVisible(true);
+            user_form.setVisible(false);
 
+        } else if (event.getSource() == userButton){
+            user_form.setVisible(true);
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            UpdatedTable();
         }
 
 
+    }
+
+    //---  user interface:  ----
+    public ObservableList<Login> addUserListData() {
+        LoginDAO loginDAO = null;
+        ObservableList<Login> materialList  = FXCollections.observableArrayList();
+
+        try {
+            loginDAO = new LoginDAO();
+            List<Login> logins = loginDAO.getAll();
+            if (logins != null) {
+                materialList.addAll(logins);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return materialList;
+    }
+
+
+    public void UpdatedTable(){
+        col_id.setCellValueFactory(new PropertyValueFactory<Login,Long>("id"));
+        col_user.setCellValueFactory(new PropertyValueFactory<Login,String>("username"));
+
+        col_password.setCellValueFactory(new PropertyValueFactory<Login,String>("password"));
+        col_statut.setCellValueFactory(new PropertyValueFactory<Login,String>("userType"));
+        col_email.setCellValueFactory(new PropertyValueFactory<Login,String>("emailAddress"));
+
+
+
+
+
+        gestionutili_table.setItems(this.addUserListData());
+    }
+
+    @FXML
+    protected void onAjouterButtonClick() {
+
+        // accees a la bdd
+
+        try {
+            LoginDAO loginDAO = new LoginDAO();
+
+            Login refe;
+            refe = new Login(0l , username.getText() ,password.getText(),statut.getText(),email.getText());
+
+            loginDAO.save(refe);
+
+
+            UpdatedTable();
+
+            username.setText("");
+            password.setText("");
+            statut.setText("");
+            email.setText("");
+
+
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    @FXML
+    protected void ModifierButtonClick() {
+        // get the selected item from the table
+        Login selectedReff = gestionutili_table.getSelectionModel().getSelectedItem();
+
+
+        try {
+            // update the record in the database with the new values from the text fields
+            selectedReff.setUsername(username.getText());
+            selectedReff.setPassword(password.getText());
+            selectedReff.setUserType(statut.getText());
+            selectedReff.setEmailAddress(email.getText());
+
+
+
+            LoginDAO loginDAO = new LoginDAO();
+            loginDAO.update(selectedReff);
+
+            // update the table view
+            UpdatedTable();
+
+
+            username.setText("");
+            password.setText("");
+            statut.setText("");
+            email.setText("");
+
+
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @FXML
+    protected void supprimerButtonClick() {
+
+        Login selectedItems = gestionutili_table.getSelectionModel().getSelectedItem();
+
+
+
+        try {
+            LoginDAO loginDAO = new LoginDAO();
+
+            loginDAO.delete(selectedItems);
+            UpdatedTable();
+
+            username.setText("");
+            password.setText("");
+            statut.setText("");
+            email.setText("");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    void onAnnulerButtonClick() {
+        // Clear the text fields
+        username.setText("");
+        password.setText("");
+        statut.setText("");
+        email.setText("");
+        // Clear the table selection
+        gestionutili_table.getSelectionModel().clearSelection();
     }
 
     public void logout(){
@@ -419,11 +596,12 @@ public class AdminController implements Initializable {
 
             if(option.get().equals(ButtonType.OK)){
 
-                log.getScene().getWindow().hide();
 
-                Parent root = FXMLLoader.load(getClass().getResource("login-view.fxml"));
-                Stage stage = new Stage();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+                Parent root = loader.load();
+                Stage currentStage = (Stage) log.getScene().getWindow();
                 Scene scene = new Scene(root);
+                currentStage.setScene(scene);
 
                 root.setOnMousePressed((MouseEvent event) -> {
                     x = event.getSceneX();
@@ -432,18 +610,18 @@ public class AdminController implements Initializable {
                 });
 
                 root.setOnMouseDragged((MouseEvent event) -> {
-                    stage.setX(event.getScreenX());
-                    stage.setY(event.getScreenY());
+                    currentStage.setX(event.getScreenX());
+                    currentStage.setY(event.getScreenY());
 
-                    stage.setOpacity(0.8);
+                    currentStage.setOpacity(0.8);
 
                 });
 
                 root.setOnMouseReleased((MouseEvent event)->{
-                    stage.setOpacity(1);
+                    currentStage.setOpacity(1);
                 });
-                stage.setScene(scene);
-                stage.show();
+
+                currentStage.show();
 
 
             }else return;
@@ -461,6 +639,8 @@ public class AdminController implements Initializable {
         addRefListCategorie();
         addRefListType();
         UpdateTable();
+
+        UpdatedTable();
 
 
         update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
@@ -481,5 +661,19 @@ public class AdminController implements Initializable {
             }
         });
 
+        //display the info of a selected item in the textFields
+        gestionutili_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Set the values of the selected item to the text fieldsadmin
+                username.setText(newSelection.getUsername());
+                password.setText(newSelection.getPassword());
+                statut.setText(newSelection.getUserType());
+                email.setText(newSelection.getEmailAddress());
+
+            }
+        });
+
+
     }
 }
+
