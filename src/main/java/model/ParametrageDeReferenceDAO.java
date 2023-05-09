@@ -1,11 +1,13 @@
 package model;
 
+import ma.fstt.Category;
 import ma.fstt.ParametrageDeReference;
+import ma.fstt.Type;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
     public ParametrageDeReferenceDAO() throws SQLException {
@@ -15,110 +17,148 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
     @Override
     public void save(ParametrageDeReference object) throws SQLException {
 
-
-        String request = "insert into parametrageRef (type, categorie,quantity,stockMax,stockMin,reference,brand,serialNumber) values (? , ?, ?, ?, ?, ?, ?, ?)";
-
-        // mapping objet table
+        String request = "INSERT INTO parametrageRef (type_id, category_id, quantity, stockMax, stockMin, reference, brand, serialNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.preparedStatement = this.connection.prepareStatement(request);
-        // mapping
-        this.preparedStatement.setString(1 , object.getType());
-
-        this.preparedStatement.setString(2 , object.getCategorie());
-
-        this.preparedStatement.setInt(3 , object.getQuantity());
-
-        this.preparedStatement.setInt(4 , object.getStockMax());
-
-        this.preparedStatement.setInt(5 , object.getStockMin());
-
-        this.preparedStatement.setString(6 , object.getReference());
-
-        this.preparedStatement.setString(7 , object.getBrand());
-
-        if(object.getSerialNumber() != 0){
-            this.preparedStatement.setInt(8 , object.getSerialNumber());
-        }else {
-            this.preparedStatement.setNull(8, Types.INTEGER);
-        }
-
-
-
-
-
-        this.preparedStatement.execute();
-
-    }
-
-    public void update(ParametrageDeReference object) throws SQLException {
-        String request = "update parametrageRef set type = ?, categorie = ?, quantity = ?, stockMax = ?, stockMin = ?, reference = ?, brand = ?, serialNumber = ? where id = ?";
-
-        this.preparedStatement = this.connection.prepareStatement(request);
-        // mapping
-        this.preparedStatement.setString(1, object.getType());
-        this.preparedStatement.setString(2, object.getCategorie());
+        this.preparedStatement.setLong(1, object.getType().getId());
+        this.preparedStatement.setLong(2, object.getCategory().getId());
         this.preparedStatement.setInt(3, object.getQuantity());
         this.preparedStatement.setInt(4, object.getStockMax());
         this.preparedStatement.setInt(5, object.getStockMin());
         this.preparedStatement.setString(6, object.getReference());
         this.preparedStatement.setString(7, object.getBrand());
+        this.preparedStatement.setInt(8, object.getSerialNumber());
 
-        if (object.getSerialNumber() != 0) {
-            this.preparedStatement.setInt(8, object.getSerialNumber());
-        } else {
-            this.preparedStatement.setNull(8, Types.INTEGER);
-        }
+        this.preparedStatement.execute();
 
+    }
+
+    @Override
+    public void update(ParametrageDeReference object) throws SQLException {
+        String request = "UPDATE parametrageRef SET type_id = ?, category_id = ?, quantity = ?, stockMax = ?, stockMin = ?, reference = ?, brand = ?, serialNumber = ? WHERE id = ?";
+
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setLong(1, object.getType().getId());
+        this.preparedStatement.setLong(2, object.getCategory().getId());
+        this.preparedStatement.setInt(3, object.getQuantity());
+        this.preparedStatement.setInt(4, object.getStockMax());
+        this.preparedStatement.setInt(5, object.getStockMin());
+        this.preparedStatement.setString(6, object.getReference());
+        this.preparedStatement.setString(7, object.getBrand());
+        this.preparedStatement.setInt(8, object.getSerialNumber());
         this.preparedStatement.setLong(9, object.getId());
 
         this.preparedStatement.executeUpdate();
-    }
 
+    }
 
     @Override
     public void delete(ParametrageDeReference object) throws SQLException {
+        String request = "DELETE FROM parametrageRef WHERE id = ?";
 
-        String request = "delete from parametrageRef where id=?";
         this.preparedStatement = this.connection.prepareStatement(request);
         this.preparedStatement.setLong(1, object.getId());
+
         this.preparedStatement.executeUpdate();
 
-    }
-
-
-    @Override
-    public List<ParametrageDeReference> getAll() throws SQLException {
-        List<ParametrageDeReference> mylist = new ArrayList<ParametrageDeReference>();
-
-        String request = "select * from parametrageRef ";
-
-        this.statement = this.connection.createStatement();
-
-        this.resultSet =   this.statement.executeQuery(request);
-
-// parcours de la table
-        while ( this.resultSet.next()){
-
-// mapping table objet
-            mylist.add(new ParametrageDeReference(this.resultSet.getLong(1)
-                    ,this.resultSet.getString(2)
-                    ,this.resultSet.getString(3)
-                    ,this.resultSet.getInt(4)
-                    ,this.resultSet.getInt(5)
-                    ,this.resultSet.getInt(6)
-                    ,this.resultSet.getString(7)
-                    ,this.resultSet.getString(8)
-                    ,this.resultSet.getInt(9)));
-
-
-        }
-
-
-        return mylist;
     }
 
     @Override
     public ParametrageDeReference getOne(Long id) throws SQLException {
+        String request = "SELECT * FROM parametrageRef WHERE id = ?";
+
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setLong(1, id);
+
+        this.resultSet = this.preparedStatement.executeQuery();
+
+        if (this.resultSet.next()) {
+            long typeId = this.resultSet.getLong("type_id");
+            long categoryId = this.resultSet.getLong("category_id");
+            int quantity = this.resultSet.getInt("quantity");
+            int stockMax = this.resultSet.getInt("stockMax");
+            int stockMin = this.resultSet.getInt("stockMin");
+            String reference = this.resultSet.getString("reference");
+            String brand = this.resultSet.getString("brand");
+            int serialNumber = this.resultSet.getInt("serialNumber");
+
+            Type type = getTypeById(typeId);
+            Category category = getCategoryById(categoryId);
+
+            return new ParametrageDeReference(id, type, category, quantity, stockMax, stockMin, reference, brand, serialNumber);
+        }
+
         return null;
     }
+
+    private Type getTypeById(long typeId) throws SQLException {
+        TypeDAO typeDAO = new TypeDAO();
+        return typeDAO.getOne(typeId);
+    }
+
+    private Category getCategoryById(long categoryId) throws SQLException {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        return categoryDAO.getOne(categoryId);
+    }
+
+    @Override
+    public List<ParametrageDeReference> getAll() throws SQLException {
+        List<ParametrageDeReference> objectList = new ArrayList<>();
+
+        String request = "SELECT * FROM parametrageRef";
+
+
+        // Create a scrollable result set
+        this.statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        this.resultSet = this.statement.executeQuery(request);
+
+
+        // Fetching all type and category IDs
+        Set<Long> typeIds = new HashSet<>();
+        Set<Long> categoryIds = new HashSet<>();
+        while (this.resultSet.next()) {
+            long typeId = this.resultSet.getLong("type_id");
+            long categoryId = this.resultSet.getLong("category_id");
+            typeIds.add(typeId);
+            categoryIds.add(categoryId);
+        }
+
+        // Retrieving types and categories in bulk
+        Map<Long, Type> types = getTypesByIds(typeIds);
+        Map<Long, Category> categories = getCategoriesByIds(categoryIds);
+
+        // Reset the result set to the beginning
+        this.resultSet.beforeFirst();
+
+        while (this.resultSet.next()) {
+            long id = this.resultSet.getLong("id");
+            long typeId = this.resultSet.getLong("type_id");
+            long categoryId = this.resultSet.getLong("category_id");
+            int quantity = this.resultSet.getInt("quantity");
+            int stockMax = this.resultSet.getInt("stockMax");
+            int stockMin = this.resultSet.getInt("stockMin");
+            String reference = this.resultSet.getString("reference");
+            String brand = this.resultSet.getString("brand");
+            int serialNumber = this.resultSet.getInt("serialNumber");
+
+            Type type = types.get(typeId);
+            Category category = categories.get(categoryId);
+            ParametrageDeReference param = new ParametrageDeReference(id, type, category, quantity, stockMax, stockMin, reference, brand, serialNumber);
+            objectList.add(param);
+        }
+
+        return objectList;
+    }
+
+    private Map<Long, Type> getTypesByIds(Set<Long> typeIds) throws SQLException {
+        TypeDAO typeDAO = new TypeDAO();
+        return typeDAO.getTypesByIds(typeIds);
+    }
+
+    private Map<Long, Category> getCategoriesByIds(Set<Long> categoryIds) throws SQLException {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        return categoryDAO.getCategoriesByIds(categoryIds);
+    }
+
 }
+

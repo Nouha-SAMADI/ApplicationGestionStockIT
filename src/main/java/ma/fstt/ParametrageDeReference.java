@@ -1,10 +1,9 @@
 package ma.fstt;
 
 public class ParametrageDeReference {
-
     private long id;
-    private String type;
-    private String categorie;
+    private Type type;
+    private Category category;
     private int quantity;
     private int stockMax;
     private int stockMin;
@@ -12,10 +11,10 @@ public class ParametrageDeReference {
     private String brand;
     private int serialNumber;
 
-    public ParametrageDeReference(long id, String type, String categorie, int quantity, int stockMax, int stockMin, String reference, String brand, int serialNumber) {
+    public ParametrageDeReference(long id, Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, int serialNumber) {
         this.id = id;
         this.type = type;
-        this.categorie = categorie;
+        this.category = category;
         this.quantity = quantity;
         this.stockMax = stockMax;
         this.stockMin = stockMin;
@@ -24,7 +23,7 @@ public class ParametrageDeReference {
         this.serialNumber = serialNumber;
     }
 
-    public ParametrageDeReference(long id, String type, String categorie, int quantity, int stockMax, int stockMin, String reference, String brand) {
+    public ParametrageDeReference(long id, Type type, Category categorie, int quantity, int stockMax, int stockMin, String reference, String brand) {
         this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,0);
     }
 
@@ -36,27 +35,27 @@ public class ParametrageDeReference {
         this.id = id;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public String getCategorie() {
-        return categorie;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quntity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

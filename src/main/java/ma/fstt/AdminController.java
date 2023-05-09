@@ -12,11 +12,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.CategoryDAO;
 import model.LoginDAO;
 import model.ParametrageDeReferenceDAO;
+import model.TypeDAO;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -34,7 +38,7 @@ public class AdminController implements Initializable {
     private TableColumn<ParametrageDeReference, String> category_col;
 
     @FXML
-    private ComboBox<String> category_comboBox;
+    private ComboBox<Category> category_comboBox;
 
     @FXML
     private Button log;
@@ -87,7 +91,7 @@ public class AdminController implements Initializable {
     private TableColumn<ParametrageDeReference, String> type_col;
 
     @FXML
-    private ComboBox<String> type_comboBox;
+    private ComboBox<Type> type_comboBox;
 
     @FXML
     private Button historyButton;
@@ -137,13 +141,19 @@ public class AdminController implements Initializable {
     private TextField username;
     @FXML
     private TableView<Login> gestionutili_table;
+    @FXML
+    private Button addCategory_button;
 
     @FXML
     private AnchorPane user_form;
+
+    private AddTypeController addTypeController; // AddTypeController reference
+
+    private AddCategoryController addCategoryController;
+
     private double x =0 ;
     private double y=0;
-
-
+    //------------------------------------parametrage de reference-----------------------------------------------------------
     public ObservableList<ParametrageDeReference> addMaterialsListData(){
 
 
@@ -167,7 +177,7 @@ public class AdminController implements Initializable {
         id_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,Long>("id"));
         type_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("type"));
 
-        category_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("categorie"));
+        category_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("category"));
         serialNumber_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,Integer>("serialNumber"));
         marque_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("brand"));
         reference_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("reference"));
@@ -180,10 +190,70 @@ public class AdminController implements Initializable {
     }
 
 
+    private TypeDAO typeDAO;
+    private CategoryDAO categoryDAO;
+
+    private void initializeDAO() {
+        try {
+            typeDAO = new TypeDAO();
+            categoryDAO = new CategoryDAO();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // Method to set the AddTypeController reference
+    public void setAddTypeController(AddTypeController addTypeController) {
+        this.addTypeController = addTypeController;
+    }
+
+
+    // Method to set the addCategoryController reference
+
+    public void setAddCategoryController(AddCategoryController addCategoryController) {
+        this.addCategoryController = addCategoryController;
+    }
 
     @FXML
-    private Button resetButton;
+    private void populateTypeComboBox() {
+        try {
+            List<Type> types = typeDAO.getAll();
+            type_comboBox.getItems().addAll(types);
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @FXML
+    private void setTypeSelectionListener() {
+        type_comboBox.setOnAction(event -> {
+            Type selectedType = type_comboBox.getSelectionModel().getSelectedItem();
+            if (selectedType != null) {
+                if (!selectedType.getName().equalsIgnoreCase("consommable")) {
+                    num_serie.setDisable(true);
+                } else {
+                    num_serie.setDisable(false);
+                }
+                try {
+                    populateCategoryComboBox(selectedType);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    @FXML
+    private void populateCategoryComboBox(Type selectedType) throws SQLException {
+        List<Category> categories = categoryDAO.getByType(selectedType);
+        category_comboBox.getItems().clear();
+        category_comboBox.getItems().addAll(categories);
+    }
     @FXML
     void onResetButtonClick() {
         // Clear the text fields
@@ -218,8 +288,8 @@ public class AdminController implements Initializable {
             ParametrageDeReference ref;
             if (serialNumberValue != 0) {
                 ref = new ParametrageDeReference(0l,
-                        (String) type_comboBox.getSelectionModel().getSelectedItem(),
-                        (String) category_comboBox.getSelectionModel().getSelectedItem(),
+                         type_comboBox.getSelectionModel().getSelectedItem(),
+                         category_comboBox.getSelectionModel().getSelectedItem(),
                         Integer.parseInt(quantity.getText()),
                         Integer.parseInt(stock_max.getText()),
                         Integer.parseInt(stock_min.getText()),
@@ -229,8 +299,8 @@ public class AdminController implements Initializable {
 
             } else {
                 ref = new ParametrageDeReference(0l,
-                        (String) type_comboBox.getSelectionModel().getSelectedItem(),
-                        (String) category_comboBox.getSelectionModel().getSelectedItem(),
+                        type_comboBox.getSelectionModel().getSelectedItem(),
+                        category_comboBox.getSelectionModel().getSelectedItem(),
                         Integer.parseInt(quantity.getText()),
                         Integer.parseInt(stock_max.getText()),
                         Integer.parseInt(stock_min.getText()),
@@ -269,24 +339,24 @@ public class AdminController implements Initializable {
             try {
                 // update the record in the database with the new values from the text fields
                 selectedRef.setType(type_comboBox.getValue());
-                selectedRef.setCategorie(category_comboBox.getValue());
+                selectedRef.setCategory(category_comboBox.getValue());
                 selectedRef.setQuantity(Integer.parseInt(quantity.getText()));
                 selectedRef.setStockMax(Integer.parseInt(stock_max.getText()));
                 selectedRef.setStockMin(Integer.parseInt(stock_min.getText()));
                 selectedRef.setReference(reference.getText());
                 selectedRef.setBrand(marque.getText());
 
-                if (type_comboBox.getValue().equals("Matériel")) {
-
+                if (type_comboBox.getValue() != null && !type_comboBox.getValue().getName().equalsIgnoreCase("consommable")) {
                     selectedRef.setSerialNumber(0);
                 } else {
-                    // otherwise, update the serial number from the text field
+                    // Otherwise, update the serial number from the text field
                     if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
                         selectedRef.setSerialNumber(Integer.parseInt(num_serie.getText()));
                     } else {
                         selectedRef.setSerialNumber(0);
                     }
                 }
+
 
 
                 ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
@@ -340,86 +410,58 @@ public class AdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    private Map<String, List<String>> categories = new HashMap<>();
 
-    private String[] listType = {"Consommable", "Matériel"};
+    @FXML
+    protected void addTypeScene(){
+        try {
+            // Load the addType_view.fxml file
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("addType_view.fxml"));
+            Parent root = fxmlLoader.load();
 
-    public void addRefListType() {
-        // Initialize the categories map with the pre-defined categories
-        categories.put("Consommable", Arrays.asList("Ordinateur", "Imprimante", "Cable"));
-        categories.put("Matériel", Arrays.asList("Clavier", "Souris", "Toner"));
+            // Get the controller instance
+            AddTypeController addTypeController = fxmlLoader.getController();
+            setAddTypeController(addTypeController);
 
-        // Set up the type combo box with the pre-defined types
-        ObservableList<String> typeList = FXCollections.observableArrayList(listType);
-        type_comboBox.setItems(typeList);
+            // Set the ComboBox reference
+            this.addTypeController.setComboBox(type_comboBox);
 
-        // Set up the categories combo box based on the selected type
-        type_comboBox.setOnAction(event -> {
-            String selectedType = type_comboBox.getSelectionModel().getSelectedItem();
-            List<String> selectedCategories = categories.get(selectedType);
-            category_comboBox.getItems().clear();
-            category_comboBox.getItems().addAll(selectedCategories);
-        });
+            // Create a new stage for the prompt scene
+            Stage promptStage = new Stage();
+            promptStage.setScene(new Scene(root));
+            promptStage.setTitle("Ajouter un type");
+            promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
+            promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        // Disable the num_serie field for the "Matériel" type
-        type_comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue.equals("Consommable")) {
-                num_serie.setDisable(false);
-            } else {
-                num_serie.setDisable(true);
-            }
-        });
+    @FXML
+    protected void addCategoryScene(){
+        try {
+            // Load the addType_view.fxml file
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("addCategory_view.fxml"));
+            Parent root = fxmlLoader.load();
 
-        // Set up the button to allow the user to add a new type and categories
-        addType_btn.setOnAction(event -> {
-            // Create a new dialog to get the type and categories from the user
-            Dialog<Map.Entry<String, List<String>>> dialog = new Dialog<>();
-            dialog.setTitle("Ajouter nouveau type");
-            dialog.setHeaderText("Entrez le nouveau type et ses catégories");
+            // Get the controller instance
+            AddCategoryController addCategoryController = fxmlLoader.getController();
+            setAddCategoryController(addCategoryController);
 
-            // Set up the form to get the type and categories from the user
-            Label typeLabel = new Label("Type:");
-            TextField typeTextField = new TextField();
-            Label categoriesLabel = new Label("Catégories (separée par des virgules):");
-            TextField categoriesTextField = new TextField();
-            GridPane grid = new GridPane();
-            grid.add(typeLabel, 1, 1);
-            grid.add(typeTextField, 2, 1);
-            grid.add(categoriesLabel, 1, 2);
-            grid.add(categoriesTextField, 2, 2);
-            dialog.getDialogPane().setContent(grid);
+            // Set the ComboBox reference
+            this.addCategoryController.setComboBox(category_comboBox);
 
-            // Add buttons to allow the user to submit or cancel the form
-            ButtonType submitButtonType = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(submitButtonType, ButtonType.CANCEL);
-
-            // Convert the categories input into a list of categories
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == submitButtonType) {
-                    String type = typeTextField.getText();
-                    String[] categories = categoriesTextField.getText().split(",");
-                    List<String> categoryList = Arrays.asList(categories);
-                    return new AbstractMap.SimpleEntry<>(type, categoryList);
-                }
-                return null;
-            });
-
-            // Show the dialog and add the new type and categories if the user submits the form
-            Optional<Map.Entry<String, List<String>>> result = dialog.showAndWait();
-            result.ifPresent(typeAndCategories -> {
-                categories.put(typeAndCategories.getKey(), typeAndCategories.getValue());
-                typeList.add(typeAndCategories.getKey());
-            });
-        });
-
+            // Create a new stage for the prompt scene
+            Stage promptStage = new Stage();
+            promptStage.setScene(new Scene(root));
+            promptStage.setTitle("Ajouter une catégorie");
+            promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
+            promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
-
-
-        public void addRefListCategorie(){
-        // This method is not needed anymore since the categories are being populated dynamically based on the selected type
-    }
 
 
 
@@ -432,8 +474,6 @@ public class AdminController implements Initializable {
             historique_form.setVisible(false);
             user_form.setVisible(false);
 
-            addRefListType();
-            addRefListCategorie();
             UpdateTable();
         } else if (event.getSource() == historyButton) {
             parametrageRef_form.setVisible(false);
@@ -450,7 +490,7 @@ public class AdminController implements Initializable {
 
     }
 
-    //---  user interface:  ----
+    //-------------------------------------------  user interface:  --------------------------------------------
     public ObservableList<Login> addUserListData() {
         LoginDAO loginDAO = null;
         ObservableList<Login> materialList  = FXCollections.observableArrayList();
@@ -632,15 +672,21 @@ public class AdminController implements Initializable {
         }
     }
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         //To show data on the tableview
-        addRefListCategorie();
-        addRefListType();
+
         UpdateTable();
 
         UpdatedTable();
+
+        //comboBoxes
+        initializeDAO();
+        populateTypeComboBox();
+        setTypeSelectionListener();
 
 
         update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
@@ -652,7 +698,7 @@ public class AdminController implements Initializable {
                 // Set the values of the selected item to the text fields
                 num_serie.setText(String.valueOf(newSelection.getSerialNumber()));
                 type_comboBox.getSelectionModel().select(newSelection.getType());
-                category_comboBox.getSelectionModel().select(newSelection.getCategorie());
+                category_comboBox.getSelectionModel().select(newSelection.getCategory());
                 quantity.setText(String.valueOf(newSelection.getQuantity()));
                 stock_max.setText(String.valueOf(newSelection.getStockMax()));
                 stock_min.setText(String.valueOf(newSelection.getStockMin()));
@@ -661,7 +707,7 @@ public class AdminController implements Initializable {
             }
         });
 
-        //display the info of a selected item in the textFields
+        //display the info of a selected user in the textFields
         gestionutili_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 // Set the values of the selected item to the text fieldsadmin
