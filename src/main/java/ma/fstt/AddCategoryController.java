@@ -1,6 +1,7 @@
 package ma.fstt;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -8,6 +9,8 @@ import model.CategoryDAO;
 import model.TypeDAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddCategoryController {
 
@@ -17,8 +20,14 @@ public class AddCategoryController {
     @FXML
     private TextField category;
 
+
     @FXML
-    private TextField type;
+    private ComboBox<Type> typeComboBox; // Reference to the ComboBox
+
+    // Method to set the ComboBox reference
+    public void setTypeComboBox(ComboBox<Type> comboBox) {
+        this.typeComboBox = comboBox;
+    }
 
     @FXML
     private ComboBox<Category> categoryComboBox; // Reference to the ComboBox
@@ -29,33 +38,47 @@ public class AddCategoryController {
     }
 
 
+
     @FXML
-    protected void onAddButtonClick(){
-        try{
-            // Fetch the Type object by name
-            TypeDAO typeDAO = new TypeDAO();
-            Type categoryType = typeDAO.getByName(type.getText());
+    protected void onAddButtonClick() {
+        try {
+            // Fetch the selected Type object from the typeComboBox
+            Type selectedType = typeComboBox.getSelectionModel().getSelectedItem();
 
-            // Create the Category object with the retrieved Type object
-            Category newCategory = new Category(0l, category.getText(), categoryType);
+            // Check if a Type is selected
+            if (selectedType == null) {
+                // Display an error alert for no selected type
+                showAlert(Alert.AlertType.ERROR, "Type Error", "No type selected!");
+                return;
+            }
 
-            // Save the category to the database
+            // Retrieve the category names (assuming they are entered in a comma-separated format)
+            String[] categoryNames = category.getText().split(",");
+
+            // Create the Category objects with the retrieved Type object
             CategoryDAO categoryDAO = new CategoryDAO();
-            categoryDAO.save(newCategory);
+            for (String categoryName : categoryNames) {
+                categoryName = categoryName.trim();
 
 
+                Category newCategory = new Category(0L, categoryName, selectedType);
+                categoryDAO.save(newCategory);
+                categoryComboBox.getItems().add(newCategory);
+            }
 
-            // Add the new type to the ComboBox
-            categoryComboBox.getItems().add(newCategory);
-
-            type.setText(" ");
-            category.setText(" ");
-
-
-
-        }catch (SQLException e) {
+            category.setText("");
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
 }

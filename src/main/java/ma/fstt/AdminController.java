@@ -449,6 +449,7 @@ public class AdminController implements Initializable {
 
             // Set the ComboBox reference
             this.addCategoryController.setComboBox(category_comboBox);
+            this.addCategoryController.setTypeComboBox(type_comboBox);
 
             // Create a new stage for the prompt scene
             Stage promptStage = new Stage();
@@ -456,6 +457,9 @@ public class AdminController implements Initializable {
             promptStage.setTitle("Ajouter une catégorie");
             promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
             promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
