@@ -60,6 +60,15 @@ public class AddCategoryController {
             for (String categoryName : categoryNames) {
                 categoryName = categoryName.trim();
 
+                // Check if the category already exists
+                Category existingCategory = categoryDAO.getByName(categoryName);
+                System.out.println("Existing Category: " + existingCategory);
+                System.out.println("Selected Type: " + selectedType);
+                if (existingCategory != null && existingCategory.getType().equals(selectedType)) {
+                    // Display an error alert for category existence
+                    showAlert(Alert.AlertType.ERROR, "Category Error", "Category already exists: " + categoryName);
+                    continue; // Skip adding this category and proceed to the next one
+                }
 
                 Category newCategory = new Category(0L, categoryName, selectedType);
                 categoryDAO.save(newCategory);
