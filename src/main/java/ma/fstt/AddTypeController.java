@@ -17,6 +17,7 @@ public class AddTypeController {
     @FXML
     private TextField type;
 
+    private Type newType;
 
     @FXML
     private ComboBox<Type> typeComboBox; // Reference to the ComboBox
@@ -25,6 +26,9 @@ public class AddTypeController {
     public void setComboBox(ComboBox<Type> comboBox) {
         this.typeComboBox = comboBox;
     }
+    // Method to set the ComboBox reference
+
+
 
 //checké l'existance du  type dans la base de données???????
 
@@ -46,7 +50,7 @@ public class AddTypeController {
                 return;
             }
 
-            Type newType = new Type(0L, typeName);
+            newType = new Type(0L, typeName);
             typeDao.save(newType);
 
             // Add the new type to the ComboBox
@@ -57,5 +61,8 @@ public class AddTypeController {
         }
     }
 
+    public Type getNewType() {
+        return newType;
+    }
 
 }

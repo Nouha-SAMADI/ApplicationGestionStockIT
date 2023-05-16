@@ -27,6 +27,19 @@ public class ParametrageDeReference {
         this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,0);
     }
 
+    public ParametrageDeReference(Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, int serialNumber) {
+        this.type = type;
+        this.category = category;
+        this.quantity = quantity;
+        this.stockMax = stockMax;
+        this.stockMin = stockMin;
+        this.reference = reference;
+        this.brand = brand;
+        this.serialNumber = serialNumber;
+    }
+
+
+
     public long getId() {
         return id;
     }

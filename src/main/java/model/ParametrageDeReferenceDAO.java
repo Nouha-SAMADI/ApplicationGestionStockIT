@@ -91,6 +91,41 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         return null;
     }
 
+    public ParametrageDeReference getByReference(String reference) throws SQLException {
+        String query = "SELECT * FROM parametrageRef WHERE reference = ?";
+        preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, reference);
+        resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            long typeId = resultSet.getLong("type_id");
+            long categoryId = resultSet.getLong("category_id");
+            int quantity = resultSet.getInt("quantity");
+            int stockMax = resultSet.getInt("stockMax");
+            int stockMin = resultSet.getInt("stockMin");
+            String brand = resultSet.getString("brand");
+            int serialNumber = resultSet.getInt("serialNumber");
+
+            Type type = getTypeById(typeId);
+            Category category = getCategoryById(categoryId);
+
+            return new ParametrageDeReference( type, category, quantity, stockMax, stockMin,reference, brand, serialNumber);
+        }
+
+        return null;
+    }
+
+    public void updateQuantity(String reference, int quantity) throws SQLException {
+        String query = "UPDATE parametrageRef SET quantity = quantity + ? WHERE reference = ?";
+        this.preparedStatement= this.connection.prepareStatement(query);
+        this.preparedStatement.setInt(1, quantity);
+        this.preparedStatement.setString(2, reference);
+
+
+        this.preparedStatement.executeUpdate();
+    }
+
+
     private Type getTypeById(long typeId) throws SQLException {
         TypeDAO typeDAO = new TypeDAO();
         return typeDAO.getOne(typeId);

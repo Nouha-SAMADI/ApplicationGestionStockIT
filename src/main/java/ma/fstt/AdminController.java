@@ -10,19 +10,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.CategoryDAO;
-import model.LoginDAO;
-import model.ParametrageDeReferenceDAO;
-import model.TypeDAO;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class AdminController implements Initializable {
@@ -150,9 +150,158 @@ public class AdminController implements Initializable {
     private AddTypeController addTypeController; // AddTypeController reference
 
     private AddCategoryController addCategoryController;
+    //------Entry attributes --------------
+
+
+    @FXML
+    private DatePicker entryDate;
+
+    @FXML
+    private AnchorPane entry_form;
+    @FXML
+    private TextField newquantity;
+
+    @FXML
+    private Label reference_label;
+    @FXML
+    private TextField searchField;
+
+    @FXML
+    private Label stockMax_label;
+
+    @FXML
+    private Label stock_label;
+    @FXML
+    private Button submitButton;
+    @FXML
+    private Label type_label;
+
+    @FXML
+    private Label category_label;
+    @FXML
+    private Label brand_label;
+
+    @FXML
+    private TableView<Entry> entryTable;
+
+    @FXML
+    private TableColumn<Entry,Integer > entryId_col;
+    @FXML
+    private TableColumn<Entry,String > entryReference_col;
+    @FXML
+    private TableColumn<Entry,Integer > entryQuantity_col;
+    @FXML
+    private TableColumn<Entry,LocalDate > entryDate_col;
+    @FXML
+    private Button entry_button;
+
+    private ParametrageDeReferenceDAO paramRefDAO;
+    private EntryDAO entryDAO;
+
+    private void intializeEntryDAO(){
+
+        try {
+            paramRefDAO = new ParametrageDeReferenceDAO();
+            entryDAO = new EntryDAO();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+    }
+    //-----------------------------------
 
     private double x =0 ;
     private double y=0;
+    //---------------------------------------Entries--------------------------------------------------------------------
+
+    public ObservableList<Entry> addEntryListData() {
+
+
+        EntryDAO entryDAO = null;
+
+        ObservableList<Entry> entriesList  = FXCollections.observableArrayList();
+
+        try {
+            entryDAO = new EntryDAO();
+            for (Entry ettemp : entryDAO.getAll())
+                entriesList.add(ettemp);
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return entriesList;
+
+    }
+
+    public void UpdateEntriesTable(){
+        entryId_col.setCellValueFactory(new PropertyValueFactory<Entry,Integer>("id"));
+        entryReference_col.setCellValueFactory(new PropertyValueFactory<Entry,String>("productReference"));
+
+        entryQuantity_col.setCellValueFactory(new PropertyValueFactory<Entry,Integer>("quantity"));
+        entryDate_col.setCellValueFactory(new PropertyValueFactory<Entry,LocalDate>("entryDate"));
+
+
+
+
+        entryTable.setItems(this.addEntryListData());
+    }
+
+    @FXML
+    private void searchFieldKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            String reference = searchField.getText();
+
+            try {
+                ParametrageDeReference product = paramRefDAO.getByReference(reference);
+
+                if (product != null) {
+                    reference_label.setText(reference);
+                    type_label.setText(product.getType().getName());
+                    category_label.setText(product.getCategory().getName());
+                    stock_label.setText(String.valueOf(product.getQuantity()));
+                    brand_label.setText(product.getBrand());
+                    stockMax_label.setText(String.valueOf(product.getStockMax()));
+
+                } else {
+                    System.out.println("Product not found.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle any errors that may occur during database operations
+            }
+        }
+    }
+
+    @FXML
+    private void submitButtonClicked() {
+        String reference = searchField.getText();
+        int quantity = Integer.parseInt(newquantity.getText());
+        LocalDate date = entryDate.getValue();
+        try {
+
+            Entry newEntry = new Entry(reference, quantity, date);
+            entryDAO.save(newEntry);
+
+
+            paramRefDAO.updateQuantity(reference,quantity);
+
+            UpdateEntriesTable();
+
+            searchField.setText("");
+            newquantity.setText("");
+            entryDate.setValue(null);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any errors that may occur during database operations
+        }
+    }
+
+
+
+
     //------------------------------------parametrage de reference-----------------------------------------------------------
     public ObservableList<ParametrageDeReference> addMaterialsListData(){
 
@@ -448,8 +597,9 @@ public class AdminController implements Initializable {
             setAddCategoryController(addCategoryController);
 
             // Set the ComboBox reference
+            this.addCategoryController.setAddTypeController(addTypeController);
             this.addCategoryController.setComboBox(category_comboBox);
-            this.addCategoryController.setTypeComboBox(type_comboBox);
+
 
             // Create a new stage for the prompt scene
             Stage promptStage = new Stage();
@@ -477,18 +627,28 @@ public class AdminController implements Initializable {
             parametrageRef_form.setVisible(true);
             historique_form.setVisible(false);
             user_form.setVisible(false);
+            entry_form.setVisible(false);
 
             UpdateTable();
         } else if (event.getSource() == historyButton) {
             parametrageRef_form.setVisible(false);
             historique_form.setVisible(true);
             user_form.setVisible(false);
+            entry_form.setVisible(false);
 
         } else if (event.getSource() == userButton){
             user_form.setVisible(true);
             parametrageRef_form.setVisible(false);
             historique_form.setVisible(false);
+            entry_form.setVisible(false);
             UpdatedTable();
+        }else if(event.getSource() == entry_button){
+            user_form.setVisible(false);
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            entry_form.setVisible(true);
+            UpdateEntriesTable();
+
         }
 
 
@@ -686,11 +846,14 @@ public class AdminController implements Initializable {
         UpdateTable();
 
         UpdatedTable();
+        UpdateEntriesTable();
 
         //comboBoxes
         initializeDAO();
         populateTypeComboBox();
         setTypeSelectionListener();
+
+        intializeEntryDAO();
 
 
         update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
