@@ -50,7 +50,7 @@ public class AddTypeController {
                 return;
             }
 
-            newType = new Type(0L, typeName);
+            Type newType = new Type(0L, typeName);
             typeDao.save(newType);
 
             // Add the new type to the ComboBox
@@ -61,8 +61,5 @@ public class AddTypeController {
         }
     }
 
-    public Type getNewType() {
-        return newType;
-    }
 
 }

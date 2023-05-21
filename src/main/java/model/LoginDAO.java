@@ -94,6 +94,25 @@ public class LoginDAO extends BaseDAO<Login>{
     public Login getOne(Long id) throws SQLException {
         return null;
     }
+
+    public Login getLoggedInUser(String username) throws SQLException {
+        String request = "SELECT * FROM login WHERE username = ?";
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setString(1, username);
+        this.resultSet = this.preparedStatement.executeQuery();
+
+        if (this.resultSet.next()) {
+            Long id = this.resultSet.getLong("id");
+            String password = this.resultSet.getString("password");
+            String userType = this.resultSet.getString("userType");
+            String emailAddress = this.resultSet.getString("emailAddress");
+
+            return new Login(id, username, password, userType, emailAddress);
+        }
+
+        return null;
+    }
+
     public  boolean authentifier(String username, String password) throws SQLException{
         String request = "Select username,password,userType from login where username = ?";
         this.preparedStatement = this.connection.prepareStatement(request);

@@ -21,15 +21,13 @@ public class AddCategoryController {
     private TextField category;
 
 
-    private AddTypeController addTypeController; // Reference to the AddTypeController
+    @FXML
+    private ComboBox<Type> typeComboBox; // Reference to the ComboBox
 
-    // ...
-
-    // Method to set the AddTypeController reference
-    public void setAddTypeController(AddTypeController controller) {
-        this.addTypeController = controller;
+    // Method to set the ComboBox reference
+    public void setTypeComboBox(ComboBox<Type> comboBox) {
+        this.typeComboBox = comboBox;
     }
-
 
     @FXML
     private ComboBox<Category> categoryComboBox; // Reference to the ComboBox
@@ -45,7 +43,7 @@ public class AddCategoryController {
     protected void onAddButtonClick() {
         try {
             // Fetch the selected Type object from the typeComboBox
-            Type selectedType = addTypeController.getNewType();
+            Type selectedType = typeComboBox.getSelectionModel().getSelectedItem();
 
             // Check if a Type is selected
             if (selectedType == null) {

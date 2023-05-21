@@ -93,18 +93,18 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
 
     public ParametrageDeReference getByReference(String reference) throws SQLException {
         String query = "SELECT * FROM parametrageRef WHERE reference = ?";
-        preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, reference);
-        resultSet = preparedStatement.executeQuery();
+        this.preparedStatement = this.connection.prepareStatement(query);
+        this.preparedStatement.setString(1, reference);
+        this.resultSet = this.preparedStatement.executeQuery();
 
         if (resultSet.next()) {
-            long typeId = resultSet.getLong("type_id");
-            long categoryId = resultSet.getLong("category_id");
-            int quantity = resultSet.getInt("quantity");
-            int stockMax = resultSet.getInt("stockMax");
-            int stockMin = resultSet.getInt("stockMin");
-            String brand = resultSet.getString("brand");
-            int serialNumber = resultSet.getInt("serialNumber");
+            long typeId = this.resultSet.getLong("type_id");
+            long categoryId = this.resultSet.getLong("category_id");
+            int quantity = this.resultSet.getInt("quantity");
+            int stockMax = this.resultSet.getInt("stockMax");
+            int stockMin = this.resultSet.getInt("stockMin");
+            String brand = this.resultSet.getString("brand");
+            int serialNumber = this.resultSet.getInt("serialNumber");
 
             Type type = getTypeById(typeId);
             Category category = getCategoryById(categoryId);
@@ -115,8 +115,34 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         return null;
     }
 
+    public  List<String> getAllReferences() throws SQLException {
+        List<String> references = new ArrayList<>();
+
+        String query = "SELECT reference FROM parametrageRef";
+        this.statement = this.connection.createStatement();
+        this.resultSet = this.statement.executeQuery(query);
+
+        while (this.resultSet.next()) {
+            String reference = this.resultSet.getString("reference");
+            references.add(reference);
+        }
+
+        return references;
+    }
+
+
     public void updateQuantity(String reference, int quantity) throws SQLException {
         String query = "UPDATE parametrageRef SET quantity = quantity + ? WHERE reference = ?";
+        this.preparedStatement= this.connection.prepareStatement(query);
+        this.preparedStatement.setInt(1, quantity);
+        this.preparedStatement.setString(2, reference);
+
+
+        this.preparedStatement.executeUpdate();
+    }
+
+    public void updateSortieQuantity(String reference, int quantity) throws SQLException {
+        String query = "UPDATE parametrageRef SET quantity = quantity - ? WHERE reference = ?";
         this.preparedStatement= this.connection.prepareStatement(query);
         this.preparedStatement.setInt(1, quantity);
         this.preparedStatement.setString(2, reference);

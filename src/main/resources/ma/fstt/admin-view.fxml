@@ -17,7 +17,7 @@
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane prefHeight="473.0" prefWidth="218.0" style="-fx-background-color: #b2db7d;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="473.0" prefWidth="218.0" style="-fx-background-color: orange;" BorderPane.alignment="CENTER">
                <children>
                   <Label layoutX="32.0" layoutY="100.0" prefHeight="26.0" prefWidth="159.0" text="Espace admin" textFill="WHITE">
                      <font>
@@ -26,7 +26,7 @@
                   </Label>
                   <Button fx:id="paramButton" layoutX="9.0" layoutY="143.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Paramétrage de référence" />
                   <Button fx:id="entry_button" layoutX="10.0" layoutY="197.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des entrés" />
-                  <Button layoutX="10.0" layoutY="254.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="190.0" text="Gestion des sorties" />
+                  <Button fx:id="sortie_button" layoutX="10.0" layoutY="254.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des sorties" />
                   <Button fx:id="userButton" layoutX="9.0" layoutY="310.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des utilisateurs" />
                   <Button layoutX="9.0" layoutY="365.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="190.0" text="Tableau de bord" />
                   <Button fx:id="historyButton" layoutX="10.0" layoutY="417.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Historique" />
@@ -42,12 +42,6 @@
             <AnchorPane BorderPane.alignment="CENTER">
 
                <children>
-                  <AnchorPane fx:id="historique_form" prefHeight="532.0" prefWidth="726.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <AnchorPane layoutX="23.0" layoutY="18.0" prefHeight="466.0" prefWidth="253.0" style="-fx-background-color: red;" visible="false" />
-                        <AnchorPane layoutX="327.0" layoutY="28.0" prefHeight="444.0" prefWidth="377.0" style="-fx-background-color: green;" />
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="parametrageRef_form" prefHeight="532.0" prefWidth="864.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="510.0" prefWidth="235.0">
@@ -140,7 +134,7 @@
                   </AnchorPane>
                   <AnchorPane fx:id="entry_form" layoutX="99.0" layoutY="63.0" prefHeight="616.0" prefWidth="915.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="37.0" layoutY="38.0" prefHeight="547.0" prefWidth="381.0" style="-fx-background-color: chocolate;">
+                        <AnchorPane layoutX="37.0" layoutY="38.0" prefHeight="547.0" prefWidth="381.0" style="-fx-background-color: orange;">
                            <children>
                               <Label layoutX="26.0" layoutY="75.0" text="Type :">
                                  <font>
@@ -221,9 +215,10 @@
                               <DatePicker fx:id="entryDate" layoutX="20.0" layoutY="429.0" />
                               <Button fx:id="submitButton" layoutX="84.0" layoutY="477.0" mnemonicParsing="false" onAction="#submitButtonClicked" text="Submit" />
                               <TextField fx:id="searchField" layoutX="20.0" layoutY="9.0" onKeyPressed="#searchFieldKeyPressed" promptText="search......" />
+                              <Button layoutX="206.0" layoutY="9.0" mnemonicParsing="false" onAction="#searchButtonClicked" text="search" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="437.0" layoutY="38.0" prefHeight="466.0" prefWidth="464.0" style="-fx-background-color: chocolate;">
+                        <AnchorPane layoutX="437.0" layoutY="38.0" prefHeight="466.0" prefWidth="464.0" style="-fx-background-color: orange;">
                            <children>
                               <TableView fx:id="entryTable" layoutX="20.0" layoutY="14.0" prefHeight="426.0" prefWidth="430.0">
                                 <columns>
@@ -231,6 +226,118 @@
                                   <TableColumn fx:id="entryReference_col" prefWidth="75.0" text="reference" />
                                     <TableColumn fx:id="entryQuantity_col" prefWidth="75.0" text="Quantity" />
                                     <TableColumn fx:id="entryDate_col" prefWidth="115.0" text="Entry date" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="sortie_form" layoutX="70.0" layoutY="59.0" prefHeight="616.0" prefWidth="915.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane layoutX="46.0" layoutY="32.0" prefHeight="560.0" prefWidth="389.0" style="-fx-background-color: orange;">
+                           <children>
+                              <Button fx:id="search_button" layoutX="262.0" layoutY="26.0" mnemonicParsing="false" onAction="#sortieSearchButtonClicked" text="search" />
+                              <Label layoutX="21.0" layoutY="73.0" text="Reference :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="21.0" layoutY="106.0" text="Type :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="21.0" layoutY="138.0" text="Category :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="21.0" layoutY="168.0" text="Current Stock :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="21.0" layoutY="199.0" text="Brand :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="21.0" layoutY="229.0" text="Stock min :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_reference" layoutX="177.0" layoutY="75.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_type" layoutX="177.0" layoutY="108.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_category" layoutX="177.0" layoutY="140.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_currentStock" layoutX="184.0" layoutY="170.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_brand" layoutX="177.0" layoutY="201.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_stockMin" layoutX="184.0" layoutY="231.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="18.0" layoutY="268.0" text="Enter the quantity to retrieve :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="sortie_quantity" layoutX="21.0" layoutY="302.0" />
+                              <DatePicker fx:id="sortie_date" layoutX="13.0" layoutY="389.0" />
+                              <Label layoutX="23.0" layoutY="346.0" text="Date :">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="searchField_sortie" layoutX="27.0" layoutY="28.0" onKeyPressed="#sortieSearchFieldKeyPressed" prefHeight="26.0" prefWidth="220.0" promptText="search ..." />
+                              <Button fx:id="sortie_submit" layoutX="146.0" layoutY="453.0" mnemonicParsing="false" onAction="#sortieSubmitButtonClicked" text="Submit" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="472.0" layoutY="42.0" prefHeight="412.0" prefWidth="405.0" style="-fx-background-color: orange;">
+                           <children>
+                              <TableView fx:id="sortie_table" layoutX="14.0" layoutY="10.0" prefHeight="387.0" prefWidth="385.0">
+                                <columns>
+                                  <TableColumn fx:id="sortie_id_col" prefWidth="44.0" text="id" />
+                                  <TableColumn fx:id="sortie_reference_col" prefWidth="131.0" text="Reference" />
+                                    <TableColumn fx:id="sortie_quantity_col" prefWidth="79.0" text="Quantity" />
+                                    <TableColumn fx:id="sortie_date_col" prefWidth="130.0" text="Date" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="historique_form" layoutX="49.0" layoutY="108.0" prefHeight="616.0" prefWidth="915.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane layoutX="69.0" layoutY="22.0" prefHeight="560.0" prefWidth="702.0">
+                           <children>
+                              <TableView fx:id="history_table" layoutX="58.0" layoutY="50.0" prefHeight="560.0" prefWidth="702.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <columns>
+                                  <TableColumn fx:id="history_id" prefWidth="46.0" text="id" />
+                                  <TableColumn fx:id="history_reference" prefWidth="180.0" text="Reference" />
+                                    <TableColumn fx:id="history_quantity" text="Quantity" />
+                                    <TableColumn fx:id="history_date" prefWidth="183.0" text="Date" />
+                                    <TableColumn fx:id="history_user" prefWidth="165.0" text="Username" />
                                 </columns>
                               </TableView>
                            </children>

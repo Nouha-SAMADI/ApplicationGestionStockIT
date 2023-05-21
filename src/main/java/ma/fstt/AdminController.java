@@ -2,6 +2,7 @@ package ma.fstt;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +30,8 @@ import java.util.*;
 public class AdminController implements Initializable {
 
 
+    private double x =0 ;
+    private double y=0;
     @FXML
     private Button addType_btn;
 
@@ -197,21 +201,298 @@ public class AdminController implements Initializable {
 
     private ParametrageDeReferenceDAO paramRefDAO;
     private EntryDAO entryDAO;
+    @FXML
+    private List<String> referenceList;
+    private FilteredList<String> filteredReferences;
 
-    private void intializeEntryDAO(){
+
+    //------------------Sortie Attributes ------------------------
+    @FXML
+    private AnchorPane sortie_form;
+    @FXML
+    private Button search_button;
+    @FXML
+    private Button sortie_submit;
+    @FXML
+    private TextField searchField_sortie;
+    @FXML
+    private Label sortie_reference;
+    @FXML
+    private Label sortie_type;
+    @FXML
+    private Label sortie_category;
+    @FXML
+    private Label sortie_currentStock;
+    @FXML
+    private Label sortie_brand;
+    @FXML
+    private Label sortie_stockMin;
+    @FXML
+    private TextField sortie_quantity;
+    @FXML
+    private DatePicker sortie_date;
+    private ParametrageDeReferenceDAO sortie_paramRefDAO;
+    private SortieDAO sortieDAO;
+    @FXML
+    private List<String> referenceList_sortie;
+    private FilteredList<String> filteredReferences_sortie;
+    @FXML
+    private Button sortie_button;
+    @FXML
+    private TableView<Sortie> sortie_table;
+
+    @FXML
+    private TableColumn<Sortie,Long > sortie_id_col;
+    @FXML
+    private TableColumn<Sortie,String > sortie_reference_col;
+    @FXML
+    private TableColumn<Sortie,Integer > sortie_quantity_col;
+    @FXML
+    private TableColumn<Sortie,LocalDate > sortie_date_col;
+
+
+
+    //-----------------History attributes------------------
+    @FXML
+    private TableView<Sortie> history_table;
+
+    @FXML
+    private TableColumn<Sortie,Long > history_id;
+    @FXML
+    private TableColumn<Sortie,String > history_reference;
+    @FXML
+    private TableColumn<Sortie,Integer > history_quantity;
+    @FXML
+    private TableColumn<Sortie,LocalDate > history_date;
+    @FXML
+    private TableColumn<Sortie,String > history_user;
+    //-----------------------------History----------------------------
+
+
+    public ObservableList<Sortie> addHistoryList(){
+
+
+        SortieDAO sortieDAO = null;
+
+        ObservableList<Sortie> materialList  = FXCollections.observableArrayList();
 
         try {
-            paramRefDAO = new ParametrageDeReferenceDAO();
-            entryDAO = new EntryDAO();
+            sortieDAO = new SortieDAO();
+            for (Sortie ettemp : sortieDAO.getAllWithUsernames())
+                materialList.add(ettemp);
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return materialList;
+    }
+
+    public void UpdateHistoryTable(){
+        history_id.setCellValueFactory(new PropertyValueFactory<Sortie,Long>("id"));
+        history_reference.setCellValueFactory(new PropertyValueFactory<Sortie,String>("productReference"));
+
+        history_quantity.setCellValueFactory(new PropertyValueFactory<Sortie,Integer>("quantity"));
+        history_date.setCellValueFactory(new PropertyValueFactory<Sortie,LocalDate>("sortieDate"));
+        history_user.setCellValueFactory(new PropertyValueFactory<Sortie,String>("username"));
+
+
+
+
+        history_table.setItems(this.addHistoryList());
+    }
+
+
+    //----------------------------------------Sorties -------------------------------------
+
+    private void intializeSortieDAO(){
+
+        try {
+            sortie_paramRefDAO = new ParametrageDeReferenceDAO();
+            sortieDAO = new SortieDAO();
+            referenceList_sortie = sortie_paramRefDAO.getAllReferences(); // Retrieve all references from the database
+            filteredReferences_sortie = new FilteredList<>(FXCollections.observableArrayList(referenceList_sortie));
         } catch (SQLException e) {
             e.printStackTrace();
 
         }
     }
-    //-----------------------------------
+    @FXML
+    private void sortieSearchButtonClicked() {
+        String reference = searchField_sortie.getText();
 
-    private double x =0 ;
-    private double y=0;
+        try {
+            ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
+
+            if (product != null) {
+                sortie_reference.setText(reference);
+                sortie_type.setText(product.getType().getName());
+                sortie_category.setText(product.getCategory().getName());
+                sortie_currentStock.setText(String.valueOf(product.getQuantity()));
+                sortie_brand.setText(product.getBrand());
+                sortie_stockMin.setText(String.valueOf(product.getStockMax()));
+            } else {
+                System.out.println("Product not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any errors that may occur during database operations
+        }
+    }
+
+    @FXML
+    private void sortieSearchFieldKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            String reference = searchField_sortie.getText();
+
+            try {
+                ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
+
+                if (product != null) {
+                    sortie_reference.setText(reference);
+                    sortie_type.setText(product.getType().getName());
+                    sortie_category.setText(product.getCategory().getName());
+                    sortie_currentStock.setText(String.valueOf(product.getQuantity()));
+                    sortie_brand.setText(product.getBrand());
+                    sortie_stockMin.setText(String.valueOf(product.getStockMax()));
+                } else {
+                    System.out.println("Product not found.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle any errors that may occur during database operations
+            }
+        }
+    }
+
+
+    @FXML
+    private void sortieSubmitButtonClicked() {
+        String reference = searchField_sortie.getText();
+        int quantity = Integer.parseInt(sortie_quantity.getText());
+        LocalDate date = sortie_date.getValue();
+
+        try {
+            ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
+
+            if (product != null) {
+                int updatedQuantity = product.getQuantity() - quantity;
+                int stockMin = product.getStockMin();
+
+                if (quantity > product.getQuantity()) {
+                    // Display an alert for exceeding the available stock
+                    String alertMessage = "The entered quantity exceeds the available stock.\n";
+                    alertMessage += "Please enter a valid quantity less than or equal to " + product.getQuantity();
+
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText("Exceeding Available Stock");
+                    alert.setContentText(alertMessage);
+                    alert.showAndWait();
+
+                    // Clear the quantity field
+                    sortie_quantity.setText("");
+                } else if (quantity == product.getQuantity()) {
+                    // Display a confirmation alert for depleting the stock
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation");
+                    alert.setHeaderText("Depleting Stock");
+                    alert.setContentText("Are you sure you want to retrieve the entire stock?");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        // Create and save the new sortie
+                        Login loggedInUser = SessionManager.getLoggedInUser();
+                        Sortie newSortie = new Sortie(reference, quantity, date, loggedInUser.getId());
+                        sortieDAO.save(newSortie);
+
+                        // Update the product quantity
+                        sortie_paramRefDAO.updateSortieQuantity(reference, quantity);
+
+                        // Clear the fields
+                        searchField_sortie.setText("");
+                        sortie_quantity.setText("");
+                        sortie_date.setValue(null);
+                    } else {
+                        // User canceled the operation, do nothing
+                    }
+                } else {
+                    // Create and save the new sortie
+                    Login loggedInUser = SessionManager.getLoggedInUser();
+                    Sortie newSortie = new Sortie(reference, quantity, date, loggedInUser.getId());
+                    sortieDAO.save(newSortie);
+
+                    // Update the product quantity
+                    sortie_paramRefDAO.updateSortieQuantity(reference, quantity);
+
+                    // Clear the fields
+                    searchField_sortie.setText("");
+                    sortie_quantity.setText("");
+                    sortie_date.setValue(null);
+                }
+            } else {
+                System.out.println("Product not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any errors that may occur during database operations
+        }
+    }
+
+
+    private void sortieSetupAutoCompletion() {
+        TextFields.bindAutoCompletion(searchField_sortie, filteredReferences_sortie).setOnAutoCompleted(event -> {
+            String selectedReference = event.getCompletion();
+
+            try {
+                ParametrageDeReference product = sortie_paramRefDAO.getByReference(selectedReference);
+
+                if (product != null) {
+                    sortie_reference.setText(selectedReference);
+                    sortie_type.setText(product.getType().getName());
+                    sortie_category.setText(product.getCategory().getName());
+                    sortie_currentStock.setText(String.valueOf(product.getQuantity()));
+                    sortie_brand.setText(product.getBrand());
+                    sortie_stockMin.setText(String.valueOf(product.getStockMax()));
+                } else {
+                    System.out.println("Product not found.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle any errors that may occur during database operations
+            }
+        });
+    }
+    public ObservableList<Sortie> addSortieList(){
+
+
+        SortieDAO sortieDAO = null;
+
+        ObservableList<Sortie> materialList  = FXCollections.observableArrayList();
+
+        try {
+            sortieDAO = new SortieDAO();
+            for (Sortie ettemp : sortieDAO.getAll())
+                materialList.add(ettemp);
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return materialList;
+    }
+
+    public void UpdateSortieTable(){
+        sortie_id_col.setCellValueFactory(new PropertyValueFactory<Sortie,Long>("id"));
+        sortie_reference_col.setCellValueFactory(new PropertyValueFactory<Sortie,String>("productReference"));
+
+        sortie_quantity_col.setCellValueFactory(new PropertyValueFactory<Sortie,Integer>("quantity"));
+        sortie_date_col.setCellValueFactory(new PropertyValueFactory<Sortie,LocalDate>("sortieDate"));
+
+        sortie_table.setItems(this.addSortieList());
+    }
+
+
     //---------------------------------------Entries--------------------------------------------------------------------
 
     public ObservableList<Entry> addEntryListData() {
@@ -247,6 +528,69 @@ public class AdminController implements Initializable {
         entryTable.setItems(this.addEntryListData());
     }
 
+    private void intializeEntryDAO(){
+
+        try {
+            paramRefDAO = new ParametrageDeReferenceDAO();
+            entryDAO = new EntryDAO();
+            referenceList = paramRefDAO.getAllReferences(); // Retrieve all references from the database
+            filteredReferences = new FilteredList<>(FXCollections.observableArrayList(referenceList));
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @FXML
+    private void submitButtonClicked() {
+        String reference = searchField.getText();
+        int quantity = Integer.parseInt(newquantity.getText());
+        LocalDate date = entryDate.getValue();
+
+        try {
+            ParametrageDeReference product = paramRefDAO.getByReference(reference);
+
+            if (product != null) {
+                int updatedQuantity = product.getQuantity() + quantity;
+                int stockMax = product.getStockMax();
+
+                if (quantity > stockMax || updatedQuantity > stockMax) {
+                    // Display an alert for exceeding stock max
+                    String alertMessage = "The entered quantity exceeds the stock maximum.\n";
+                    alertMessage += "Please enter a valid quantity less than or equal to " + (stockMax - product.getQuantity());
+
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText("Exceeding Stock Maximum");
+                    alert.setContentText(alertMessage);
+                    alert.showAndWait();
+
+                    // Clear the newquantity field
+                    newquantity.setText("");
+                } else {
+                    // Create and save the new entry
+                    Entry newEntry = new Entry(reference, quantity, date);
+                    entryDAO.save(newEntry);
+
+                    // Update the product quantity
+                    paramRefDAO.updateQuantity(reference, quantity);
+
+                    // Update the table
+                    UpdateEntriesTable();
+
+                    // Clear the fields
+                    searchField.setText("");
+                    newquantity.setText("");
+                    entryDate.setValue(null);
+                }
+            } else {
+                System.out.println("Product not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any errors that may occur during database operations
+        }
+    }
     @FXML
     private void searchFieldKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -262,7 +606,6 @@ public class AdminController implements Initializable {
                     stock_label.setText(String.valueOf(product.getQuantity()));
                     brand_label.setText(product.getBrand());
                     stockMax_label.setText(String.valueOf(product.getStockMax()));
-
                 } else {
                     System.out.println("Product not found.");
                 }
@@ -274,25 +617,22 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    private void submitButtonClicked() {
+    private void searchButtonClicked() {
         String reference = searchField.getText();
-        int quantity = Integer.parseInt(newquantity.getText());
-        LocalDate date = entryDate.getValue();
+
         try {
+            ParametrageDeReference product = paramRefDAO.getByReference(reference);
 
-            Entry newEntry = new Entry(reference, quantity, date);
-            entryDAO.save(newEntry);
-
-
-            paramRefDAO.updateQuantity(reference,quantity);
-
-            UpdateEntriesTable();
-
-            searchField.setText("");
-            newquantity.setText("");
-            entryDate.setValue(null);
-
-
+            if (product != null) {
+                reference_label.setText(reference);
+                type_label.setText(product.getType().getName());
+                category_label.setText(product.getCategory().getName());
+                stock_label.setText(String.valueOf(product.getQuantity()));
+                brand_label.setText(product.getBrand());
+                stockMax_label.setText(String.valueOf(product.getStockMax()));
+            } else {
+                System.out.println("Product not found.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             // Handle any errors that may occur during database operations
@@ -302,6 +642,29 @@ public class AdminController implements Initializable {
 
 
 
+    private void setupAutoCompletion() {
+        TextFields.bindAutoCompletion(searchField, filteredReferences).setOnAutoCompleted(event -> {
+            String selectedReference = event.getCompletion();
+
+            try {
+                ParametrageDeReference product = paramRefDAO.getByReference(selectedReference);
+
+                if (product != null) {
+                    reference_label.setText(selectedReference);
+                    type_label.setText(product.getType().getName());
+                    category_label.setText(product.getCategory().getName());
+                    stock_label.setText(String.valueOf(product.getQuantity()));
+                    brand_label.setText(product.getBrand());
+                    stockMax_label.setText(String.valueOf(product.getStockMax()));
+                } else {
+                    System.out.println("Product not found.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle any errors that may occur during database operations
+            }
+        });
+    }
     //------------------------------------parametrage de reference-----------------------------------------------------------
     public ObservableList<ParametrageDeReference> addMaterialsListData(){
 
@@ -597,7 +960,7 @@ public class AdminController implements Initializable {
             setAddCategoryController(addCategoryController);
 
             // Set the ComboBox reference
-            this.addCategoryController.setAddTypeController(addTypeController);
+            this.addCategoryController.setTypeComboBox(type_comboBox);
             this.addCategoryController.setComboBox(category_comboBox);
 
 
@@ -628,6 +991,7 @@ public class AdminController implements Initializable {
             historique_form.setVisible(false);
             user_form.setVisible(false);
             entry_form.setVisible(false);
+            sortie_form.setVisible(false);
 
             UpdateTable();
         } else if (event.getSource() == historyButton) {
@@ -635,20 +999,31 @@ public class AdminController implements Initializable {
             historique_form.setVisible(true);
             user_form.setVisible(false);
             entry_form.setVisible(false);
+            sortie_form.setVisible(false);
+            UpdateHistoryTable();
 
         } else if (event.getSource() == userButton){
             user_form.setVisible(true);
             parametrageRef_form.setVisible(false);
             historique_form.setVisible(false);
             entry_form.setVisible(false);
-            UpdatedTable();
+            sortie_form.setVisible(false);
+            UpdateUserTable();;
         }else if(event.getSource() == entry_button){
             user_form.setVisible(false);
             parametrageRef_form.setVisible(false);
             historique_form.setVisible(false);
             entry_form.setVisible(true);
+            sortie_form.setVisible(false);
             UpdateEntriesTable();
 
+        }else if(event.getSource() == sortie_button) {
+            user_form.setVisible(false);
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            entry_form.setVisible(false);
+            sortie_form.setVisible(true);
+            UpdateSortieTable();
         }
 
 
@@ -673,7 +1048,7 @@ public class AdminController implements Initializable {
     }
 
 
-    public void UpdatedTable(){
+    public void UpdateUserTable(){
         col_id.setCellValueFactory(new PropertyValueFactory<Login,Long>("id"));
         col_user.setCellValueFactory(new PropertyValueFactory<Login,String>("username"));
 
@@ -702,7 +1077,7 @@ public class AdminController implements Initializable {
             loginDAO.save(refe);
 
 
-            UpdatedTable();
+            UpdateUserTable();
 
             username.setText("");
             password.setText("");
@@ -738,7 +1113,7 @@ public class AdminController implements Initializable {
             loginDAO.update(selectedReff);
 
             // update the table view
-            UpdatedTable();
+            UpdateUserTable();
 
 
             username.setText("");
@@ -766,7 +1141,7 @@ public class AdminController implements Initializable {
             LoginDAO loginDAO = new LoginDAO();
 
             loginDAO.delete(selectedItems);
-            UpdatedTable();
+            UpdateUserTable();
 
             username.setText("");
             password.setText("");
@@ -787,6 +1162,7 @@ public class AdminController implements Initializable {
         // Clear the table selection
         gestionutili_table.getSelectionModel().clearSelection();
     }
+    //------------------------------------------- -------------------------------------------
 
     public void logout(){
         try{
@@ -845,8 +1221,10 @@ public class AdminController implements Initializable {
 
         UpdateTable();
 
-        UpdatedTable();
+        UpdateUserTable();;
         UpdateEntriesTable();
+        UpdateHistoryTable();
+        UpdateSortieTable();
 
         //comboBoxes
         initializeDAO();
@@ -854,6 +1232,7 @@ public class AdminController implements Initializable {
         setTypeSelectionListener();
 
         intializeEntryDAO();
+        intializeSortieDAO();
 
 
         update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
@@ -885,6 +1264,23 @@ public class AdminController implements Initializable {
 
             }
         });
+
+        //search suggestions
+        // Bind the filteredReferences to the searchField
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = newValue.toLowerCase();
+            filteredReferences.setPredicate(reference -> reference.toLowerCase().contains(searchText));
+        });
+
+        // Set up auto-completion and onAutoCompleted event listener
+        setupAutoCompletion();
+
+        searchField_sortie.textProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = newValue.toLowerCase();
+            filteredReferences_sortie.setPredicate(reference -> reference.toLowerCase().contains(searchText));
+        });
+
+        sortieSetupAutoCompletion();
 
 
     }
