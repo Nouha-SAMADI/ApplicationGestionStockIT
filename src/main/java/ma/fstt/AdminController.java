@@ -1,5 +1,6 @@
 package ma.fstt;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -16,6 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
@@ -266,7 +268,29 @@ public class AdminController implements Initializable {
     private TableColumn<Sortie,LocalDate > history_date;
     @FXML
     private TableColumn<Sortie,String > history_user;
+    //----------------------Dashboard----------------
+    @FXML
+    private AnchorPane dashboard_form;
+    @FXML
+    private Button dashboard_button;
+
+    @FXML
+    private TableView<ParametrageDeReference> tableView;
+
+    @FXML
+    private TableColumn<ParametrageDeReference, String> referenceColumn;
+
+    @FXML
+    private TableColumn<ParametrageDeReference, String> brandColumn;
+
+    @FXML
+    private TableColumn<ParametrageDeReference, Integer> quantityColumn;
+
+    @FXML
+    private TableColumn<ParametrageDeReference, String> stripColumn;
+
     //-----------------------------History----------------------------
+
 
 
     public ObservableList<Sortie> addHistoryList(){
@@ -992,6 +1016,7 @@ public class AdminController implements Initializable {
             user_form.setVisible(false);
             entry_form.setVisible(false);
             sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
 
             UpdateTable();
         } else if (event.getSource() == historyButton) {
@@ -1000,6 +1025,7 @@ public class AdminController implements Initializable {
             user_form.setVisible(false);
             entry_form.setVisible(false);
             sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
             UpdateHistoryTable();
 
         } else if (event.getSource() == userButton){
@@ -1008,6 +1034,7 @@ public class AdminController implements Initializable {
             historique_form.setVisible(false);
             entry_form.setVisible(false);
             sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
             UpdateUserTable();;
         }else if(event.getSource() == entry_button){
             user_form.setVisible(false);
@@ -1015,6 +1042,7 @@ public class AdminController implements Initializable {
             historique_form.setVisible(false);
             entry_form.setVisible(true);
             sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
             UpdateEntriesTable();
 
         }else if(event.getSource() == sortie_button) {
@@ -1023,7 +1051,15 @@ public class AdminController implements Initializable {
             historique_form.setVisible(false);
             entry_form.setVisible(false);
             sortie_form.setVisible(true);
+            dashboard_form.setVisible(false);
             UpdateSortieTable();
+        }else if (event.getSource() == dashboard_button) {
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            user_form.setVisible(false);
+            entry_form.setVisible(false);
+            sortie_form.setVisible(false);
+            dashboard_form.setVisible(true);
         }
 
 
@@ -1283,6 +1319,56 @@ public class AdminController implements Initializable {
         sortieSetupAutoCompletion();
 
 
+
+// Configure the table columns
+        referenceColumn.setCellValueFactory(new PropertyValueFactory<>("reference"));
+        brandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        // Create the strip column
+        TableColumn<ParametrageDeReference, String> stripColumn = new TableColumn<>("Etat de stock");
+        stripColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReference()));
+        stripColumn.setCellFactory(column -> new TableCell<ParametrageDeReference, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    ParametrageDeReference product = getTableView().getItems().get(getIndex());
+                    String stripColor = "";
+
+                    // Determine the strip color based on the stock quantity
+                    if (product.getQuantity() > product.getStockMin()) {
+                        stripColor = "green";
+                    } else if (product.getQuantity() == product.getStockMin()) {
+                        stripColor = "orange";
+                    } else {
+                        stripColor = "red";
+                    }
+
+                    // Set the strip color
+                    String stripStyle = String.format("-fx-background-color: %s;", stripColor);
+                    setStyle(stripStyle);
+                }
+            }
+        });
+
+        // Add the strip column to the table
+        tableView.getColumns().add(stripColumn);
+
+        // Populate the table with data
+        try {
+            ParametrageDeReferenceDAO parametrageDeReferenceDAO = new ParametrageDeReferenceDAO();
+            List<ParametrageDeReference> productList = parametrageDeReferenceDAO.getAll();
+            tableView.getItems().addAll(productList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
 }
 
