@@ -354,7 +354,7 @@ public class AdminController implements Initializable {
                 sortie_category.setText(product.getCategory().getName());
                 sortie_currentStock.setText(String.valueOf(product.getQuantity()));
                 sortie_brand.setText(product.getBrand());
-                sortie_stockMin.setText(String.valueOf(product.getStockMax()));
+                sortie_stockMin.setText(String.valueOf(product.getStockMin()));
             } else {
                 System.out.println("Product not found.");
             }
@@ -378,7 +378,7 @@ public class AdminController implements Initializable {
                     sortie_category.setText(product.getCategory().getName());
                     sortie_currentStock.setText(String.valueOf(product.getQuantity()));
                     sortie_brand.setText(product.getBrand());
-                    sortie_stockMin.setText(String.valueOf(product.getStockMax()));
+                    sortie_stockMin.setText(String.valueOf(product.getStockMin()));
                 } else {
                     System.out.println("Product not found.");
                 }
@@ -477,7 +477,7 @@ public class AdminController implements Initializable {
                     sortie_category.setText(product.getCategory().getName());
                     sortie_currentStock.setText(String.valueOf(product.getQuantity()));
                     sortie_brand.setText(product.getBrand());
-                    sortie_stockMin.setText(String.valueOf(product.getStockMax()));
+                    sortie_stockMin.setText(String.valueOf(product.getStockMin()));
                 } else {
                     System.out.println("Product not found.");
                 }
