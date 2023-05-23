@@ -1,5 +1,8 @@
 package ma.fstt;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -1323,7 +1326,16 @@ public class AdminController implements Initializable {
 // Configure the table columns
         referenceColumn.setCellValueFactory(new PropertyValueFactory<>("reference"));
         brandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityColumn.setCellValueFactory(param -> {
+            ParametrageDeReference product = param.getValue();
+            IntegerBinding quantityBinding = Bindings.createIntegerBinding(() -> product.getQuantity());
+            quantityBinding.addListener((observable, oldValue, newValue) -> {
+                tableView.refresh();
+            });
+            return quantityBinding.asObject();
+        });
+
+
 
         // Create the strip column
         TableColumn<ParametrageDeReference, String> stripColumn = new TableColumn<>("Etat de stock");
@@ -1354,6 +1366,9 @@ public class AdminController implements Initializable {
                 }
             }
         });
+
+// Update the strip color whenever the table view is refreshed
+        tableView.refresh();
 
         // Add the strip column to the table
         tableView.getColumns().add(stripColumn);

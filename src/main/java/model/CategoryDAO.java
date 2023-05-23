@@ -20,7 +20,7 @@ public class CategoryDAO extends BaseDAO<Category> {
         this.preparedStatement.setString(1, object.getName());
         this.preparedStatement.setLong(2, object.getType().getId());
 
-        this.preparedStatement.executeUpdate();
+        this.preparedStatement.execute();
     }
 
     @Override
