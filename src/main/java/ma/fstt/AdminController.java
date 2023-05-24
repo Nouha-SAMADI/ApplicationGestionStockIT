@@ -1,5 +1,6 @@
 package ma.fstt;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
@@ -291,6 +292,9 @@ public class AdminController implements Initializable {
 
     @FXML
     private TableColumn<ParametrageDeReference, String> stripColumn;
+
+    @FXML
+    private Label notificationLabel;
 
     //-----------------------------History----------------------------
 
@@ -1381,9 +1385,68 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+
+        // Call the checkStockAndShowNotification method periodically
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                checkStockAndShowNotification();
+            }
+        }, 0, 5000); // Adjust the time interval (in milliseconds) as per your requirement
+    }
+
+    private void checkStockAndShowNotification() {
+        // Create an instance of ParametrageDeReferenceDAO
+        ParametrageDeReferenceDAO dao;
+        try {
+            dao = new ParametrageDeReferenceDAO();
+
+            // Get the list of ParametrageDeReference objects
+            List<ParametrageDeReference> paramList = dao.getAll();
+
+            // Iterate over the list and check for low stock
+            for (ParametrageDeReference param : paramList) {
+                if (param.getQuantity() <= param.getStockMin()) {
+                    String notificationMessage = "Product " + param.getReference() + " (" + param.getBrand() + ") is almost out of stock.";
+                    showNotification(notificationMessage);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showNotification(String message) {
+        Platform.runLater(() -> {
+            notificationLabel.setText(message);
+            notificationLabel.setVisible(true);
+        });
+
+        // Schedule a task to hide the notification after a certain time (e.g., 5 seconds)
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                hideNotification();
+                timer.cancel();
+            }
+        }, 5000); // Adjust the time interval (in milliseconds) as per your requirement
+    }
+
+    private void hideNotification() {
+        Platform.runLater(() -> {
+            notificationLabel.setText("");
+            notificationLabel.setVisible(false);
+        });
     }
 
 
-
 }
+
+
+
+
 

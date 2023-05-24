@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.StackPane?>
 <AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="1125.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -357,6 +358,9 @@
                               </TableView>
                            </children>
                         </AnchorPane>
+                        <StackPane layoutX="617.0" layoutY="179.0" prefHeight="200.0" prefWidth="250.0">
+                           <Label fx:id="notificationLabel" style="-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF; -fx-padding: 10px;" visible="false" StackPane.alignment="BOTTOM_RIGHT" />
+                        </StackPane>
                      </children>
                   </AnchorPane>
                </children>
