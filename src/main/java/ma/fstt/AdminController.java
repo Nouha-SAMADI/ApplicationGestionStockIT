@@ -12,8 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
@@ -24,7 +29,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.*;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
@@ -122,6 +129,13 @@ public class AdminController implements Initializable {
 
     @FXML
     private Button update_button;
+
+    private AddTypeController addTypeController; // AddTypeController reference
+
+    private AddCategoryController addCategoryController;
+    @FXML
+    private Button addCategory_button;
+    //---------------------------------User attributes----------------
     @FXML
     private Button ajouter;
 
@@ -142,7 +156,7 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<Login, String> col_user;
     @FXML
-    private TextField statut;
+    private ComboBox<String> userType_comboBox;
     @FXML
     private TextField email;
     @FXML
@@ -151,15 +165,11 @@ public class AdminController implements Initializable {
     private TextField username;
     @FXML
     private TableView<Login> gestionutili_table;
-    @FXML
-    private Button addCategory_button;
+
 
     @FXML
     private AnchorPane user_form;
 
-    private AddTypeController addTypeController; // AddTypeController reference
-
-    private AddCategoryController addCategoryController;
     //------Entry attributes --------------
 
 
@@ -292,9 +302,18 @@ public class AdminController implements Initializable {
 
     @FXML
     private TableColumn<ParametrageDeReference, String> stripColumn;
+    @FXML
+    private TableColumn<ParametrageDeReference, String> categoryColumun;
+    @FXML
+    private BarChart<String, Number> chart;
 
     @FXML
-    private Label notificationLabel;
+    private CategoryAxis xAxis;
+
+    @FXML
+    private NumberAxis yAxis;
+
+
 
     //-----------------------------History----------------------------
 
@@ -401,7 +420,7 @@ public class AdminController implements Initializable {
     private void sortieSubmitButtonClicked() {
         String reference = searchField_sortie.getText();
         int quantity = Integer.parseInt(sortie_quantity.getText());
-        LocalDate date = sortie_date.getValue();
+
 
         try {
             ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
@@ -434,32 +453,34 @@ public class AdminController implements Initializable {
                     if (result.isPresent() && result.get() == ButtonType.OK) {
                         // Create and save the new sortie
                         Login loggedInUser = SessionManager.getLoggedInUser();
-                        Sortie newSortie = new Sortie(reference, quantity, date, loggedInUser.getId());
+                        Sortie newSortie = new Sortie(reference, quantity, loggedInUser.getId());
                         sortieDAO.save(newSortie);
 
                         // Update the product quantity
                         sortie_paramRefDAO.updateSortieQuantity(reference, quantity);
+                        UpdateSortieTable();
 
                         // Clear the fields
                         searchField_sortie.setText("");
                         sortie_quantity.setText("");
-                        sortie_date.setValue(null);
+
                     } else {
                         // User canceled the operation, do nothing
                     }
                 } else {
                     // Create and save the new sortie
                     Login loggedInUser = SessionManager.getLoggedInUser();
-                    Sortie newSortie = new Sortie(reference, quantity, date, loggedInUser.getId());
+                    Sortie newSortie = new Sortie(reference, quantity, loggedInUser.getId());
                     sortieDAO.save(newSortie);
 
                     // Update the product quantity
                     sortie_paramRefDAO.updateSortieQuantity(reference, quantity);
+                    UpdateSortieTable();
 
                     // Clear the fields
                     searchField_sortie.setText("");
                     sortie_quantity.setText("");
-                    sortie_date.setValue(null);
+
                 }
             } else {
                 System.out.println("Product not found.");
@@ -576,7 +597,7 @@ public class AdminController implements Initializable {
     private void submitButtonClicked() {
         String reference = searchField.getText();
         int quantity = Integer.parseInt(newquantity.getText());
-        LocalDate date = entryDate.getValue();
+
 
         try {
             ParametrageDeReference product = paramRefDAO.getByReference(reference);
@@ -600,7 +621,7 @@ public class AdminController implements Initializable {
                     newquantity.setText("");
                 } else {
                     // Create and save the new entry
-                    Entry newEntry = new Entry(reference, quantity, date);
+                    Entry newEntry = new Entry(reference, quantity);
                     entryDAO.save(newEntry);
 
                     // Update the product quantity
@@ -612,7 +633,7 @@ public class AdminController implements Initializable {
                     // Clear the fields
                     searchField.setText("");
                     newquantity.setText("");
-                    entryDate.setValue(null);
+
                 }
             } else {
                 System.out.println("Product not found.");
@@ -1115,7 +1136,7 @@ public class AdminController implements Initializable {
             LoginDAO loginDAO = new LoginDAO();
 
             Login refe;
-            refe = new Login(0l , username.getText() ,password.getText(),statut.getText(),email.getText());
+            refe = new Login(0l , username.getText() ,password.getText(),userType_comboBox.getValue(),email.getText());
 
             loginDAO.save(refe);
 
@@ -1124,7 +1145,7 @@ public class AdminController implements Initializable {
 
             username.setText("");
             password.setText("");
-            statut.setText("");
+            userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
 
 
@@ -1147,7 +1168,7 @@ public class AdminController implements Initializable {
             // update the record in the database with the new values from the text fields
             selectedReff.setUsername(username.getText());
             selectedReff.setPassword(password.getText());
-            selectedReff.setUserType(statut.getText());
+            selectedReff.setUserType(userType_comboBox.getValue());
             selectedReff.setEmailAddress(email.getText());
 
 
@@ -1161,7 +1182,7 @@ public class AdminController implements Initializable {
 
             username.setText("");
             password.setText("");
-            statut.setText("");
+            userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
 
 
@@ -1188,7 +1209,7 @@ public class AdminController implements Initializable {
 
             username.setText("");
             password.setText("");
-            statut.setText("");
+            userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
 
         } catch (SQLException e) {
@@ -1200,10 +1221,18 @@ public class AdminController implements Initializable {
         // Clear the text fields
         username.setText("");
         password.setText("");
-        statut.setText("");
+        userType_comboBox.getSelectionModel().clearSelection();
         email.setText("");
         // Clear the table selection
         gestionutili_table.getSelectionModel().clearSelection();
+    }
+    private String[] listUserType = {"admin", "user"};
+    public void setUpUserComboBox() {
+
+
+        // Set up the type combo box with the pre-defined types
+        ObservableList<String> userTypeList = FXCollections.observableArrayList(listUserType);
+        userType_comboBox.setItems(userTypeList);
     }
     //------------------------------------------- -------------------------------------------
 
@@ -1254,7 +1283,118 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+    private void configureTableColumns() {
+        // Configure the reference column
+        categoryColumun.setCellValueFactory(new PropertyValueFactory<>("category"));
+        referenceColumn.setCellValueFactory(new PropertyValueFactory<>("reference"));
 
+        // Configure the brand column
+        brandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
+
+        // Configure the quantity column
+        quantityColumn.setCellValueFactory(param -> {
+            ParametrageDeReference product = param.getValue();
+            IntegerBinding quantityBinding = Bindings.createIntegerBinding(() -> product.getQuantity());
+            quantityBinding.addListener((observable, oldValue, newValue) -> {
+                tableView.refresh();
+            });
+            return quantityBinding.asObject();
+        });
+    }
+
+    private void configureStripColumn() {
+        // Create the strip column
+        TableColumn<ParametrageDeReference, String> stripColumn = new TableColumn<>("Etat de stock");
+        stripColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReference()));
+        stripColumn.setCellFactory(column -> new TableCell<ParametrageDeReference, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    ParametrageDeReference product = getTableView().getItems().get(getIndex());
+                    String stripColor = "";
+                    String stripText = "";
+
+                    // Determine the strip color and text based on the stock quantity
+                    if (product.getQuantity() > product.getStockMin()) {
+                        stripColor = "green";
+                        stripText = "Available";
+                    } else if (product.getQuantity() == product.getStockMin()  ) {
+                        stripColor = "orange";
+                        stripText = "Need to order";
+                    } else if(product.getQuantity() <  product.getStockMin() ){
+                        stripColor = "red";
+                        stripText = "Stock out";
+                    }
+
+                    // Set the strip color and text
+                    String stripStyle = String.format("-fx-background-color: %s;", stripColor);
+                    setStyle(stripStyle);
+                    setText(stripText);
+                }
+            }
+        });
+
+        // Add the strip column to the table
+        tableView.getColumns().add(stripColumn);
+
+        // Update the strip color and text whenever the table view is refreshed
+        tableView.refresh();
+    }
+
+    private void checkStockAndShowNotification() {
+        // Create an instance of ParametrageDeReferenceDAO
+        ParametrageDeReferenceDAO dao;
+        try {
+            dao = new ParametrageDeReferenceDAO();
+
+            // Get the list of ParametrageDeReference objects
+            List<ParametrageDeReference> paramList = dao.getAll();
+
+            // Iterate over the list and check for low stock
+            for (ParametrageDeReference param : paramList) {
+                if (param.getQuantity() == param.getStockMin()) {
+                    String notificationMessage = "Product " + param.getCategory() + " (" + param.getReference() + ") is almost out of stock.";
+                    showNotification(notificationMessage);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showNotification(String message) {
+        Notifications.create()
+                .title("Notification")
+                .text(message)
+                .position(Pos.BASELINE_RIGHT)
+                .hideAfter(Duration.seconds(60))
+                .showInformation();
+    }
+
+
+    private void showProductCountsChart(Map<String, Integer> productCounts) {
+        // Create the chart axes
+        xAxis.setLabel("Product Reference");
+        yAxis.setLabel("Frequency");
+
+        // Create the data series for the chart
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Product Count");
+        for (Map.Entry<String, Integer> entry : productCounts.entrySet()) {
+            String productReference = entry.getKey();
+            int count = entry.getValue();
+            series.getData().add(new XYChart.Data<>(productReference, count));
+        }
+
+        // Add the data series to the chart
+        ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList(series);
+        chart.setData(data);
+    }
 
 
     @Override
@@ -1263,6 +1403,7 @@ public class AdminController implements Initializable {
         //To show data on the tableview
 
         UpdateTable();
+        setUpUserComboBox();
 
         UpdateUserTable();;
         UpdateEntriesTable();
@@ -1276,6 +1417,8 @@ public class AdminController implements Initializable {
 
         intializeEntryDAO();
         intializeSortieDAO();
+        checkStockAndShowNotification();
+
 
 
         update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
@@ -1302,7 +1445,7 @@ public class AdminController implements Initializable {
                 // Set the values of the selected item to the text fieldsadmin
                 username.setText(newSelection.getUsername());
                 password.setText(newSelection.getPassword());
-                statut.setText(newSelection.getUserType());
+                userType_comboBox.getSelectionModel().select(newSelection.getUserType());
                 email.setText(newSelection.getEmailAddress());
 
             }
@@ -1328,54 +1471,11 @@ public class AdminController implements Initializable {
 
 
 // Configure the table columns
-        referenceColumn.setCellValueFactory(new PropertyValueFactory<>("reference"));
-        brandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
-        quantityColumn.setCellValueFactory(param -> {
-            ParametrageDeReference product = param.getValue();
-            IntegerBinding quantityBinding = Bindings.createIntegerBinding(() -> product.getQuantity());
-            quantityBinding.addListener((observable, oldValue, newValue) -> {
-                tableView.refresh();
-            });
-            return quantityBinding.asObject();
-        });
+        configureTableColumns();
 
+        // Configure the strip column
+        configureStripColumn();
 
-
-        // Create the strip column
-        TableColumn<ParametrageDeReference, String> stripColumn = new TableColumn<>("Etat de stock");
-        stripColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReference()));
-        stripColumn.setCellFactory(column -> new TableCell<ParametrageDeReference, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    ParametrageDeReference product = getTableView().getItems().get(getIndex());
-                    String stripColor = "";
-
-                    // Determine the strip color based on the stock quantity
-                    if (product.getQuantity() > product.getStockMin()) {
-                        stripColor = "green";
-                    } else if (product.getQuantity() == product.getStockMin()) {
-                        stripColor = "orange";
-                    } else {
-                        stripColor = "red";
-                    }
-
-                    // Set the strip color
-                    String stripStyle = String.format("-fx-background-color: %s;", stripColor);
-                    setStyle(stripStyle);
-                }
-            }
-        });
-
-// Update the strip color whenever the table view is refreshed
-        tableView.refresh();
-
-        // Add the strip column to the table
-        tableView.getColumns().add(stripColumn);
 
         // Populate the table with data
         try {
@@ -1386,63 +1486,20 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
 
-
-
-        // Call the checkStockAndShowNotification method periodically
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                checkStockAndShowNotification();
-            }
-        }, 0, 5000); // Adjust the time interval (in milliseconds) as per your requirement
-    }
-
-    private void checkStockAndShowNotification() {
-        // Create an instance of ParametrageDeReferenceDAO
-        ParametrageDeReferenceDAO dao;
+        // Retrieve the overall product counts and most retrieved product per month from the SortieDAO
+        SortieDAO sortieDAO = null;
         try {
-            dao = new ParametrageDeReferenceDAO();
+            sortieDAO = new SortieDAO();
+            Map<String, Integer> productCounts = sortieDAO.getOverallProductCounts();
+            Map<String, String> mostRetrievedProducts = sortieDAO.getMostRetrievedProductPerMonth();
 
-            // Get the list of ParametrageDeReference objects
-            List<ParametrageDeReference> paramList = dao.getAll();
-
-            // Iterate over the list and check for low stock
-            for (ParametrageDeReference param : paramList) {
-                if (param.getQuantity() <= param.getStockMin()) {
-                    String notificationMessage = "Product " + param.getReference() + " (" + param.getBrand() + ") is almost out of stock.";
-                    showNotification(notificationMessage);
-                }
-            }
+            // Generate and display the product counts chart
+            showProductCountsChart(productCounts);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
     }
-
-    private void showNotification(String message) {
-        Platform.runLater(() -> {
-            notificationLabel.setText(message);
-            notificationLabel.setVisible(true);
-        });
-
-        // Schedule a task to hide the notification after a certain time (e.g., 5 seconds)
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                hideNotification();
-                timer.cancel();
-            }
-        }, 5000); // Adjust the time interval (in milliseconds) as per your requirement
-    }
-
-    private void hideNotification() {
-        Platform.runLater(() -> {
-            notificationLabel.setText("");
-            notificationLabel.setVisible(false);
-        });
-    }
-
 
 }
 

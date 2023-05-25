@@ -18,7 +18,7 @@ public class EntryDAO extends BaseDAO<Entry>{
         this.preparedStatement = this.connection.prepareStatement(query);
         this.preparedStatement.setString(1, object.getProductReference());
         this.preparedStatement.setInt(2, object.getQuantity());
-        this.preparedStatement.setDate(3, java.sql.Date.valueOf(object.getEntryDate()));
+        this.preparedStatement.setTimestamp(3,object.getEntryDate());
         this.preparedStatement.executeUpdate();
 
 
@@ -48,7 +48,7 @@ public class EntryDAO extends BaseDAO<Entry>{
             entry.setId(this.resultSet.getInt("id"));
             entry.setProductReference(this.resultSet.getString("product_reference"));
             entry.setQuantity(this.resultSet.getInt("quantity"));
-            entry.setEntryDate(this.resultSet.getDate("entry_date").toLocalDate());
+            entry.setEntryDate(this.resultSet.getTimestamp("entry_date"));
             entries.add(entry);
         }
 

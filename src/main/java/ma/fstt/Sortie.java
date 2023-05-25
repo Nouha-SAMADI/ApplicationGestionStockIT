@@ -1,5 +1,6 @@
 package ma.fstt;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class Sortie {
@@ -7,11 +8,11 @@ public class Sortie {
     private Long id;
     private String productReference;
     private int quantity;
-    private LocalDate sortieDate;
+    private Timestamp sortieDate;
     private Long userId;
 
 
-    public Sortie(Long id, String productReference, int quantity, LocalDate stockOutDate, Long userId) {
+    public Sortie(Long id, String productReference, int quantity, Timestamp stockOutDate, Long userId) {
         this.id = id;
         this.productReference = productReference;
         this.quantity = quantity;
@@ -21,16 +22,17 @@ public class Sortie {
 
     private String username;
 
-    public Sortie(String reference, int quantity, LocalDate date, Long userId) {
+    public Sortie(String reference, int quantity, Long userId) {
         this.productReference = reference;
         this.quantity = quantity;
-        this.sortieDate = date;
+
         this.userId = userId;
     }
 
     public Sortie() {
 
     }
+
 
     public Long getId() {
         return id;
@@ -56,11 +58,11 @@ public class Sortie {
         this.quantity = quantity;
     }
 
-    public LocalDate getSortieDate() {
+    public Timestamp getSortieDate() {
         return sortieDate;
     }
 
-    public void setSortieDate(LocalDate sortieDate) {
+    public void setSortieDate(Timestamp sortieDate) {
         this.sortieDate = sortieDate;
     }
 
@@ -80,7 +82,7 @@ public class Sortie {
         this.username = username;
     }
 
-    public Sortie(Long id, String productReference, int quantity, LocalDate stockOutDate, Long userId, String username) {
+    public Sortie(Long id, String productReference, int quantity, Timestamp stockOutDate, Long userId, String username) {
         this.id = id;
         this.productReference = productReference;
         this.quantity = quantity;

@@ -3,33 +3,22 @@ package ma.fstt;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import ma.fstt.ParametrageDeReference;
 import model.ParametrageDeReferenceDAO;
+import org.controlsfx.control.Notifications;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class HomeInterface extends Application {
 
-    private Label notificationLabel;
-
     @Override
     public void start(Stage primaryStage) {
         // Create a StackPane as the root node
         StackPane root = new StackPane();
-
-        // Create a label to display the notification
-        notificationLabel = new Label();
-        notificationLabel.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF; -fx-padding: 10px;");
-        notificationLabel.setVisible(false);
-
-        // Add the notification label to the root node
-        root.getChildren().add(notificationLabel);
-
-        // Set the alignment of the notification label to bottom-right
-        StackPane.setAlignment(notificationLabel, Pos.BOTTOM_RIGHT);
 
         // Create a scene with the root node
         Scene scene = new Scene(root, 400, 300);
@@ -66,8 +55,12 @@ public class HomeInterface extends Application {
     }
 
     private void showNotification(String message) {
-        notificationLabel.setText(message);
-        notificationLabel.setVisible(true);
+        Notifications.create()
+                .title("Notification")
+                .text(message)
+                .position(Pos.BOTTOM_RIGHT)
+                .hideAfter(Duration.seconds(60))
+                .showInformation();
     }
 
     public static void main(String[] args) {

@@ -136,8 +136,6 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         this.preparedStatement= this.connection.prepareStatement(query);
         this.preparedStatement.setInt(1, quantity);
         this.preparedStatement.setString(2, reference);
-
-
         this.preparedStatement.executeUpdate();
     }
 
@@ -149,6 +147,20 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
 
 
         this.preparedStatement.executeUpdate();
+    }
+
+    // Method to fetch the quantity directly from the database for a given reference
+    public int getQuantityFromDatabase(String reference) throws SQLException {
+        String query = "SELECT quantity FROM parametrageRef WHERE reference = ?";
+        this.preparedStatement = this.connection.prepareStatement(query);
+        this.preparedStatement.setString(1, reference);
+        this.resultSet = this.preparedStatement.executeQuery();
+
+        if (this.resultSet.next()) {
+            return this.resultSet.getInt("quantity");
+        }
+
+        return 0;
     }
 
 

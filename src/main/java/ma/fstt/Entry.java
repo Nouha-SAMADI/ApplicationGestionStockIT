@@ -1,16 +1,17 @@
 package ma.fstt;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class Entry {
     private int id;
     private String productReference;
     private int quantity;
-    private LocalDate entryDate;
+    private Timestamp entryDate;
 
     public Entry() {
     }
 
-    public Entry(String productReference, int quantity, LocalDate entryDate) {
+    public Entry(String productReference, int quantity, Timestamp entryDate) {
         this.productReference = productReference;
         this.quantity = quantity;
         this.entryDate = entryDate;
@@ -36,15 +37,20 @@ public class Entry {
         return quantity;
     }
 
+    public Entry(String productReference, int quantity) {
+        this.productReference = productReference;
+        this.quantity = quantity;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public LocalDate getEntryDate() {
+    public Timestamp getEntryDate() {
         return entryDate;
     }
 
-    public void setEntryDate(LocalDate entryDate) {
+    public void setEntryDate(Timestamp entryDate) {
         this.entryDate = entryDate;
     }
 }

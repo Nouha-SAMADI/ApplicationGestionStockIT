@@ -7,7 +7,9 @@ import ma.fstt.Sortie;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SortieDAO extends BaseDAO<Sortie> {
 
@@ -35,7 +37,7 @@ public class SortieDAO extends BaseDAO<Sortie> {
             // Set the values for the prepared statement
             this.preparedStatement.setString(1, object.getProductReference());
             this.preparedStatement.setInt(2, object.getQuantity());
-            this.preparedStatement.setDate(3, java.sql.Date.valueOf(object.getSortieDate()));
+            this.preparedStatement.setTimestamp(3, object.getSortieDate());
             this.preparedStatement.setLong(4, object.getUserId());
 
             // Execute the statement
@@ -70,7 +72,7 @@ public class SortieDAO extends BaseDAO<Sortie> {
             sortie.setId(this.resultSet.getLong(1));
             sortie.setProductReference(this.resultSet.getString(2));
             sortie.setQuantity(this.resultSet.getInt(3));
-            sortie.setSortieDate(this.resultSet.getDate(4).toLocalDate());
+            sortie.setSortieDate(this.resultSet.getTimestamp(4));
             sorties.add(sortie);
         }
 
@@ -93,7 +95,7 @@ public class SortieDAO extends BaseDAO<Sortie> {
             sortie.setId(this.resultSet.getLong(1));
             sortie.setProductReference(this.resultSet.getString(2));
             sortie.setQuantity(this.resultSet.getInt(3));
-            sortie.setSortieDate(this.resultSet.getDate(4).toLocalDate());
+            sortie.setSortieDate(this.resultSet.getTimestamp(4));
             sortie.setUsername(this.resultSet.getString(5));
 
             sorties.add(sortie);
@@ -105,5 +107,75 @@ public class SortieDAO extends BaseDAO<Sortie> {
     @Override
     public Sortie getOne(Long id) throws SQLException {
         return null;
+    }
+
+
+    public Map<String, Integer> getMonthlyProductCounts() throws SQLException {
+        Map<String, Integer> monthlyCounts = new HashMap<>();
+
+        String query = "SELECT DATE_FORMAT(sortie_date, '%Y-%m') AS month, product_reference, COUNT(*) AS count " +
+                "FROM sortie " +
+                "GROUP BY month, product_reference";
+
+        this.statement = this.connection.createStatement();
+        this.resultSet = this.statement.executeQuery(query);
+
+        while (this.resultSet.next()) {
+            String month = this.resultSet.getString("month");
+            String productReference = this.resultSet.getString("product_reference");
+            int count = this.resultSet.getInt("count");
+
+            // Update the count for the product in the corresponding month
+            monthlyCounts.put(month + "-" + productReference, count);
+        }
+
+        return monthlyCounts;
+    }
+
+
+    public Map<String, Integer> getOverallProductCounts() throws SQLException {
+        Map<String, Integer> productCounts = new HashMap<>();
+
+        String query = "SELECT product_reference, COUNT(*) AS count " +
+                "FROM sortie " +
+                "GROUP BY product_reference";
+
+        this.statement = this.connection.createStatement();
+        this.resultSet = this.statement.executeQuery(query);
+
+        while (this.resultSet.next()) {
+            String productReference = this.resultSet.getString("product_reference");
+            int count = this.resultSet.getInt("count");
+
+            // Update the count for the product
+            productCounts.put(productReference, count);
+        }
+
+        return productCounts;
+    }
+
+    public Map<String, String> getMostRetrievedProductPerMonth() throws SQLException {
+        Map<String, String> mostRetrievedProducts = new HashMap<>();
+
+        String query = "SELECT DATE_FORMAT(sortie_date, '%Y-%m') AS month, product_reference, COUNT(*) AS count " +
+                "FROM sortie " +
+                "GROUP BY month, product_reference " +
+                "ORDER BY month, count DESC";
+
+        this.statement = this.connection.createStatement();
+        this.resultSet = this.statement.executeQuery(query);
+
+        while (this.resultSet.next()) {
+            String month = this.resultSet.getString("month");
+            String productReference = this.resultSet.getString("product_reference");
+            int count = this.resultSet.getInt("count");
+
+            // Update the most retrieved product for the month
+            if (!mostRetrievedProducts.containsKey(month)) {
+                mostRetrievedProducts.put(month, productReference);
+            }
+        }
+
+        return mostRetrievedProducts;
     }
 }
