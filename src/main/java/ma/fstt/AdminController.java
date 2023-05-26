@@ -312,6 +312,15 @@ public class AdminController implements Initializable {
 
     @FXML
     private NumberAxis yAxis;
+    @FXML
+    private Label lastArrival_category;
+
+    @FXML
+    private Label lastArrival_quantity;
+
+    @FXML
+    private Label lastArrival_reference;
+
 
 
 
@@ -1283,7 +1292,29 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+    public ObservableList<ParametrageDeReference> addDashboardTableList(){
+
+
+        ParametrageDeReferenceDAO paramDAO = null;
+
+        ObservableList<ParametrageDeReference> materialList  = FXCollections.observableArrayList();
+
+        try {
+            paramDAO = new ParametrageDeReferenceDAO();
+            for (ParametrageDeReference ettemp : paramDAO.getAll())
+                materialList.add(ettemp);
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return materialList;
+    }
+
+
     private void configureTableColumns() {
+        // Set the initial items for the table
+        tableView.setItems(addDashboardTableList());
         // Configure the reference column
         categoryColumun.setCellValueFactory(new PropertyValueFactory<>("category"));
         referenceColumn.setCellValueFactory(new PropertyValueFactory<>("reference"));
@@ -1296,7 +1327,7 @@ public class AdminController implements Initializable {
             ParametrageDeReference product = param.getValue();
             IntegerBinding quantityBinding = Bindings.createIntegerBinding(() -> product.getQuantity());
             quantityBinding.addListener((observable, oldValue, newValue) -> {
-                tableView.refresh();
+                tableView.setItems(addDashboardTableList());
             });
             return quantityBinding.asObject();
         });
@@ -1323,12 +1354,15 @@ public class AdminController implements Initializable {
                     if (product.getQuantity() > product.getStockMin()) {
                         stripColor = "green";
                         stripText = "Available";
-                    } else if (product.getQuantity() == product.getStockMin()  ) {
+                    } else if (product.getQuantity() == product.getStockMin()) {
                         stripColor = "orange";
                         stripText = "Need to order";
-                    } else if(product.getQuantity() <  product.getStockMin() ){
+                    } else if (product.getQuantity() < product.getStockMin() && product.getQuantity() > 0) {
+                        stripColor = "gray";
+                        stripText = "Almost out of stock";
+                    } else if (product.getQuantity() == 0) {
                         stripColor = "red";
-                        stripText = "Stock out";
+                        stripText = "Out of stock";
                     }
 
                     // Set the strip color and text
@@ -1343,8 +1377,9 @@ public class AdminController implements Initializable {
         tableView.getColumns().add(stripColumn);
 
         // Update the strip color and text whenever the table view is refreshed
-        tableView.refresh();
+        tableView.setItems(addDashboardTableList());
     }
+
 
     private void checkStockAndShowNotification() {
         // Create an instance of ParametrageDeReferenceDAO
@@ -1396,6 +1431,42 @@ public class AdminController implements Initializable {
         chart.setData(data);
     }
 
+    private void lastArrivals(){
+        try {
+            // Retrieve the last entry
+            EntryDAO entryDAO = new EntryDAO();
+            Entry lastEntry = entryDAO.getLastEntry();
+
+            if (lastEntry != null) {
+                // Get the product reference of the last entry
+
+                int quantity = lastEntry.getQuantity();
+                String productReference = lastEntry.getProductReference();
+
+                // Retrieve the corresponding parameterization reference
+                ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
+                ParametrageDeReference param = paramDAO.getByReference(productReference);
+
+                if (param != null) {
+                    // Get the category of the parameterization reference
+                    String category = param.getCategory().getName();
+
+                    // Update the category label with the retrieved category
+                    lastArrival_reference.setText( productReference);
+                    lastArrival_quantity.setText(String.valueOf(quantity));
+                    lastArrival_category.setText(category);
+                } else {
+                    lastArrival_category.setText("Category not found");
+
+                }
+            } else {
+                lastArrival_category.setText("No entries found");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -1418,6 +1489,8 @@ public class AdminController implements Initializable {
         intializeEntryDAO();
         intializeSortieDAO();
         checkStockAndShowNotification();
+        lastArrivals();
+
 
 
 
@@ -1470,21 +1543,14 @@ public class AdminController implements Initializable {
 
 
 
-// Configure the table columns
+        // Configure the table columns
         configureTableColumns();
 
         // Configure the strip column
         configureStripColumn();
 
 
-        // Populate the table with data
-        try {
-            ParametrageDeReferenceDAO parametrageDeReferenceDAO = new ParametrageDeReferenceDAO();
-            List<ParametrageDeReference> productList = parametrageDeReferenceDAO.getAll();
-            tableView.getItems().addAll(productList);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
 
         // Retrieve the overall product counts and most retrieved product per month from the SortieDAO
         SortieDAO sortieDAO = null;

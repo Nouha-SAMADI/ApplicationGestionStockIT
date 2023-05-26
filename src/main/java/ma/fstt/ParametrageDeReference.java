@@ -38,6 +38,9 @@ public class ParametrageDeReference {
         this.serialNumber = serialNumber;
     }
 
+    public ParametrageDeReference() {
+
+    }
 
 
     public long getId() {

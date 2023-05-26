@@ -60,4 +60,22 @@ public class EntryDAO extends BaseDAO<Entry>{
     public Entry getOne(Long id) throws SQLException {
         return null;
     }
+    public Entry getLastEntry() throws SQLException {
+        Entry lastEntry = null;
+
+        String query = "SELECT * FROM entry ORDER BY entry_date DESC LIMIT 1";
+        this.preparedStatement = this.connection.prepareStatement(query);
+        this.resultSet = this.preparedStatement.executeQuery();
+
+        if (this.resultSet.next()) {
+            lastEntry = new Entry();
+            lastEntry.setId(this.resultSet.getInt("id"));
+            lastEntry.setProductReference(this.resultSet.getString("product_reference"));
+            lastEntry.setQuantity(this.resultSet.getInt("quantity"));
+            lastEntry.setEntryDate(this.resultSet.getTimestamp("entry_date"));
+        }
+
+        return lastEntry;
+    }
+
 }
