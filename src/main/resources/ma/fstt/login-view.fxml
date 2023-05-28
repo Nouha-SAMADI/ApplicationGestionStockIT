@@ -2,33 +2,16 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.LoginController">
    <stylesheets>
       <URL value="@style.css" />
    </stylesheets>
    <children>
-      <AnchorPane prefHeight="600.0" prefWidth="454.0" style="-fx-background-color: orange;">
-         <children>
-            <ImageView fitHeight="278.0" fitWidth="297.0" layoutX="58.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true" styleClass="image-pane">
-               <image>
-                  <Image url="@../../cow-cow.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="58.0" layoutY="54.0" text="Polydesign Systems">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
+      <AnchorPane prefHeight="600.0" prefWidth="454.0" style="-fx-background-color: orange;" />
       <AnchorPane layoutX="454.0" prefHeight="600.0" prefWidth="346.0">
          <children>
             <TextField fx:id="username" layoutX="30.0" layoutY="140.0" prefHeight="40.0" prefWidth="268.0" promptText="Username" styleClass="input-label" stylesheets="@style.css" />

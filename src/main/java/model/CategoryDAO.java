@@ -22,6 +22,24 @@ public class CategoryDAO extends BaseDAO<Category> {
 
         this.preparedStatement.execute();
     }
+    public Category getByNameAndType(String name, Type type) throws SQLException {
+        String request = "SELECT * FROM categories WHERE name = ? AND type_id = ?";
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setString(1, name);
+        this.preparedStatement.setLong(2, type.getId());
+        this.resultSet = this.preparedStatement.executeQuery();
+
+        if (this.resultSet.next()) {
+            Category category = new Category();
+            category.setId(this.resultSet.getLong("id"));
+            category.setName(this.resultSet.getString("name"));
+            category.setType(type);
+            return category;
+        }
+
+        return null;
+    }
+
 
     @Override
     public void update(Category object) throws SQLException {

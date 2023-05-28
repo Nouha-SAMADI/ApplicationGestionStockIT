@@ -19,6 +19,15 @@ public class AddCategoryController {
 
     @FXML
     private TextField category;
+    private TypeDAO typeDAO;
+    public AddCategoryController() {
+        try {
+            typeDAO = new TypeDAO();
+        } catch (SQLException e) {
+            // Handle the exception
+        }
+    }
+
 
 
     @FXML
@@ -42,8 +51,12 @@ public class AddCategoryController {
     @FXML
     protected void onAddButtonClick() {
         try {
-            // Fetch the selected Type object from the typeComboBox
-            Type selectedType = typeComboBox.getSelectionModel().getSelectedItem();
+            // Fetch the selected type name from the typeComboBox
+            String selectedTypeName = typeComboBox.getSelectionModel().getSelectedItem().getName();
+
+            // Retrieve the selected type from the database
+            TypeDAO typeDAO = new TypeDAO();
+            Type selectedType = typeDAO.getByName(selectedTypeName);
 
             // Check if a Type is selected
             if (selectedType == null) {
@@ -59,16 +72,14 @@ public class AddCategoryController {
             CategoryDAO categoryDAO = new CategoryDAO();
             for (String categoryName : categoryNames) {
                 categoryName = categoryName.trim();
-                // Check if the category already exists
-                Category existingCategory = categoryDAO.getByName(categoryName);
-                System.out.println("Existing Category: " + existingCategory);
-                System.out.println("Selected Type: " + selectedType);
-                if (existingCategory != null && existingCategory.getType().equals(selectedType)) {
+
+                // Check if the category already exists for the selected type
+                Category existingCategory = categoryDAO.getByNameAndType(categoryName, selectedType);
+                if (existingCategory != null) {
                     // Display an error alert for category existence
                     showAlert(Alert.AlertType.ERROR, "Category Error", "Category already exists: " + categoryName);
                     continue; // Skip adding this category and proceed to the next one
                 }
-
 
                 Category newCategory = new Category(0L, categoryName, selectedType);
                 categoryDAO.save(newCategory);
@@ -76,6 +87,9 @@ public class AddCategoryController {
             }
 
             category.setText("");
+
+            // Print the selected type
+            System.out.println("Selected Type: " + selectedType);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

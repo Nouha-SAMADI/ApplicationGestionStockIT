@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -19,6 +20,8 @@ public class LoginController {
     @FXML
     private PasswordField password;
 
+
+
     @FXML
     public void onLoginClickButton() {
         try {
@@ -32,7 +35,7 @@ public class LoginController {
                         Scene myScene = new Scene(loader.load(), 1100, 616);
                         HelloApplication.setScene(myScene);
                     } catch (IOException e) {
-                        showErrorMessage("Erreur", "Opération n'a pas pu être effectuée", e.toString());
+                        showErrorMessage("Error", "Operation could not be performed", e.toString());
                     }
                 } else if (loggedInUser.getUserType().equals("user")) {
                     FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
@@ -40,17 +43,22 @@ public class LoginController {
                         Scene myScene = new Scene(loader.load(), 750, 470);
                         HelloApplication.setScene(myScene);
                     } catch (IOException e) {
-                        showErrorMessage("Erreur", "Opération n'a pas pu être effectuée", e.toString());
+                        showErrorMessage("Error", "Operation could not be performed", e.toString());
                     }
                 }
             } else {
-                showErrorMessage("Accès non autorisé", "Erreur Authentification échouée", "Les valeurs saisies ne sont pas correctes");
+                if (username.getText().isEmpty()) {
+                    showErrorMessage("Unauthorized Access", "Authentication Failed", "Username is required. Please enter your username.");
+                } else if (password.getText().isEmpty()) {
+                    showErrorMessage("Unauthorized Access", "Authentication Failed", "Password is required. Please enter your password.");
+                } else {
+                    showErrorMessage("Unauthorized Access", "Authentication Failed", "Invalid username or password. Please check your credentials.");
+                }
             }
         } catch (SQLException e) {
-            showErrorMessage("Erreur", "Connexion à la base de données", e.toString());
+            showErrorMessage("Error", "Database Connection", e.toString());
         }
     }
-
     private void showErrorMessage(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(HelloApplication.getStage());
@@ -58,5 +66,6 @@ public class LoginController {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+
     }
 }

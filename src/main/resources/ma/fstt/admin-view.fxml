@@ -21,21 +21,72 @@
          <left>
             <AnchorPane prefHeight="473.0" prefWidth="218.0" style="-fx-background-color: orange;" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="32.0" layoutY="100.0" prefHeight="26.0" prefWidth="159.0" text="Espace admin" textFill="WHITE">
+                  <Label fx:id="usernameText" layoutX="32.0" layoutY="100.0" prefHeight="26.0" prefWidth="159.0" textFill="#111010">
                      <font>
                         <Font size="21.0" />
                      </font>
                   </Label>
-                  <Button fx:id="paramButton" layoutX="10.0" layoutY="195.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Paramétrage de référence" />
-                  <Button fx:id="entry_button" layoutX="10.0" layoutY="308.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des entrés" />
-                  <Button fx:id="sortie_button" layoutX="10.0" layoutY="250.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des sorties" />
-                  <Button fx:id="userButton" layoutX="10.0" layoutY="363.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Gestion des utilisateurs" />
-                  <Button fx:id="dashboard_button" layoutX="10.0" layoutY="144.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Acceuil" />
-                  <Button fx:id="historyButton" layoutX="10.0" layoutY="417.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="190.0" text="Historique" />
-                  <Button fx:id="log" layoutX="10.0" layoutY="466.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="190.0" text="Log out" />
-                  <ImageView fitHeight="92.0" fitWidth="113.0" layoutX="50.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                  <Button fx:id="paramButton" layoutX="55.0" layoutY="199.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="166.0" style="-fx-background-color: transparent;" text="Paramétrage de référence">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Button>
+                  <Button fx:id="entry_button" layoutX="36.0" layoutY="309.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="161.0" style="-fx-background-color: transparent;" text="Gestion des entrés">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <Button fx:id="sortie_button" layoutX="20.0" layoutY="257.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="29.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Gestion des sorties">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <Button fx:id="userButton" layoutX="48.0" layoutY="363.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="162.0" style="-fx-background-color: transparent;" text="Gestion des utilisateurs">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <Button fx:id="dashboard_button" layoutX="23.0" layoutY="144.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="131.0" style="-fx-background-color: transparent;" styleClass="buttonPressed" stylesheets="@style.css" text="Acceuil">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <Button fx:id="historyButton" layoutX="-7.0" layoutY="417.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Historique">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <Button fx:id="log" layoutX="-28.0" layoutY="466.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="227.0" style="-fx-background-color: transparent;" text="Log out">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
+                  <ImageView fx:id="profilePicture" fitHeight="92.0" fitWidth="113.0" layoutX="50.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="26.0" fitWidth="32.0" layoutX="29.0" layoutY="149.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons8-utilisateur-30.png" />
+                        <Image url="@../../icons8-tableau-de-bord-64(1).png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="25.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons8-engrenages-48.png" />
+                     </image></ImageView>
+                  <ImageView fitHeight="27.0" fitWidth="31.0" layoutX="26.0" layoutY="258.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons8-sortie-48.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="31.0" fitWidth="28.0" layoutX="23.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons8-entrer-48.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="29.0" fitWidth="27.0" layoutX="24.0" layoutY="363.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons8-utilisateurs-48.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="24.0" layoutY="422.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons8-history-48.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="23.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons8-sortie-64(1).png" />
                      </image>
                   </ImageView>
                </children></AnchorPane>
@@ -117,6 +168,8 @@
                               <Button fx:id="supprimer" layoutX="175.0" layoutY="340.0" mnemonicParsing="false" onAction="#supprimerButtonClick" prefHeight="39.0" prefWidth="75.0" text="Supprimer" />
                               <Button fx:id="annuler" layoutX="257.0" layoutY="340.0" mnemonicParsing="false" onAction="#onAnnulerButtonClick" prefHeight="43.0" prefWidth="69.0" text="Annuler" />
                               <ComboBox fx:id="userType_comboBox" layoutX="25.0" layoutY="290.0" onAction="#setUpUserComboBox" prefWidth="150.0" />
+                              <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" layoutX="26.0" layoutY="400.0" preserveRatio="true" />
+                              <Button fx:id="exportButton" layoutX="250.0" layoutY="400.0" mnemonicParsing="false" onAction="#onChooseImageButtonClick" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: orange;" text="Export Image" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="348.0" layoutY="16.0" prefHeight="491.0" prefWidth="567.0">

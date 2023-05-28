@@ -16,7 +16,7 @@ public class LoginDAO extends BaseDAO<Login>{
 
     @Override
     public void save(Login object) throws SQLException {
-        String request = "insert into login (username,password,userType,emailAddress) values (? , ?, ?, ?)";
+        String request = "insert into login (username,password,userType,emailAddress,profilePicturePath) values (? , ?, ?, ?,?)";
 
         // mapping objet table
 
@@ -30,6 +30,8 @@ public class LoginDAO extends BaseDAO<Login>{
 
         this.preparedStatement.setString(4 , object.getEmailAddress());
 
+        this.preparedStatement.setString(5, object.getProfilePicturePath());
+
 
 
 
@@ -39,7 +41,7 @@ public class LoginDAO extends BaseDAO<Login>{
 
     @Override
     public void update(Login object) throws SQLException {
-        String request = "update login set  username = ?, password = ?, userType = ?, emailAddress = ? where id = ?";
+        String request = "update login set  username = ?, password = ?, userType = ?, emailAddress = ?, profilePicturePath = ? where id = ?";
 
         this.preparedStatement = this.connection.prepareStatement(request);
         // mapping
@@ -47,7 +49,8 @@ public class LoginDAO extends BaseDAO<Login>{
         this.preparedStatement.setString(2, object.getPassword());
         this.preparedStatement.setString(3, object.getUserType());
         this.preparedStatement.setString(4, object.getEmailAddress());
-        this.preparedStatement.setLong(5, object.getId());
+        this.preparedStatement.setString(5, object.getProfilePicturePath());
+        this.preparedStatement.setLong(6, object.getId());
 
 
         this.preparedStatement.executeUpdate();
@@ -81,6 +84,7 @@ public class LoginDAO extends BaseDAO<Login>{
                     ,this.resultSet.getString(3)
                     ,this.resultSet.getString(4)
                     ,this.resultSet.getString(5)
+                    ,this.resultSet.getString(6)
             ));
 
 
@@ -106,8 +110,9 @@ public class LoginDAO extends BaseDAO<Login>{
             String password = this.resultSet.getString("password");
             String userType = this.resultSet.getString("userType");
             String emailAddress = this.resultSet.getString("emailAddress");
+            String profilePicture = this.resultSet.getString("profilePicturePath");
 
-            return new Login(id, username, password, userType, emailAddress);
+            return new Login(id, username, password, userType, emailAddress,profilePicture);
         }
 
         return null;

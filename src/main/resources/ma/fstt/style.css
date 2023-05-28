@@ -46,3 +46,7 @@
 .description-label {
     -fx-font-size: 16px;
 }
+
+.buttonPressed:pressed{
+    -fx-background-color: #4CAF50;
+}

@@ -21,12 +21,15 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -34,6 +37,7 @@ import model.*;
 import org.controlsfx.control.Notifications;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -169,6 +173,15 @@ public class AdminController implements Initializable {
 
     @FXML
     private AnchorPane user_form;
+    @FXML
+    private Button exportButton;
+    @FXML
+    private ImageView imageView;
+    @FXML
+    private ImageView profilePicture;
+    @FXML
+    private Label usernameText;
+
 
     //------Entry attributes --------------
 
@@ -848,7 +861,7 @@ public class AdminController implements Initializable {
     @FXML
     protected void onSaveButtonClick() {
 
-        // accees a la bdd
+        // Access the database
 
         try {
             ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
@@ -858,11 +871,41 @@ public class AdminController implements Initializable {
                 serialNumberValue = Integer.parseInt(num_serie.getText());
             }
 
+            // Check if any required fields are empty
+            if (type_comboBox.getSelectionModel().isEmpty()) {
+                showAlert("Error", "Please select a type.");
+                return; // Stop execution if type is empty
+            }
+            if (category_comboBox.getSelectionModel().isEmpty()) {
+                showAlert("Error", "Please select a category.");
+                return; // Stop execution if category is empty
+            }
+            if (quantity.getText().isEmpty()) {
+                showAlert("Error", "Please enter a quantity.");
+                return; // Stop execution if quantity is empty
+            }
+            if (stock_max.getText().isEmpty()) {
+                showAlert("Error", "Please enter a maximum stock value.");
+                return; // Stop execution if maximum stock is empty
+            }
+            if (stock_min.getText().isEmpty()) {
+                showAlert("Error", "Please enter a minimum stock value.");
+                return; // Stop execution if minimum stock is empty
+            }
+            if (reference.getText().isEmpty()) {
+                showAlert("Error", "Please enter a reference.");
+                return; // Stop execution if reference is empty
+            }
+            if (marque.getText().isEmpty()) {
+                showAlert("Error", "Please enter a brand.");
+                return; // Stop execution if marque is empty
+            }
+
             ParametrageDeReference ref;
             if (serialNumberValue != 0) {
                 ref = new ParametrageDeReference(0l,
-                         type_comboBox.getSelectionModel().getSelectedItem(),
-                         category_comboBox.getSelectionModel().getSelectedItem(),
+                        type_comboBox.getSelectionModel().getSelectedItem(),
+                        category_comboBox.getSelectionModel().getSelectedItem(),
                         Integer.parseInt(quantity.getText()),
                         Integer.parseInt(stock_max.getText()),
                         Integer.parseInt(stock_min.getText()),
@@ -893,15 +936,19 @@ public class AdminController implements Initializable {
             reference.setText("");
             marque.setText("");
 
-
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     @FXML
     protected void onUpdateButtonClick() {
@@ -1001,7 +1048,7 @@ public class AdminController implements Initializable {
             // Create a new stage for the prompt scene
             Stage promptStage = new Stage();
             promptStage.setScene(new Scene(root));
-            promptStage.setTitle("Ajouter un type");
+            promptStage.setTitle("Add type");
             promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
             promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
         } catch (IOException e) {
@@ -1028,7 +1075,7 @@ public class AdminController implements Initializable {
             // Create a new stage for the prompt scene
             Stage promptStage = new Stage();
             promptStage.setScene(new Scene(root));
-            promptStage.setTitle("Ajouter une catégorie");
+            promptStage.setTitle("Add category");
             promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
             promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
 
@@ -1097,6 +1144,10 @@ public class AdminController implements Initializable {
             entry_form.setVisible(false);
             sortie_form.setVisible(false);
             dashboard_form.setVisible(true);
+            configureTableColumns();
+            configureStripColumn();
+            lastArrivals();
+            fillProductChart();
         }
 
 
@@ -1136,42 +1187,70 @@ public class AdminController implements Initializable {
         gestionutili_table.setItems(this.addUserListData());
     }
 
+
+    @FXML
+    protected void onChooseImageButtonClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Profile Picture");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        Stage stage = (Stage) username.getScene().getWindow();
+        File profilePictureFile = fileChooser.showOpenDialog(stage);
+        if (profilePictureFile != null) {
+            // Get the absolute file path
+            String profilePicturePath = profilePictureFile.getAbsolutePath();
+
+            // Update the portrait image
+            Image profilePicture = new Image(profilePictureFile.toURI().toString());
+            imageView.setImage(profilePicture);
+
+            // Save the profile picture path for later use
+            imageView.setUserData(profilePicturePath);
+
+            System.out.println("Profile picture chosen successfully.");
+        }
+    }
+
     @FXML
     protected void onAjouterButtonClick() {
-
-        // accees a la bdd
-
         try {
             LoginDAO loginDAO = new LoginDAO();
 
-            Login refe;
-            refe = new Login(0l , username.getText() ,password.getText(),userType_comboBox.getValue(),email.getText());
+            String profilePicturePath = (String) imageView.getUserData();
+            if (profilePicturePath == null) {
+                System.out.println("Please choose a profile picture.");
+                return;
+            }
+
+            // Save the Login object in the database
+            Login refe = new Login(0L, username.getText(), password.getText(), userType_comboBox.getValue(), email.getText());
+            refe.setProfilePicturePath(profilePicturePath);
 
             loginDAO.save(refe);
-
-
             UpdateUserTable();
 
+            System.out.println("Profile picture path saved successfully.");
+
+            // Clear the form fields
             username.setText("");
             password.setText("");
             userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
-
-
-
-
+            imageView.setImage(null);
+            imageView.setUserData(null);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
+
 
     @FXML
     protected void ModifierButtonClick() {
         // get the selected item from the table
         Login selectedReff = gestionutili_table.getSelectionModel().getSelectedItem();
-
 
         try {
             // update the record in the database with the new values from the text fields
@@ -1179,29 +1258,50 @@ public class AdminController implements Initializable {
             selectedReff.setPassword(password.getText());
             selectedReff.setUserType(userType_comboBox.getValue());
             selectedReff.setEmailAddress(email.getText());
+            selectedReff.setProfilePicturePath((String) imageView.getUserData());
 
-
+            // Get the updated profile picture path from the selectedReff object
+            String updatedProfilePicturePath = selectedReff.getProfilePicturePath();
 
             LoginDAO loginDAO = new LoginDAO();
             loginDAO.update(selectedReff);
 
-            // update the table view
-            UpdateUserTable();
+            // Update the logged-in user's profile picture and name if the logged-in user is the one being modified
+            Login loggedInUser = SessionManager.getLoggedInUser();
+            if (loggedInUser != null && loggedInUser.getId() == selectedReff.getId()) {
+                loggedInUser.setUsername(selectedReff.getUsername());
+                loggedInUser.setPassword(selectedReff.getPassword());
+                loggedInUser.setUserType(selectedReff.getUserType());
+                loggedInUser.setEmailAddress(selectedReff.getEmailAddress());
+                loggedInUser.setProfilePicturePath(updatedProfilePicturePath);
+            }
 
+            // Update the table view
+            UpdateUserTable();
 
             username.setText("");
             password.setText("");
             userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
 
+            // Update the profile picture displayed in the UI if the logged-in user is the one being modified
+            if (loggedInUser != null && loggedInUser.getId() == selectedReff.getId()) {
+                String profilePicturePath = loggedInUser.getProfilePicturePath();
+                Image profilePicture = new Image("file:" + profilePicturePath);
+                this.profilePicture.setImage(profilePicture);
 
+                String username = loggedInUser.getUsername();
+                usernameText.setText(username);
+            }
 
+            imageView.setImage(null);
+            imageView.setUserData(null);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     @FXML
     protected void supprimerButtonClick() {
@@ -1220,6 +1320,8 @@ public class AdminController implements Initializable {
             password.setText("");
             userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
+            imageView.setImage(null);
+            imageView.setUserData(null);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1234,6 +1336,8 @@ public class AdminController implements Initializable {
         email.setText("");
         // Clear the table selection
         gestionutili_table.getSelectionModel().clearSelection();
+        imageView.setImage(null);
+        imageView.setUserData(null);
     }
     private String[] listUserType = {"admin", "user"};
     public void setUpUserComboBox() {
@@ -1431,6 +1535,21 @@ public class AdminController implements Initializable {
         chart.setData(data);
     }
 
+    private void fillProductChart(){
+        // Retrieve the overall product counts and most retrieved product per month from the SortieDAO
+        SortieDAO sortieDAO = null;
+        try {
+            sortieDAO = new SortieDAO();
+            Map<String, Integer> productCounts = sortieDAO.getOverallProductCounts();
+            Map<String, String> mostRetrievedProducts = sortieDAO.getMostRetrievedProductPerMonth();
+
+            // Generate and display the product counts chart
+            showProductCountsChart(productCounts);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void lastArrivals(){
         try {
             // Retrieve the last entry
@@ -1466,10 +1585,26 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+    private void showUserProfile(){
+        Login loggedInUser = SessionManager.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            String profilePicturePath = loggedInUser.getProfilePicturePath();
+            Image profilePicture = new Image("file:" + profilePicturePath);
+            this.profilePicture.setImage(profilePicture);
+
+            String username = loggedInUser.getUsername();
+            usernameText.setText(username);
+        }
+
+    }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+        showUserProfile();
 
         //To show data on the tableview
 
@@ -1490,6 +1625,7 @@ public class AdminController implements Initializable {
         intializeSortieDAO();
         checkStockAndShowNotification();
         lastArrivals();
+        fillProductChart();
 
 
 
@@ -1512,17 +1648,28 @@ public class AdminController implements Initializable {
             }
         });
 
-        //display the info of a selected user in the textFields
+        // Assuming you have an ImageView component named 'imageView' in your FXML file
+
         gestionutili_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Set the values of the selected item to the text fieldsadmin
+                // Set the values of the selected item to the text fields
                 username.setText(newSelection.getUsername());
                 password.setText(newSelection.getPassword());
                 userType_comboBox.getSelectionModel().select(newSelection.getUserType());
                 email.setText(newSelection.getEmailAddress());
 
+                // Load the profile picture of the selected user
+                String profilePicturePath = newSelection.getProfilePicturePath();
+                if (profilePicturePath != null) {
+                    Image profilePicture = new Image(new File(profilePicturePath).toURI().toString());
+                    imageView.setImage(profilePicture);
+                } else {
+                    // If no profile picture is available, clear the image view
+                    imageView.setImage(null);
+                }
             }
         });
+
 
         //search suggestions
         // Bind the filteredReferences to the searchField
@@ -1552,18 +1699,7 @@ public class AdminController implements Initializable {
 
 
 
-        // Retrieve the overall product counts and most retrieved product per month from the SortieDAO
-        SortieDAO sortieDAO = null;
-        try {
-            sortieDAO = new SortieDAO();
-            Map<String, Integer> productCounts = sortieDAO.getOverallProductCounts();
-            Map<String, String> mostRetrievedProducts = sortieDAO.getMostRetrievedProductPerMonth();
 
-            // Generate and display the product counts chart
-            showProductCountsChart(productCounts);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 
