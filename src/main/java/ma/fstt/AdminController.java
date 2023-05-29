@@ -1145,7 +1145,7 @@ public class AdminController implements Initializable {
             sortie_form.setVisible(false);
             dashboard_form.setVisible(true);
             configureTableColumns();
-            configureStripColumn();
+
             lastArrivals();
             fillProductChart();
         }
