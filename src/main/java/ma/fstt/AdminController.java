@@ -900,12 +900,19 @@ public class AdminController implements Initializable {
                 showAlert("Error", "Please enter a brand.");
                 return; // Stop execution if marque is empty
             }
+            String selectedTypeName =  type_comboBox.getSelectionModel().getSelectedItem().getName();
+            TypeDAO typeDAO = new TypeDAO();
+            Type selectedType = typeDAO.getByName(selectedTypeName);
+            String selectedCategoryName = category_comboBox.getSelectionModel().getSelectedItem().getName();
+            CategoryDAO categoryDAO = new CategoryDAO();
+            Category selectedCategory = categoryDAO.getByName(selectedCategoryName);
+
 
             ParametrageDeReference ref;
             if (serialNumberValue != 0) {
                 ref = new ParametrageDeReference(0l,
-                        type_comboBox.getSelectionModel().getSelectedItem(),
-                        category_comboBox.getSelectionModel().getSelectedItem(),
+                        selectedType,
+                        selectedCategory,
                         Integer.parseInt(quantity.getText()),
                         Integer.parseInt(stock_max.getText()),
                         Integer.parseInt(stock_min.getText()),
@@ -915,8 +922,8 @@ public class AdminController implements Initializable {
 
             } else {
                 ref = new ParametrageDeReference(0l,
-                        type_comboBox.getSelectionModel().getSelectedItem(),
-                        category_comboBox.getSelectionModel().getSelectedItem(),
+                        selectedType,
+                        selectedCategory,
                         Integer.parseInt(quantity.getText()),
                         Integer.parseInt(stock_max.getText()),
                         Integer.parseInt(stock_min.getText()),
@@ -1224,8 +1231,16 @@ public class AdminController implements Initializable {
                 return;
             }
 
+            String emailPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
+            String enteredEmail = email.getText().trim();
+
+            if (!enteredEmail.matches(emailPattern)) {
+                System.out.println("Please enter a valid Gmail address.");
+                return;
+            }
+
             // Save the Login object in the database
-            Login refe = new Login(0L, username.getText(), password.getText(), userType_comboBox.getValue(), email.getText());
+            Login refe = new Login(0L, username.getText(), password.getText(), userType_comboBox.getValue(), enteredEmail);
             refe.setProfilePicturePath(profilePicturePath);
 
             loginDAO.save(refe);
@@ -1244,6 +1259,7 @@ public class AdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 
 
 
@@ -1339,14 +1355,25 @@ public class AdminController implements Initializable {
         imageView.setImage(null);
         imageView.setUserData(null);
     }
-    private String[] listUserType = {"admin", "user"};
-    public void setUpUserComboBox() {
+    private ObservableList<String> userTypeList;
 
-
-        // Set up the type combo box with the pre-defined types
-        ObservableList<String> userTypeList = FXCollections.observableArrayList(listUserType);
-        userType_comboBox.setItems(userTypeList);
+    @FXML
+    private void setUpUserComboBox() {
+        String[] listUserType = {"admin", "user"};
+        userTypeList = FXCollections.observableArrayList(listUserType);
+        Platform.runLater(() -> {
+            if (userType_comboBox != null) {
+                userType_comboBox.setItems(userTypeList);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please choose a user type");
+                alert.showAndWait();
+            }
+        });
     }
+
     //------------------------------------------- -------------------------------------------
 
     public void logout(){
