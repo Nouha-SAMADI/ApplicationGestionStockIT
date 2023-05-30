@@ -19,7 +19,7 @@
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane prefHeight="473.0" prefWidth="218.0" style="-fx-background-color: orange;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="473.0" prefWidth="218.0" style="-fx-background-color: #F3F0E4;" BorderPane.alignment="CENTER">
                <children>
                   <Label fx:id="usernameText" layoutX="32.0" layoutY="100.0" prefHeight="26.0" prefWidth="159.0" textFill="#111010">
                      <font>

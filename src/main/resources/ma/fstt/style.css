@@ -50,3 +50,10 @@
 .buttonPressed:pressed{
     -fx-background-color: #4CAF50;
 }
+.login-button {
+    -fx-background-color: #222752;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 10px 20px;
+    -fx-pref-height: 20px;
+}

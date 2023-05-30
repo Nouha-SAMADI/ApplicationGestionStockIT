@@ -4,20 +4,26 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.LoginController">
+<AnchorPane prefHeight="516.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.LoginController">
    <stylesheets>
       <URL value="@style.css" />
    </stylesheets>
    <children>
-      <AnchorPane prefHeight="600.0" prefWidth="454.0" style="-fx-background-color: orange;" />
-      <AnchorPane layoutX="454.0" prefHeight="600.0" prefWidth="346.0">
-         <children>
-            <TextField fx:id="username" layoutX="30.0" layoutY="140.0" prefHeight="40.0" prefWidth="268.0" promptText="Username" styleClass="input-label" stylesheets="@style.css" />
-            <PasswordField fx:id="password" layoutX="30.0" layoutY="219.0" prefHeight="49.0" prefWidth="268.0" promptText="Password" styleClass="input-label" stylesheets="@style.css" />
-            <Button fx:id="loginButton" layoutX="119.0" layoutY="310.0" mnemonicParsing="false" onAction="#onLoginClickButton" prefHeight="40.0" prefWidth="108.0" styleClass="login-button" stylesheets="@style.css" text="Login" />
-         </children>
-      </AnchorPane>
+      <ImageView fitHeight="530.0" fitWidth="797.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../BG.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="username" layoutX="282.0" layoutY="225.0" prefHeight="19.0" prefWidth="260.0" promptText="Username" styleClass="input-label" stylesheets="@style.css" />
+      <PasswordField fx:id="password" layoutX="282.0" layoutY="284.0" prefHeight="41.0" prefWidth="260.0" promptText="Password" styleClass="input-label" stylesheets="@style.css" />
+      <Button fx:id="loginButton" layoutX="368.0" layoutY="342.0" mnemonicParsing="false" onAction="#onLoginClickButton" prefHeight="41.0" prefWidth="102.0" styleClass="login-button" stylesheets="@style.css" text="Login">
+         <font>
+            <Font size="11.0" />
+         </font></Button>
    </children>
 </AnchorPane>
