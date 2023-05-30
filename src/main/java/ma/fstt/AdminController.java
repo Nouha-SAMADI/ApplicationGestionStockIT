@@ -146,6 +146,10 @@ public class AdminController implements Initializable {
     @FXML
     private Button annuler;
     @FXML
+    private Button modifier;
+    @FXML
+    private Button supprimer;
+    @FXML
     private TableColumn<Login, String> col_email;
 
     @FXML
@@ -392,6 +396,10 @@ public class AdminController implements Initializable {
     @FXML
     private void sortieSearchButtonClicked() {
         String reference = searchField_sortie.getText();
+        if (reference.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter the reference of the product.");
+            return;
+        }
 
         try {
             ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
@@ -404,7 +412,7 @@ public class AdminController implements Initializable {
                 sortie_brand.setText(product.getBrand());
                 sortie_stockMin.setText(String.valueOf(product.getStockMin()));
             } else {
-                System.out.println("Product not found.");
+                showAlert(Alert.AlertType.INFORMATION, null, null, "Product not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -416,6 +424,10 @@ public class AdminController implements Initializable {
     private void sortieSearchFieldKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             String reference = searchField_sortie.getText();
+            if (reference.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter the reference of the product.");
+                return;
+            }
 
             try {
                 ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
@@ -428,7 +440,7 @@ public class AdminController implements Initializable {
                     sortie_brand.setText(product.getBrand());
                     sortie_stockMin.setText(String.valueOf(product.getStockMin()));
                 } else {
-                    System.out.println("Product not found.");
+                    showAlert(Alert.AlertType.INFORMATION, null, null, "Product not found.");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -441,10 +453,16 @@ public class AdminController implements Initializable {
     @FXML
     private void sortieSubmitButtonClicked() {
         String reference = searchField_sortie.getText();
-        int quantity = Integer.parseInt(sortie_quantity.getText());
 
+        String quantityText = sortie_quantity.getText();
+
+        if (quantityText.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter the quantity.");
+            return;
+        }
 
         try {
+            int quantity = Integer.parseInt(quantityText);
             ParametrageDeReference product = sortie_paramRefDAO.getByReference(reference);
 
             if (product != null) {
@@ -486,8 +504,13 @@ public class AdminController implements Initializable {
                         searchField_sortie.setText("");
                         sortie_quantity.setText("");
 
-                    } else {
-                        // User canceled the operation, do nothing
+                        sortie_reference.setText("");
+                        sortie_type.setText("");
+                        sortie_category.setText("");
+                        sortie_currentStock.setText("");
+                        sortie_brand.setText("");
+                        sortie_stockMin.setText("");
+
                     }
                 } else {
                     // Create and save the new sortie
@@ -503,9 +526,14 @@ public class AdminController implements Initializable {
                     searchField_sortie.setText("");
                     sortie_quantity.setText("");
 
+                    sortie_reference.setText("");
+                    sortie_type.setText("");
+                    sortie_category.setText("");
+                    sortie_currentStock.setText("");
+                    sortie_brand.setText("");
+                    sortie_stockMin.setText("");
+
                 }
-            } else {
-                System.out.println("Product not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -515,7 +543,13 @@ public class AdminController implements Initializable {
 
 
     private void sortieSetupAutoCompletion() {
-        TextFields.bindAutoCompletion(searchField_sortie, filteredReferences_sortie).setOnAutoCompleted(event -> {
+        // Fetch references from the database
+        List<String> references = null;
+        try {
+            references = paramRefDAO.getAllReferences();
+
+
+        TextFields.bindAutoCompletion(searchField, references).setOnAutoCompleted(event -> {
             String selectedReference = event.getCompletion();
 
             try {
@@ -535,7 +569,10 @@ public class AdminController implements Initializable {
                 e.printStackTrace();
                 // Handle any errors that may occur during database operations
             }
-        });
+            });
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     public ObservableList<Sortie> addSortieList(){
 
@@ -616,12 +653,19 @@ public class AdminController implements Initializable {
     }
 
     @FXML
+
     private void submitButtonClicked() {
         String reference = searchField.getText();
-        int quantity = Integer.parseInt(newquantity.getText());
+        String quantityText = newquantity.getText();
 
+        if (quantityText.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter the quantity.");
+            return;
+        }
 
         try {
+            int quantity = Integer.parseInt(quantityText);
+
             ParametrageDeReference product = paramRefDAO.getByReference(reference);
 
             if (product != null) {
@@ -655,20 +699,34 @@ public class AdminController implements Initializable {
                     // Clear the fields
                     searchField.setText("");
                     newquantity.setText("");
+                    reference_label.setText("");
+                    type_label.setText("");
+                    category_label.setText("");
+                    stock_label.setText("");
+                    brand_label.setText("");
+                    stockMax_label.setText("");
 
+                    showAlert(Alert.AlertType.INFORMATION, "Success", null, "Product entry saved successfully.");
                 }
             } else {
-                System.out.println("Product not found.");
+                showAlert(Alert.AlertType.INFORMATION, null, null, "Product not found.");
             }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter a valid quantity.");
         } catch (SQLException e) {
             e.printStackTrace();
             // Handle any errors that may occur during database operations
         }
     }
+
     @FXML
     private void searchFieldKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             String reference = searchField.getText();
+            if (reference.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter the reference of the product.");
+                return;
+            }
 
             try {
                 ParametrageDeReference product = paramRefDAO.getByReference(reference);
@@ -681,7 +739,7 @@ public class AdminController implements Initializable {
                     brand_label.setText(product.getBrand());
                     stockMax_label.setText(String.valueOf(product.getStockMax()));
                 } else {
-                    System.out.println("Product not found.");
+                    showAlert(Alert.AlertType.INFORMATION, null, null, "Product not found.");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -693,6 +751,10 @@ public class AdminController implements Initializable {
     @FXML
     private void searchButtonClicked() {
         String reference = searchField.getText();
+        if (reference.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter the reference of the product.");
+            return;
+        }
 
         try {
             ParametrageDeReference product = paramRefDAO.getByReference(reference);
@@ -705,7 +767,7 @@ public class AdminController implements Initializable {
                 brand_label.setText(product.getBrand());
                 stockMax_label.setText(String.valueOf(product.getStockMax()));
             } else {
-                System.out.println("Product not found.");
+                showAlert(Alert.AlertType.INFORMATION, null, null, "Product not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -717,28 +779,37 @@ public class AdminController implements Initializable {
 
 
     private void setupAutoCompletion() {
-        TextFields.bindAutoCompletion(searchField, filteredReferences).setOnAutoCompleted(event -> {
-            String selectedReference = event.getCompletion();
+        try {
+            // Fetch references from the database
+            List<String> references = paramRefDAO.getAllReferences();
 
-            try {
-                ParametrageDeReference product = paramRefDAO.getByReference(selectedReference);
+            TextFields.bindAutoCompletion(searchField, references).setOnAutoCompleted(event -> {
+                String selectedReference = event.getCompletion();
 
-                if (product != null) {
-                    reference_label.setText(selectedReference);
-                    type_label.setText(product.getType().getName());
-                    category_label.setText(product.getCategory().getName());
-                    stock_label.setText(String.valueOf(product.getQuantity()));
-                    brand_label.setText(product.getBrand());
-                    stockMax_label.setText(String.valueOf(product.getStockMax()));
-                } else {
-                    System.out.println("Product not found.");
+                try {
+                    ParametrageDeReference product = paramRefDAO.getByReference(selectedReference);
+
+                    if (product != null) {
+                        reference_label.setText(selectedReference);
+                        type_label.setText(product.getType().getName());
+                        category_label.setText(product.getCategory().getName());
+                        stock_label.setText(String.valueOf(product.getQuantity()));
+                        brand_label.setText(product.getBrand());
+                        stockMax_label.setText(String.valueOf(product.getStockMax()));
+                    } else {
+                        System.out.println("Product not found.");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // Handle any errors that may occur during database operations
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                // Handle any errors that may occur during database operations
-            }
-        });
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any errors that may occur during database operations
+        }
     }
+
     //------------------------------------parametrage de reference-----------------------------------------------------------
     public ObservableList<ParametrageDeReference> addMaterialsListData(){
 
@@ -866,9 +937,9 @@ public class AdminController implements Initializable {
         try {
             ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
 
-            int serialNumberValue = 0;
+            String serialNumberValue = null;
             if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
-                serialNumberValue = Integer.parseInt(num_serie.getText());
+                serialNumberValue = num_serie.getText();
             }
 
             // Check if any required fields are empty
@@ -909,7 +980,7 @@ public class AdminController implements Initializable {
 
 
             ParametrageDeReference ref;
-            if (serialNumberValue != 0) {
+            if (serialNumberValue != null) {
                 ref = new ParametrageDeReference(0l,
                         selectedType,
                         selectedCategory,
@@ -942,6 +1013,8 @@ public class AdminController implements Initializable {
             stock_min.setText("");
             reference.setText("");
             marque.setText("");
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "Product saved successfully.");
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -974,13 +1047,13 @@ public class AdminController implements Initializable {
                 selectedRef.setBrand(marque.getText());
 
                 if (type_comboBox.getValue() != null && !type_comboBox.getValue().getName().equalsIgnoreCase("consommable")) {
-                    selectedRef.setSerialNumber(0);
+                    selectedRef.setSerialNumber(null);
                 } else {
                     // Otherwise, update the serial number from the text field
                     if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
-                        selectedRef.setSerialNumber(Integer.parseInt(num_serie.getText()));
+                        selectedRef.setSerialNumber(num_serie.getText());
                     } else {
-                        selectedRef.setSerialNumber(0);
+                        selectedRef.setSerialNumber(null);
                     }
                 }
 
@@ -1001,6 +1074,8 @@ public class AdminController implements Initializable {
                 stock_min.setText("");
                 reference.setText("");
                 marque.setText("");
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", null, "Product modified successfully.");
 
 
 
@@ -1033,6 +1108,8 @@ public class AdminController implements Initializable {
             stock_min.setText("");
             reference.setText("");
             marque.setText("");
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "Product deleted successfully.");
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -1225,17 +1302,27 @@ public class AdminController implements Initializable {
         try {
             LoginDAO loginDAO = new LoginDAO();
 
-            String profilePicturePath = (String) imageView.getUserData();
-            if (profilePicturePath == null) {
-                System.out.println("Please choose a profile picture.");
+            if (username.getText().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter a username.");
                 return;
             }
+            if (password.getText().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter a password.");
+                return;
+            }
+
+
 
             String emailPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
             String enteredEmail = email.getText().trim();
 
             if (!enteredEmail.matches(emailPattern)) {
-                System.out.println("Please enter a valid Gmail address.");
+                showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter a valid Gmail address.");
+                return;
+            }
+            String profilePicturePath = (String) imageView.getUserData();
+            if (profilePicturePath == null) {
+                showAlert(Alert.AlertType.WARNING, "Error", null, "Please choose a profile picture.");
                 return;
             }
 
@@ -1246,7 +1333,6 @@ public class AdminController implements Initializable {
             loginDAO.save(refe);
             UpdateUserTable();
 
-            System.out.println("Profile picture path saved successfully.");
 
             // Clear the form fields
             username.setText("");
@@ -1255,6 +1341,8 @@ public class AdminController implements Initializable {
             email.setText("");
             imageView.setImage(null);
             imageView.setUserData(null);
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "User saved successfully.");
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -1268,13 +1356,22 @@ public class AdminController implements Initializable {
         // get the selected item from the table
         Login selectedReff = gestionutili_table.getSelectionModel().getSelectedItem();
 
+        if (selectedReff == null) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please select a user to modify.");
+            return;
+        }
+
         try {
             // update the record in the database with the new values from the text fields
             selectedReff.setUsername(username.getText());
             selectedReff.setPassword(password.getText());
             selectedReff.setUserType(userType_comboBox.getValue());
             selectedReff.setEmailAddress(email.getText());
-            selectedReff.setProfilePicturePath((String) imageView.getUserData());
+
+            String profilePicturePath = (String) imageView.getUserData();
+            if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+                selectedReff.setProfilePicturePath(profilePicturePath);
+            }
 
             // Get the updated profile picture path from the selectedReff object
             String updatedProfilePicturePath = selectedReff.getProfilePicturePath();
@@ -1292,8 +1389,10 @@ public class AdminController implements Initializable {
                 loggedInUser.setProfilePicturePath(updatedProfilePicturePath);
             }
 
+
             // Update the table view
             UpdateUserTable();
+
 
             username.setText("");
             password.setText("");
@@ -1302,7 +1401,7 @@ public class AdminController implements Initializable {
 
             // Update the profile picture displayed in the UI if the logged-in user is the one being modified
             if (loggedInUser != null && loggedInUser.getId() == selectedReff.getId()) {
-                String profilePicturePath = loggedInUser.getProfilePicturePath();
+                 profilePicturePath = loggedInUser.getProfilePicturePath();
                 Image profilePicture = new Image("file:" + profilePicturePath);
                 this.profilePicture.setImage(profilePicture);
 
@@ -1312,6 +1411,8 @@ public class AdminController implements Initializable {
 
             imageView.setImage(null);
             imageView.setUserData(null);
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "User modified successfully.");
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1319,10 +1420,16 @@ public class AdminController implements Initializable {
     }
 
 
+
     @FXML
     protected void supprimerButtonClick() {
 
         Login selectedItems = gestionutili_table.getSelectionModel().getSelectedItem();
+        if (selectedItems == null) {
+            showAlert(Alert.AlertType.WARNING, "Error", null, "Please select a user to delete.");
+            return;
+        }
+
 
 
 
@@ -1332,12 +1439,15 @@ public class AdminController implements Initializable {
             loginDAO.delete(selectedItems);
             UpdateUserTable();
 
+
             username.setText("");
             password.setText("");
             userType_comboBox.getSelectionModel().clearSelection();
             email.setText("");
             imageView.setImage(null);
             imageView.setUserData(null);
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "User deleted successfully.");
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1359,20 +1469,27 @@ public class AdminController implements Initializable {
 
     @FXML
     private void setUpUserComboBox() {
-        String[] listUserType = {"admin", "user"};
-        userTypeList = FXCollections.observableArrayList(listUserType);
-        Platform.runLater(() -> {
-            if (userType_comboBox != null) {
-                userType_comboBox.setItems(userTypeList);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please choose a user type");
-                alert.showAndWait();
-            }
-        });
+        userTypeList = FXCollections.observableArrayList("user", "admin");
+
+        if (userType_comboBox != null) {
+            userType_comboBox.setItems(userTypeList);
+        } else {
+            showUserTypeErrorAlert();
+        }
     }
+
+    private void showUserTypeErrorAlert() {
+        showAlert(Alert.AlertType.WARNING, "Error", null, "Please choose a user type");
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+
 
     //------------------------------------------- -------------------------------------------
 
@@ -1660,6 +1777,10 @@ public class AdminController implements Initializable {
         update_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
         delete_button.disableProperty().bind(parametrageRef_table.getSelectionModel().selectedItemProperty().isNull());
 
+
+        modifier.disableProperty().bind(gestionutili_table.getSelectionModel().selectedItemProperty().isNull());
+        supprimer.disableProperty().bind(gestionutili_table.getSelectionModel().selectedItemProperty().isNull());
+
         //display the info of a selected item in the textFields
         parametrageRef_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -1679,20 +1800,24 @@ public class AdminController implements Initializable {
 
         gestionutili_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Set the values of the selected item to the text fields
-                username.setText(newSelection.getUsername());
-                password.setText(newSelection.getPassword());
-                userType_comboBox.getSelectionModel().select(newSelection.getUserType());
-                email.setText(newSelection.getEmailAddress());
+                try {
+                    // Set the values of the selected item to the text fields
+                    username.setText(newSelection.getUsername());
+                    password.setText(newSelection.getPassword());
 
-                // Load the profile picture of the selected user
-                String profilePicturePath = newSelection.getProfilePicturePath();
-                if (profilePicturePath != null) {
-                    Image profilePicture = new Image(new File(profilePicturePath).toURI().toString());
-                    imageView.setImage(profilePicture);
-                } else {
-                    // If no profile picture is available, clear the image view
-                    imageView.setImage(null);
+                    email.setText(newSelection.getEmailAddress());
+
+                    // Load the profile picture of the selected user
+                    String profilePicturePath = newSelection.getProfilePicturePath();
+                    if (profilePicturePath != null) {
+                        Image profilePicture = new Image(new File(profilePicturePath).toURI().toString());
+                        imageView.setImage(profilePicture);
+                    } else {
+                        // If no profile picture is available, clear the image view
+                        imageView.setImage(null);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -1702,16 +1827,50 @@ public class AdminController implements Initializable {
         // Bind the filteredReferences to the searchField
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             String searchText = newValue.toLowerCase();
-            filteredReferences.setPredicate(reference -> reference.toLowerCase().contains(searchText));
-        });
 
+            try {
+                List<String> allReferences = paramRefDAO.getAllReferences();
+                List<String> filteredReferences = new ArrayList<>();
+
+                for (String reference : allReferences) {
+                    if (reference.toLowerCase().contains(searchText)) {
+                        filteredReferences.add(reference);
+                    }
+                }
+
+                // Update the auto-completion suggestions
+                TextFields.bindAutoCompletion(searchField, filteredReferences);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle any errors that may occur during database operations
+            }
+        });
         // Set up auto-completion and onAutoCompleted event listener
         setupAutoCompletion();
 
         searchField_sortie.textProperty().addListener((observable, oldValue, newValue) -> {
             String searchText = newValue.toLowerCase();
-            filteredReferences_sortie.setPredicate(reference -> reference.toLowerCase().contains(searchText));
+
+            try {
+                List<String> allReferences = paramRefDAO.getAllReferences();
+                List<String> filteredReferences = new ArrayList<>();
+
+                for (String reference : allReferences) {
+                    if (reference.toLowerCase().contains(searchText)) {
+                        filteredReferences.add(reference);
+                    }
+                }
+
+                // Update the auto-completion suggestions
+                TextFields.bindAutoCompletion(searchField_sortie, filteredReferences);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle any errors that may occur during database operations
+            }
         });
+
 
         sortieSetupAutoCompletion();
 

@@ -27,7 +27,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         this.preparedStatement.setInt(5, object.getStockMin());
         this.preparedStatement.setString(6, object.getReference());
         this.preparedStatement.setString(7, object.getBrand());
-        this.preparedStatement.setInt(8, object.getSerialNumber());
+        this.preparedStatement.setString(8, object.getSerialNumber());
 
         this.preparedStatement.execute();
 
@@ -45,7 +45,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         this.preparedStatement.setInt(5, object.getStockMin());
         this.preparedStatement.setString(6, object.getReference());
         this.preparedStatement.setString(7, object.getBrand());
-        this.preparedStatement.setInt(8, object.getSerialNumber());
+        this.preparedStatement.setString(8, object.getSerialNumber());
         this.preparedStatement.setLong(9, object.getId());
 
         this.preparedStatement.executeUpdate();
@@ -80,7 +80,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
             int stockMin = this.resultSet.getInt("stockMin");
             String reference = this.resultSet.getString("reference");
             String brand = this.resultSet.getString("brand");
-            int serialNumber = this.resultSet.getInt("serialNumber");
+            String serialNumber = this.resultSet.getString("serialNumber");
 
             Type type = getTypeById(typeId);
             Category category = getCategoryById(categoryId);
@@ -104,7 +104,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
             int stockMax = this.resultSet.getInt("stockMax");
             int stockMin = this.resultSet.getInt("stockMin");
             String brand = this.resultSet.getString("brand");
-            int serialNumber = this.resultSet.getInt("serialNumber");
+            String serialNumber = this.resultSet.getString("serialNumber");
 
             Type type = getTypeById(typeId);
             Category category = getCategoryById(categoryId);
@@ -200,7 +200,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
             int stockMin = this.resultSet.getInt("stockMin");
             String reference = this.resultSet.getString("reference");
             String brand = this.resultSet.getString("brand");
-            int serialNumber = this.resultSet.getInt("serialNumber");
+            String serialNumber = this.resultSet.getString("serialNumber");
 
             Type type = types.get(typeId);
             Category category = categories.get(categoryId);

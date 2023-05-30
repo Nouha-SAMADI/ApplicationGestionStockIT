@@ -153,7 +153,7 @@ public class ProductManagementUI {
             Category productCategory = categoryDAO.getByName(category);
 
             // Create the ParametrageDeReference object with the retrieved Type and Category objects
-            ParametrageDeReference product = new ParametrageDeReference(0, productType, productCategory, quantity, stockMax, stockMin, reference, brand, 0);
+            ParametrageDeReference product = new ParametrageDeReference(0, productType, productCategory, quantity, stockMax, stockMin, reference, brand, null);
 
             // Save the product to the database
             productDAO.save(product);

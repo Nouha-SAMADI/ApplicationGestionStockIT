@@ -9,9 +9,9 @@ public class ParametrageDeReference {
     private int stockMin;
     private String reference;
     private String brand;
-    private int serialNumber;
+    private String serialNumber;
 
-    public ParametrageDeReference(long id, Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, int serialNumber) {
+    public ParametrageDeReference(long id, Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, String serialNumber) {
         this.id = id;
         this.type = type;
         this.category = category;
@@ -24,10 +24,10 @@ public class ParametrageDeReference {
     }
 
     public ParametrageDeReference(long id, Type type, Category categorie, int quantity, int stockMax, int stockMin, String reference, String brand) {
-        this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,0);
+        this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,null);
     }
 
-    public ParametrageDeReference(Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, int serialNumber) {
+    public ParametrageDeReference(Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, String serialNumber) {
         this.type = type;
         this.category = category;
         this.quantity = quantity;
@@ -107,11 +107,11 @@ public class ParametrageDeReference {
         this.brand = brand;
     }
 
-    public int getSerialNumber() {
+    public String getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(int serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 }
