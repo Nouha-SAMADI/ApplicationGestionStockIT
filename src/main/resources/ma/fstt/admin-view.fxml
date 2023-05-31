@@ -19,74 +19,79 @@
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane prefHeight="473.0" prefWidth="218.0" style="-fx-background-color: #F3F0E4;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="616.0" prefWidth="236.0" style="-fx-background-color: #F3F0E4;" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="usernameText" layoutX="32.0" layoutY="100.0" prefHeight="26.0" prefWidth="159.0" textFill="#111010">
+                  <Label fx:id="usernameText" layoutX="35.0" layoutY="146.0" prefHeight="26.0" prefWidth="159.0" textFill="#111010">
                      <font>
                         <Font size="21.0" />
                      </font>
                   </Label>
-                  <Button fx:id="paramButton" layoutX="55.0" layoutY="199.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="166.0" style="-fx-background-color: transparent;" text="Paramétrage de référence">
+                  <Button fx:id="paramButton" layoutX="43.0" layoutY="244.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="186.0" style="-fx-background-color: transparent;" text="Reference configuration">
                      <font>
                         <Font size="13.0" />
                      </font></Button>
-                  <Button fx:id="entry_button" layoutX="36.0" layoutY="309.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="161.0" style="-fx-background-color: transparent;" text="Gestion des entrés">
+                  <Button fx:id="entry_button" layoutX="40.0" layoutY="341.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="76.0" style="-fx-background-color: transparent;" text="Input">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Button fx:id="sortie_button" layoutX="20.0" layoutY="257.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="29.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Gestion des sorties">
+                  <Button fx:id="sortie_button" layoutX="21.0" layoutY="294.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="29.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Output">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Button fx:id="userButton" layoutX="48.0" layoutY="363.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="162.0" style="-fx-background-color: transparent;" text="Gestion des utilisateurs">
+                  <Button fx:id="userButton" layoutX="46.0" layoutY="391.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="42.0" prefWidth="158.0" style="-fx-background-color: transparent;" text="Users management">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Button fx:id="dashboard_button" layoutX="23.0" layoutY="144.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="131.0" style="-fx-background-color: transparent;" styleClass="buttonPressed" stylesheets="@style.css" text="Acceuil">
+                  <Button fx:id="dashboard_button" layoutX="28.0" layoutY="198.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="28.0" prefWidth="147.0" style="-fx-background-color: transparent;" styleClass="buttonPressed" stylesheets="@style.css" text="Dashboard">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Button fx:id="historyButton" layoutX="-7.0" layoutY="417.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Historique">
+                  <Button fx:id="historyButton" layoutX="-11.0" layoutY="448.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="35.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="History">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <Button fx:id="log" layoutX="-28.0" layoutY="466.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="227.0" style="-fx-background-color: transparent;" text="Log out">
+                  <Button fx:id="log" layoutX="-29.0" layoutY="505.0" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="227.0" style="-fx-background-color: transparent;" text="Log out">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                  <ImageView fx:id="profilePicture" fitHeight="92.0" fitWidth="113.0" layoutX="50.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fitHeight="26.0" fitWidth="32.0" layoutX="29.0" layoutY="149.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="profilePicture" fitHeight="92.0" fitWidth="113.0" layoutX="58.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="26.0" fitWidth="32.0" layoutX="23.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-tableau-de-bord-64(1).png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="25.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="34.0" fitWidth="30.0" layoutX="17.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-engrenages-48.png" />
                      </image></ImageView>
-                  <ImageView fitHeight="27.0" fitWidth="31.0" layoutX="26.0" layoutY="258.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="27.0" fitWidth="31.0" layoutX="21.0" layoutY="295.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-sortie-48.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="31.0" fitWidth="28.0" layoutX="23.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="31.0" fitWidth="28.0" layoutX="20.0" layoutY="348.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-entrer-48.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="27.0" layoutX="24.0" layoutY="363.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="25.0" fitWidth="27.0" layoutX="21.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-utilisateurs-48.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="24.0" layoutY="422.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="20.0" layoutY="453.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-history-48.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="23.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="19.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons8-sortie-64(1).png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="177.0" layoutX="26.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../logo.png" />
                      </image>
                   </ImageView>
                </children></AnchorPane>
@@ -95,14 +100,19 @@
             <AnchorPane BorderPane.alignment="CENTER">
 
                <children>
-                  <AnchorPane fx:id="parametrageRef_form" prefHeight="532.0" prefWidth="864.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="parametrageRef_form" prefHeight="532.0" prefWidth="864.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="510.0" prefWidth="235.0">
+                        <AnchorPane layoutX="196.0" layoutY="15.0" prefHeight="562.0" prefWidth="697.0" style="-fx-background-color: #f6f6f6;">
                            <children>
-                              <ComboBox fx:id="type_comboBox" layoutX="1.0" layoutY="25.0" onAction="#populateTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="choisir" />
+                              <Button fx:id="delete_button" layoutY="524.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" text="Delete" />
+                              <Button fx:id="reset_button" layoutX="89.0" layoutY="524.0" mnemonicParsing="false" onAction="#onResetButtonClick" text="Reset" />
+                           </children></AnchorPane>
+                        <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="562.0" prefWidth="179.0" style="-fx-background-color: #f6f6f6;">
+                           <children>
+                              <ComboBox fx:id="type_comboBox" layoutX="1.0" layoutY="25.0" onAction="#populateTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="choose" />
                               <Label layoutX="3.0" prefHeight="17.0" prefWidth="121.0" text="Type :" />
                               <Button fx:id="addType_btn" layoutX="144.0" layoutY="25.0" mnemonicParsing="false" onAction="#addTypeScene" prefHeight="25.0" prefWidth="29.0" text="+" />
-                              <Label layoutY="66.0" prefHeight="17.0" prefWidth="146.0" text="Catégorie :" />
+                              <Label layoutY="66.0" prefHeight="17.0" prefWidth="146.0" text="Category :" />
                               <Label layoutX="4.0" layoutY="200.0" prefHeight="17.0" prefWidth="87.0" text="Description:">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
@@ -110,46 +120,43 @@
                               </Label>
                               <TextField fx:id="marque" layoutX="4.0" layoutY="255.0" prefHeight="25.0" prefWidth="139.0" />
                               <TextField fx:id="reference" layoutX="4.0" layoutY="319.0" prefHeight="25.0" prefWidth="138.0" />
-                              <Label layoutX="4.0" layoutY="228.0" prefHeight="17.0" prefWidth="142.0" text="Marque:" />
-                              <Label layoutX="4.0" layoutY="293.0" prefHeight="17.0" prefWidth="142.0" text="Référence:" />
-                              <Label layoutX="1.0" layoutY="344.0" prefHeight="17.0" prefWidth="148.0" text="Quantité :" />
+                              <Label layoutX="4.0" layoutY="228.0" prefHeight="17.0" prefWidth="142.0" text="Brand :" />
+                              <Label layoutX="4.0" layoutY="293.0" prefHeight="17.0" prefWidth="142.0" text="Reference :" />
+                              <Label layoutX="1.0" layoutY="344.0" prefHeight="17.0" prefWidth="148.0" text="Quantity :" />
                               <TextField fx:id="quantity" layoutX="1.0" layoutY="371.0" prefHeight="25.0" prefWidth="139.0" />
-                              <Label layoutX="2.0" layoutY="396.0" prefHeight="17.0" prefWidth="174.0" text="Stock minimum :" />
+                              <Label layoutX="2.0" layoutY="396.0" prefHeight="17.0" prefWidth="174.0" text="Minimum stock" />
                               <TextField fx:id="stock_min" layoutX="3.0" layoutY="420.0" prefHeight="25.0" prefWidth="141.0" />
-                              <Label layoutX="1.0" layoutY="445.0" prefHeight="17.0" prefWidth="176.0" text="Stock maximum :" />
+                              <Label layoutX="1.0" layoutY="445.0" prefHeight="17.0" prefWidth="176.0" text="Maximum stock :" />
                               <TextField fx:id="stock_max" layoutX="2.0" layoutY="471.0" prefHeight="25.0" prefWidth="142.0" />
-                              <ComboBox fx:id="category_comboBox" layoutX="1.0" layoutY="97.0" prefHeight="25.0" prefWidth="138.0" promptText="choisir" />
-                              <Label layoutX="-1.0" layoutY="134.0" prefHeight="17.0" prefWidth="142.0" text="Numéro de série :" />
+                              <ComboBox fx:id="category_comboBox" layoutX="1.0" layoutY="97.0" prefHeight="25.0" prefWidth="138.0" promptText="choose" />
+                              <Label layoutX="-1.0" layoutY="134.0" prefHeight="17.0" prefWidth="142.0" text="Serial number :" />
                               <TextField fx:id="num_serie" layoutX="4.0" layoutY="168.0" prefHeight="25.0" prefWidth="139.0" />
                               <Button fx:id="addCategory_button" layoutX="144.0" layoutY="97.0" mnemonicParsing="false" onAction="#addCategoryScene" prefHeight="25.0" prefWidth="29.0" text="+" />
+                              <Button fx:id="update_button" layoutX="91.0" layoutY="524.0" mnemonicParsing="false" onAction="#onUpdateButtonClick" text="Update" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="184.0" layoutY="8.0" prefHeight="508.0" prefWidth="695.0">
                            <children>
                               <TableView fx:id="parametrageRef_table" layoutX="14.0" layoutY="14.0" prefHeight="492.0" prefWidth="663.0">
                                 <columns>
-                                  <TableColumn fx:id="id_col" prefWidth="54.0" text="id" />
                                   <TableColumn fx:id="type_col" prefWidth="92.0" text="Type" />
-                                    <TableColumn fx:id="category_col" prefWidth="92.0" text="Catégorie" />
-                                    <TableColumn fx:id="serialNumber_col" prefWidth="141.0" text="Numéro de série" />
-                                    <TableColumn fx:id="marque_col" prefWidth="73.0" text="Marque" />
-                                    <TableColumn fx:id="reference_col" prefWidth="105.0" text="Référence" />
-                                    <TableColumn fx:id="quantity_col" prefWidth="95.0" text="Quantité" />
+                                    <TableColumn fx:id="category_col" prefWidth="92.0" text="Category" />
+                                    <TableColumn fx:id="serialNumber_col" prefWidth="141.0" text="Serial number" />
+                                    <TableColumn fx:id="marque_col" prefWidth="97.0" text="Brand" />
+                                    <TableColumn fx:id="reference_col" prefWidth="141.0" text="Reference" />
+                                    <TableColumn fx:id="quantity_col" prefWidth="99.0" text="Quantity" />
                                 </columns>
                               </TableView>
                            </children>
                         </AnchorPane>
-                        <Button fx:id="add_button" layoutX="14.0" layoutY="537.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Ajouter" />
-                        <Button fx:id="update_button" layoutX="111.0" layoutY="537.0" mnemonicParsing="false" onAction="#onUpdateButtonClick" text="Modifier" />
-                        <Button fx:id="delete_button" layoutX="207.0" layoutY="537.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" text="Supprimer" />
-                        <Button fx:id="reset_button" layoutX="320.0" layoutY="537.0" mnemonicParsing="false" onAction="#onResetButtonClick" text="Annuler" />
+                        <Button fx:id="add_button" layoutX="14.0" layoutY="537.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="24.0" prefWidth="58.0" text="Save" />
 
 
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="user_form" layoutX="76.0" layoutY="78.0" prefHeight="616.0" prefWidth="907.3333333333334" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="user_form" layoutX="76.0" layoutY="78.0" prefHeight="616.0" prefWidth="907.3333333333334" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="24.0" layoutY="16.0" prefHeight="505.0" prefWidth="341.0">
+                        <AnchorPane layoutX="24.0" layoutY="16.0" prefHeight="505.0" prefWidth="341.0" style="-fx-background-color: #f6f6f6;">
                            <children>
                               <Label layoutX="26.0" layoutY="50.0" prefHeight="18.0" prefWidth="81.0" text="username :" />
                               <TextField fx:id="username" layoutX="26.0" layoutY="72.0" prefWidth="167.0" />
@@ -157,123 +164,116 @@
                               <TextField fx:id="password" layoutX="27.0" layoutY="141.0" prefHeight="0.0" prefWidth="165.0" />
                               <Label layoutX="24.0" layoutY="187.0" prefHeight="18.0" prefWidth="114.0" text="Email Address :" />
                               <TextField fx:id="email" layoutX="26.0" layoutY="212.0" prefHeight="25.0" prefWidth="167.0" />
-                              <Label layoutX="24.0" layoutY="247.0" prefHeight="20.0" prefWidth="97.0" text="Statut :" />
-                              <Label layoutX="18.0" layoutY="7.0" prefHeight="27.0" prefWidth="280.0" text="Ajouter un nouveau utilisateur : ">
+                              <Label layoutX="24.0" layoutY="247.0" prefHeight="20.0" prefWidth="97.0" text="User type :" />
+                              <Label layoutX="18.0" layoutY="7.0" prefHeight="27.0" prefWidth="280.0" text="Add a new user :">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="ajouter" layoutX="20.0" layoutY="340.0" mnemonicParsing="false" onAction="#onAjouterButtonClick" prefHeight="40.0" prefWidth="70.0" text="Ajouter" />
-                              <Button fx:id="modifier" layoutX="100.0" layoutY="340.0" mnemonicParsing="false" onAction="#ModifierButtonClick" prefHeight="40.0" prefWidth="71.0" text="Modifier" />
-                              <Button fx:id="supprimer" layoutX="175.0" layoutY="340.0" mnemonicParsing="false" onAction="#supprimerButtonClick" prefHeight="39.0" prefWidth="75.0" text="Supprimer" />
-                              <Button fx:id="annuler" layoutX="257.0" layoutY="340.0" mnemonicParsing="false" onAction="#onAnnulerButtonClick" prefHeight="43.0" prefWidth="69.0" text="Annuler" />
+                              <Button fx:id="ajouter" layoutX="17.0" layoutY="463.0" mnemonicParsing="false" onAction="#onAjouterButtonClick" prefHeight="40.0" prefWidth="70.0" text="Save" />
+                              <Button fx:id="modifier" layoutX="98.0" layoutY="463.0" mnemonicParsing="false" onAction="#ModifierButtonClick" prefHeight="40.0" prefWidth="71.0" text="Update" />
+                              <Button fx:id="supprimer" layoutX="173.0" layoutY="463.0" mnemonicParsing="false" onAction="#supprimerButtonClick" prefHeight="39.0" prefWidth="75.0" text="Delete" />
+                              <Button fx:id="annuler" layoutX="255.0" layoutY="463.0" mnemonicParsing="false" onAction="#onAnnulerButtonClick" prefHeight="40.0" prefWidth="69.0" text="Reset" />
                               <ComboBox fx:id="userType_comboBox" layoutX="25.0" layoutY="290.0" onAction="#setUpUserComboBox" prefWidth="150.0" />
-                              <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" layoutX="26.0" layoutY="400.0" preserveRatio="true" />
-                              <Button fx:id="exportButton" layoutX="250.0" layoutY="400.0" mnemonicParsing="false" onAction="#onChooseImageButtonClick" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: orange;" text="Export Image" />
+                              <ImageView fx:id="imageView" fitHeight="105.0" fitWidth="145.0" layoutX="26.0" layoutY="326.0" preserveRatio="true" />
+                              <Button fx:id="exportButton" layoutX="201.0" layoutY="344.0" mnemonicParsing="false" onAction="#onChooseImageButtonClick" prefHeight="35.0" prefWidth="126.0" text="Export Image" textFill="#37159e" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="348.0" layoutY="16.0" prefHeight="491.0" prefWidth="567.0">
+                        <AnchorPane layoutX="388.0" layoutY="16.0" prefHeight="360.0" prefWidth="477.0" style="-fx-background-color: #f6f6f6;">
                            <children>
-                              <TableView fx:id="gestionutili_table" layoutX="32.0" layoutY="20.0" prefHeight="283.0" prefWidth="485.0">
+                              <TableView fx:id="gestionutili_table" layoutY="21.0" prefHeight="283.0" prefWidth="485.0">
                                 <columns>
-                                  <TableColumn fx:id="col_id" prefWidth="52.33331298828125" text="id" />
                                   <TableColumn fx:id="col_user" prefWidth="104.66668701171875" text="Username" />
                                     <TableColumn fx:id="col_password" prefWidth="100.6666259765625" text="Password" />
-                                    <TableColumn fx:id="col_statut" prefWidth="100.0" text="Statut" />
-                                    <TableColumn fx:id="col_email" prefWidth="126.3333740234375" text="EmailAddress" />
+                                    <TableColumn fx:id="col_statut" prefWidth="110.0" text="User type" />
+                                    <TableColumn fx:id="col_email" prefWidth="168.0" text="EmailAddress" />
                                 </columns>
                               </TableView>
                            </children>
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="entry_form" layoutX="99.0" layoutY="63.0" prefHeight="616.0" prefWidth="915.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="entry_form" layoutX="99.0" layoutY="63.0" prefHeight="616.0" prefWidth="915.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="37.0" layoutY="38.0" prefHeight="547.0" prefWidth="381.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="37.0" layoutY="38.0" prefHeight="547.0" prefWidth="381.0" style="-fx-background-color: #f6f6f6;">
                            <children>
-                              <Label layoutX="26.0" layoutY="75.0" text="Type :">
+                              <Label layoutX="31.0" layoutY="101.0" prefHeight="21.0" prefWidth="60.0" text="Type :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="26.0" layoutY="122.0" text="Categorie :">
+                              <Label layoutX="31.0" layoutY="139.0" prefHeight="24.0" prefWidth="108.0" text="Categorie :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="31.0" layoutY="166.0" text="current Stock :">
+                              <Label layoutX="30.0" layoutY="177.0" prefHeight="20.0" prefWidth="149.0" text="Current Stock :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="26.0" layoutY="42.0" text="Reference :">
+                              <Label layoutX="31.0" layoutY="65.0" text="Reference :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="31.0" layoutY="213.0" text="Brand :">
+                              <Label layoutX="31.0" layoutY="214.0" prefHeight="19.0" prefWidth="73.0" text="Brand :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="28.0" layoutY="253.0" text="StockMax :">
+                              <Label layoutX="32.0" layoutY="250.0" prefHeight="22.0" prefWidth="107.0" text="StockMax :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="reference_label" layoutX="150.0" layoutY="44.0" prefHeight="21.0" prefWidth="192.0">
+                              <Label fx:id="reference_label" layoutX="151.0" layoutY="67.0" prefHeight="21.0" prefWidth="192.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="type_label" layoutX="105.0" layoutY="77.0" prefHeight="21.0" prefWidth="209.0">
+                              <Label fx:id="type_label" layoutX="156.0" layoutY="103.0" prefHeight="21.0" prefWidth="209.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="category_label" layoutX="138.0" layoutY="124.0" prefHeight="21.0" prefWidth="197.0">
+                              <Label fx:id="category_label" layoutX="162.0" layoutY="141.0" prefHeight="21.0" prefWidth="197.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="stock_label" layoutX="181.0" layoutY="168.0" prefHeight="21.0" prefWidth="183.0">
+                              <Label fx:id="stock_label" layoutX="182.0" layoutY="179.0" prefHeight="21.0" prefWidth="183.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="brand_label" layoutX="119.0" layoutY="215.0" prefHeight="21.0" prefWidth="223.0">
+                              <Label fx:id="brand_label" layoutX="136.0" layoutY="216.0" prefHeight="21.0" prefWidth="223.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="stockMax_label" layoutX="150.0" layoutY="255.0" prefHeight="21.0" prefWidth="221.0">
+                              <Label fx:id="stockMax_label" layoutX="150.0" layoutY="255.0" prefHeight="13.0" prefWidth="221.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="48.0" layoutY="299.0" text="Entry informations">
+                              <Label layoutX="89.0" layoutY="304.0" prefHeight="18.0" prefWidth="232.0" text="Enter the new quantity :">
                                  <font>
-                                    <Font size="19.0" />
+                                    <Font name="System Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="26.0" layoutY="335.0" text="Quantity:">
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="newquantity" layoutX="30.0" layoutY="367.0" />
-                              <Button fx:id="submitButton" layoutX="84.0" layoutY="477.0" mnemonicParsing="false" onAction="#submitButtonClicked" text="Submit" />
-                              <TextField fx:id="searchField" layoutX="20.0" layoutY="9.0" onKeyPressed="#searchFieldKeyPressed" promptText="search......" />
-                              <Button layoutX="206.0" layoutY="9.0" mnemonicParsing="false" onAction="#searchButtonClicked" text="search" />
+                              <TextField fx:id="newquantity" layoutX="106.0" layoutY="334.0" prefHeight="24.0" prefWidth="178.0" />
+                              <Button fx:id="submitButton" layoutX="173.0" layoutY="383.0" mnemonicParsing="false" onAction="#submitButtonClicked" prefHeight="28.0" prefWidth="74.0" text="Submit" textFill="#1c1361" />
+                              <TextField fx:id="searchField" layoutX="34.0" layoutY="21.0" onKeyPressed="#searchFieldKeyPressed" prefHeight="20.0" prefWidth="180.0" promptText="search......" />
+                              <Button layoutX="242.0" layoutY="21.0" mnemonicParsing="false" onAction="#searchButtonClicked" text="search" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="428.0" layoutY="38.0" prefHeight="466.0" prefWidth="464.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="428.0" layoutY="38.0" prefHeight="466.0" prefWidth="464.0" style="-fx-background-color: #f6f6f6;">
                            <children>
                               <TableView fx:id="entryTable" layoutX="20.0" layoutY="14.0" prefHeight="426.0" prefWidth="430.0">
                                 <columns>
-                                  <TableColumn fx:id="entryId_col" prefWidth="75.0" text="id" />
-                                  <TableColumn fx:id="entryReference_col" prefWidth="75.0" text="reference" />
-                                    <TableColumn fx:id="entryQuantity_col" prefWidth="75.0" text="Quantity" />
+                                  <TableColumn fx:id="entryReference_col" prefWidth="114.0" text="Reference" />
+                                    <TableColumn fx:id="entryQuantity_col" prefWidth="110.0" text="Quantity" />
                                     <TableColumn fx:id="entryDate_col" prefWidth="204.0" text="Entry date" />
                                 </columns>
                               </TableView>
@@ -281,115 +281,113 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="sortie_form" layoutX="70.0" layoutY="59.0" prefHeight="616.0" prefWidth="915.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="sortie_form" layoutX="70.0" layoutY="59.0" prefHeight="616.0" prefWidth="915.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="46.0" layoutY="32.0" prefHeight="560.0" prefWidth="389.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="46.0" layoutY="32.0" prefHeight="560.0" prefWidth="389.0" style="-fx-background-color: #f6f6f6;">
                            <children>
-                              <Button fx:id="search_button" layoutX="262.0" layoutY="26.0" mnemonicParsing="false" onAction="#sortieSearchButtonClicked" text="search" />
-                              <Label layoutX="21.0" layoutY="73.0" text="Reference :">
+                              <Button fx:id="search_button" layoutX="262.0" layoutY="28.0" mnemonicParsing="false" onAction="#sortieSearchButtonClicked" prefHeight="26.0" prefWidth="62.0" text="search" textFill="#181368" />
+                              <Label layoutX="28.0" layoutY="84.0" text="Reference :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="21.0" layoutY="106.0" text="Type :">
+                              <Label layoutX="27.0" layoutY="117.0" text="Type :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="21.0" layoutY="138.0" text="Category :">
+                              <Label layoutX="28.0" layoutY="153.0" prefHeight="20.0" prefWidth="100.0" text="Category :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="21.0" layoutY="168.0" text="Current Stock :">
+                              <Label layoutX="27.0" layoutY="187.0" prefHeight="26.0" prefWidth="149.0" text="Current Stock :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="21.0" layoutY="199.0" text="Brand :">
+                              <Label layoutX="27.0" layoutY="223.0" prefHeight="20.0" prefWidth="70.0" text="Brand :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="21.0" layoutY="229.0" text="Stock min :">
+                              <Label layoutX="27.0" layoutY="258.0" prefHeight="24.0" prefWidth="113.0" text="Stock min :">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="sortie_reference" layoutX="177.0" layoutY="75.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
+                              <Label layoutX="39.0" layoutY="306.0" prefHeight="14.0" prefWidth="298.0" text="Enter the quantity to retrieve :">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font name="System Bold" size="17.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="sortie_type" layoutX="177.0" layoutY="108.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="sortie_category" layoutX="177.0" layoutY="140.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="sortie_currentStock" layoutX="184.0" layoutY="170.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="sortie_brand" layoutX="177.0" layoutY="201.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="sortie_stockMin" layoutX="184.0" layoutY="231.0" prefHeight="18.0" prefWidth="198.0" textFill="#f8f5f5">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="18.0" layoutY="268.0" text="Enter the quantity to retrieve :">
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="sortie_quantity" layoutX="21.0" layoutY="302.0" />
+                              <TextField fx:id="sortie_quantity" layoutX="92.0" layoutY="347.0" />
                               <TextField fx:id="searchField_sortie" layoutX="27.0" layoutY="28.0" onKeyPressed="#sortieSearchFieldKeyPressed" prefHeight="26.0" prefWidth="220.0" promptText="search ..." />
-                              <Button fx:id="sortie_submit" layoutX="146.0" layoutY="453.0" mnemonicParsing="false" onAction="#sortieSubmitButtonClicked" text="Submit" />
+                              <Button fx:id="sortie_submit" layoutX="153.0" layoutY="395.0" mnemonicParsing="false" onAction="#sortieSubmitButtonClicked" prefHeight="28.0" prefWidth="76.0" text="Submit" textFill="#190c72" />
+                              <Label fx:id="sortie_reference" layoutX="177.0" layoutY="86.0" prefHeight="18.0" prefWidth="198.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_type" layoutX="173.0" layoutY="119.0" prefHeight="21.0" prefWidth="189.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_currentStock" layoutX="177.0" layoutY="190.0" prefHeight="16.0" prefWidth="198.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_category" layoutX="177.0" layoutY="157.0" prefHeight="16.0" prefWidth="198.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_brand" layoutX="164.0" layoutY="225.0" prefHeight="15.0" prefWidth="198.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sortie_stockMin" layoutX="163.0" layoutY="258.0" prefHeight="17.0" prefWidth="198.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="445.0" layoutY="41.0" prefHeight="412.0" prefWidth="446.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="445.0" layoutY="41.0" prefHeight="412.0" prefWidth="446.0" style="-fx-background-color: #f6f6f6;">
                            <children>
                               <TableView fx:id="sortie_table" layoutX="5.0" layoutY="13.0" prefHeight="387.0" prefWidth="436.0">
                                 <columns>
-                                  <TableColumn fx:id="sortie_id_col" prefWidth="44.0" text="id" />
                                   <TableColumn fx:id="sortie_reference_col" prefWidth="131.0" text="Reference" />
-                                    <TableColumn fx:id="sortie_quantity_col" prefWidth="79.0" text="Quantity" />
-                                    <TableColumn fx:id="sortie_date_col" prefWidth="181.0" text="Date" />
+                                    <TableColumn fx:id="sortie_quantity_col" prefWidth="136.0" text="Quantity" />
+                                    <TableColumn fx:id="sortie_date_col" prefWidth="168.0" text="Date" />
                                 </columns>
                               </TableView>
                            </children>
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="historique_form" layoutX="49.0" layoutY="108.0" prefHeight="616.0" prefWidth="915.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="historique_form" layoutX="49.0" layoutY="108.0" prefHeight="616.0" prefWidth="915.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="69.0" layoutY="22.0" prefHeight="560.0" prefWidth="702.0">
+                        <AnchorPane layoutX="69.0" layoutY="22.0" prefHeight="560.0" prefWidth="702.0" style="-fx-background-color: white;">
                            <children>
                               <TableView fx:id="history_table" layoutX="58.0" layoutY="50.0" prefHeight="560.0" prefWidth="702.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <columns>
-                                  <TableColumn fx:id="history_id" prefWidth="46.0" text="id" />
                                   <TableColumn fx:id="history_reference" prefWidth="180.0" text="Reference" />
                                     <TableColumn fx:id="history_quantity" text="Quantity" />
-                                    <TableColumn fx:id="history_date" prefWidth="183.0" text="Date" />
-                                    <TableColumn fx:id="history_user" prefWidth="165.0" text="Username" />
+                                    <TableColumn fx:id="history_date" prefWidth="255.0" text="Date" />
+                                    <TableColumn fx:id="history_user" prefWidth="185.0" text="Username" />
                                 </columns>
                               </TableView>
                            </children>
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="dashboard_form" layoutX="80.0" layoutY="94.0" prefHeight="616.0" prefWidth="915.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="dashboard_form" layoutX="80.0" layoutY="94.0" prefHeight="616.0" prefWidth="915.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane layoutX="14.0" layoutY="343.0" prefHeight="259.0" prefWidth="827.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="14.0" layoutY="343.0" prefHeight="259.0" prefWidth="827.0" style="-fx-background-color: #f6f6f6;">
                            <children>
                               <TableView fx:id="tableView" layoutX="14.0" layoutY="6.0" prefHeight="247.0" prefWidth="800.0">
                                 <columns>
@@ -401,7 +399,7 @@
                               </TableView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="313.0" prefWidth="521.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="313.0" prefWidth="521.0" style="-fx-background-color: #f6f6f6;">
                            <children>
                               <BarChart fx:id="chart" layoutX="11.0" layoutY="6.0" prefHeight="301.0" prefWidth="500.0">
                                  <xAxis>
@@ -413,39 +411,39 @@
                               </BarChart>
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="554.0" layoutY="37.0" prefHeight="231.0" prefWidth="322.0" style="-fx-background-color: orange;">
+                        <AnchorPane layoutX="554.0" layoutY="37.0" prefHeight="231.0" prefWidth="322.0" style="-fx-background-color: #f6f6f6;">
                            <children>
-                              <Label layoutX="20.0" layoutY="12.0" text="New arrival ">
+                              <Label layoutX="20.0" layoutY="18.0" prefHeight="24.0" prefWidth="171.0" text="New arrival ">
                                  <font>
-                                    <Font name="System Bold" size="26.0" />
+                                    <Font name="System Bold" size="25.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="15.0" layoutY="73.0" prefHeight="28.0" prefWidth="103.0" text="Category :">
-                                 <font>
-                                    <Font name="Abyssinica SIL" size="21.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="15.0" layoutY="117.0" prefHeight="28.0" prefWidth="120.0" text="Reference :">
+                              <Label layoutX="24.0" layoutY="73.0" prefHeight="28.0" prefWidth="103.0" text="Category :">
                                  <font>
                                     <Font name="Abyssinica SIL" size="21.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="20.0" layoutY="170.0" prefHeight="28.0" prefWidth="120.0" text="Quantity :">
+                              <Label layoutX="24.0" layoutY="110.0" prefHeight="35.0" prefWidth="120.0" text="Reference :">
                                  <font>
                                     <Font name="Abyssinica SIL" size="21.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="lastArrival_category" layoutX="135.0" layoutY="74.0" prefHeight="26.0" prefWidth="172.0" textFill="WHITE">
+                              <Label layoutX="24.0" layoutY="157.0" prefHeight="28.0" prefWidth="120.0" text="Quantity :">
+                                 <font>
+                                    <Font name="Abyssinica SIL" size="21.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lastArrival_category" layoutX="135.0" layoutY="74.0" prefHeight="26.0" prefWidth="172.0">
                                  <font>
                                     <Font size="21.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="lastArrival_reference" layoutX="143.0" layoutY="118.0" prefHeight="26.0" prefWidth="172.0" textFill="WHITE">
+                              <Label fx:id="lastArrival_reference" layoutX="143.0" layoutY="118.0" prefHeight="26.0" prefWidth="172.0">
                                  <font>
                                     <Font size="21.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="lastArrival_quantity" layoutX="135.0" layoutY="171.0" prefHeight="26.0" prefWidth="172.0" textFill="WHITE">
+                              <Label fx:id="lastArrival_quantity" layoutX="135.0" layoutY="158.0" prefHeight="26.0" prefWidth="172.0">
                                  <font>
                                     <Font size="21.0" />
                                  </font>

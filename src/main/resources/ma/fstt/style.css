@@ -57,3 +57,7 @@
     -fx-padding: 10px 20px;
     -fx-pref-height: 20px;
 }
+.tableview{
+    -fx-control-inner-background: #2F4697;
+    -fx-control-inner-background-alt: derive(-fx-base,80%);
+}

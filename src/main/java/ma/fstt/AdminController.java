@@ -365,7 +365,7 @@ public class AdminController implements Initializable {
     }
 
     public void UpdateHistoryTable(){
-        history_id.setCellValueFactory(new PropertyValueFactory<Sortie,Long>("id"));
+//        history_id.setCellValueFactory(new PropertyValueFactory<Sortie,Long>("id"));
         history_reference.setCellValueFactory(new PropertyValueFactory<Sortie,String>("productReference"));
 
         history_quantity.setCellValueFactory(new PropertyValueFactory<Sortie,Integer>("quantity"));
@@ -419,7 +419,6 @@ public class AdminController implements Initializable {
             // Handle any errors that may occur during database operations
         }
     }
-
     @FXML
     private void sortieSearchFieldKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -549,26 +548,26 @@ public class AdminController implements Initializable {
             references = paramRefDAO.getAllReferences();
 
 
-        TextFields.bindAutoCompletion(searchField, references).setOnAutoCompleted(event -> {
-            String selectedReference = event.getCompletion();
+            TextFields.bindAutoCompletion(searchField, references).setOnAutoCompleted(event -> {
+                String selectedReference = event.getCompletion();
 
-            try {
-                ParametrageDeReference product = sortie_paramRefDAO.getByReference(selectedReference);
+                try {
+                    ParametrageDeReference product = sortie_paramRefDAO.getByReference(selectedReference);
 
-                if (product != null) {
-                    sortie_reference.setText(selectedReference);
-                    sortie_type.setText(product.getType().getName());
-                    sortie_category.setText(product.getCategory().getName());
-                    sortie_currentStock.setText(String.valueOf(product.getQuantity()));
-                    sortie_brand.setText(product.getBrand());
-                    sortie_stockMin.setText(String.valueOf(product.getStockMin()));
-                } else {
-                    System.out.println("Product not found.");
+                    if (product != null) {
+                        sortie_reference.setText(selectedReference);
+                        sortie_type.setText(product.getType().getName());
+                        sortie_category.setText(product.getCategory().getName());
+                        sortie_currentStock.setText(String.valueOf(product.getQuantity()));
+                        sortie_brand.setText(product.getBrand());
+                        sortie_stockMin.setText(String.valueOf(product.getStockMin()));
+                    } else {
+                        System.out.println("Product not found.");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // Handle any errors that may occur during database operations
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                // Handle any errors that may occur during database operations
-            }
             });
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -594,7 +593,7 @@ public class AdminController implements Initializable {
     }
 
     public void UpdateSortieTable(){
-        sortie_id_col.setCellValueFactory(new PropertyValueFactory<Sortie,Long>("id"));
+//        sortie_id_col.setCellValueFactory(new PropertyValueFactory<Sortie,Long>("id"));
         sortie_reference_col.setCellValueFactory(new PropertyValueFactory<Sortie,String>("productReference"));
 
         sortie_quantity_col.setCellValueFactory(new PropertyValueFactory<Sortie,Integer>("quantity"));
@@ -627,7 +626,7 @@ public class AdminController implements Initializable {
     }
 
     public void UpdateEntriesTable(){
-        entryId_col.setCellValueFactory(new PropertyValueFactory<Entry,Integer>("id"));
+//        entryId_col.setCellValueFactory(new PropertyValueFactory<Entry,Integer>("id"));
         entryReference_col.setCellValueFactory(new PropertyValueFactory<Entry,String>("productReference"));
 
         entryQuantity_col.setCellValueFactory(new PropertyValueFactory<Entry,Integer>("quantity"));
@@ -831,7 +830,7 @@ public class AdminController implements Initializable {
     }
 
     public void UpdateTable(){
-        id_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,Long>("id"));
+//        id_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,Long>("id"));
         type_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("type"));
 
         category_col.setCellValueFactory(new PropertyValueFactory<ParametrageDeReference,String>("category"));
@@ -1257,7 +1256,7 @@ public class AdminController implements Initializable {
 
 
     public void UpdateUserTable(){
-        col_id.setCellValueFactory(new PropertyValueFactory<Login,Long>("id"));
+//        col_id.setCellValueFactory(new PropertyValueFactory<Login,Long>("id"));
         col_user.setCellValueFactory(new PropertyValueFactory<Login,String>("username"));
 
         col_password.setCellValueFactory(new PropertyValueFactory<Login,String>("password"));
