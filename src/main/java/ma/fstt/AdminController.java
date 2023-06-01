@@ -1185,6 +1185,13 @@ public class AdminController implements Initializable {
             sortie_form.setVisible(false);
             dashboard_form.setVisible(false);
 
+            paramButton.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            historyButton.setStyle("-fx-background-color:transparent;");
+            userButton.setStyle("-fx-background-color:transparent;");
+            entry_button.setStyle("-fx-background-color:transparent;");
+            sortie_button.setStyle("-fx-background-color:transparent;");
+            dashboard_button.setStyle("-fx-background-color:transparent;");
+
             UpdateTable();
         } else if (event.getSource() == historyButton) {
             parametrageRef_form.setVisible(false);
@@ -1194,6 +1201,12 @@ public class AdminController implements Initializable {
             sortie_form.setVisible(false);
             dashboard_form.setVisible(false);
             UpdateHistoryTable();
+            paramButton.setStyle("-fx-background-color:transparent;");
+            historyButton.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            userButton.setStyle("-fx-background-color:transparent;");
+            entry_button.setStyle("-fx-background-color:transparent;");
+            sortie_button.setStyle("-fx-background-color:transparent;");
+            dashboard_button.setStyle("-fx-background-color:transparent;");
 
         } else if (event.getSource() == userButton){
             user_form.setVisible(true);
@@ -1202,7 +1215,13 @@ public class AdminController implements Initializable {
             entry_form.setVisible(false);
             sortie_form.setVisible(false);
             dashboard_form.setVisible(false);
-            UpdateUserTable();;
+            UpdateUserTable();
+            paramButton.setStyle("-fx-background-color:transparent;");
+            historyButton.setStyle("-fx-background-color:transparent;");
+            userButton.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            entry_button.setStyle("-fx-background-color:transparent;");
+            sortie_button.setStyle("-fx-background-color:transparent;");
+            dashboard_button.setStyle("-fx-background-color:transparent;");
         }else if(event.getSource() == entry_button){
             user_form.setVisible(false);
             parametrageRef_form.setVisible(false);
@@ -1211,6 +1230,12 @@ public class AdminController implements Initializable {
             sortie_form.setVisible(false);
             dashboard_form.setVisible(false);
             UpdateEntriesTable();
+            paramButton.setStyle("-fx-background-color:transparent;");
+            historyButton.setStyle("-fx-background-color:transparent;");
+            userButton.setStyle("-fx-background-color:transparent;");
+            entry_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            sortie_button.setStyle("-fx-background-color:transparent;");
+            dashboard_button.setStyle("-fx-background-color:transparent;");
 
         }else if(event.getSource() == sortie_button) {
             user_form.setVisible(false);
@@ -1220,6 +1245,12 @@ public class AdminController implements Initializable {
             sortie_form.setVisible(true);
             dashboard_form.setVisible(false);
             UpdateSortieTable();
+            paramButton.setStyle("-fx-background-color:transparent;");
+            historyButton.setStyle("-fx-background-color:transparent;");
+            userButton.setStyle("-fx-background-color:transparent;");
+            entry_button.setStyle("-fx-background-color:transparent;");
+            sortie_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            dashboard_button.setStyle("-fx-background-color:transparent;");
         }else if (event.getSource() == dashboard_button) {
             parametrageRef_form.setVisible(false);
             historique_form.setVisible(false);
@@ -1227,6 +1258,12 @@ public class AdminController implements Initializable {
             entry_form.setVisible(false);
             sortie_form.setVisible(false);
             dashboard_form.setVisible(true);
+            paramButton.setStyle("-fx-background-color:transparent;");
+            historyButton.setStyle("-fx-background-color:transparent;");
+            userButton.setStyle("-fx-background-color:transparent;");
+            entry_button.setStyle("-fx-background-color:transparent;");
+            sortie_button.setStyle("-fx-background-color:transparent;");
+            dashboard_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
             configureTableColumns();
 
             lastArrivals();
@@ -1472,7 +1509,7 @@ public class AdminController implements Initializable {
 
         if (userType_comboBox != null) {
             userType_comboBox.setItems(userTypeList);
-        } else {
+        } else if  (userType_comboBox == null){
             showUserTypeErrorAlert();
         }
     }
@@ -1582,7 +1619,7 @@ public class AdminController implements Initializable {
 
     private void configureStripColumn() {
         // Create the strip column
-        TableColumn<ParametrageDeReference, String> stripColumn = new TableColumn<>("Etat de stock");
+        TableColumn<ParametrageDeReference, String> stripColumn = new TableColumn<>("Stock level");
         stripColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getReference()));
         stripColumn.setCellFactory(column -> new TableCell<ParametrageDeReference, String>() {
             @Override

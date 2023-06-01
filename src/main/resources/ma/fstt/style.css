@@ -68,12 +68,12 @@
 .table-view{
     -fx-background-color: transparent;
     -fx-padding:0px;
-    -fx-border-color:linear-gradient(to bottom right, #23825e,#6d6e30);
+    -fx-border-color:#20457C;
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
 }
 .table-view .column-header-background{
-    -fx-background-color: linear-gradient(to bottom right, #23825e,#6d6e30);
+    -fx-background-color: #20457C;
     -fx-background-radius: 8px 8px 0px 0px;
 }
 .table-view .column-header, .filter{
