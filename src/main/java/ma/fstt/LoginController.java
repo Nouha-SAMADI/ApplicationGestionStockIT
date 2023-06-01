@@ -32,12 +32,12 @@ public class LoginController {
                 if (loggedInUser.getUserType().equals("admin")) {
                     FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("admin-view.fxml"));
                     try {
-                        Scene myScene = new Scene(loader.load(), 1100, 616);
+                        Scene myScene = new Scene(loader.load(), 1125, 616);
                         HelloApplication.setScene(myScene);
                     } catch (IOException e) {
                         showErrorMessage("Error", "Operation could not be performed", e.toString());
                     }
-                } else if (loggedInUser.getUserType().equals("User")) {
+                } else if (loggedInUser.getUserType().equals("user")) {
                     FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
                     try {
                         Scene myScene = new Scene(loader.load(), 750, 470);

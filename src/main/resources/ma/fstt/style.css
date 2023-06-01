@@ -47,9 +47,8 @@
     -fx-font-size: 16px;
 }
 
-.buttonPressed:pressed{
-    -fx-background-color: #4CAF50;
-}
+
+
 .login-button {
     -fx-background-color: #222752;
     -fx-text-fill: white;
@@ -57,7 +56,39 @@
     -fx-padding: 10px 20px;
     -fx-pref-height: 20px;
 }
-.tableview{
-    -fx-control-inner-background: #2F4697;
-    -fx-control-inner-background-alt: derive(-fx-base,80%);
+
+
+.shadow{
+    -fx-effect:dropshadow(three-pass-box,rgba(0,0,0,0.4),5,0,0,0);
+}
+.white-bg{
+    -fx-background-color: #fff;
+    -fx-background-radius: 8px;
+}
+.table-view{
+    -fx-background-color: transparent;
+    -fx-padding:0px;
+    -fx-border-color:linear-gradient(to bottom right, #23825e,#6d6e30);
+    -fx-border-radius: 8px;
+    -fx-border-width: 2px;
+}
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(to bottom right, #23825e,#6d6e30);
+    -fx-background-radius: 8px 8px 0px 0px;
+}
+.table-view .column-header, .filter{
+    -fx-background-color:transparent;
+    -fx-size:40px;
+}
+.table-view .column-header .label{
+    -fx-text-fill: #fff;
+    -fx-font-family: "Arial";
+}
+
+.import-btn{
+    -fx-background-color: transparent;
+    -fx-text-fill:red;
+    -fx-font-size:14px;
+    -fx-cursor:hand;
+
 }

@@ -1666,7 +1666,7 @@ public class AdminController implements Initializable {
 
         // Create the data series for the chart
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Product Count");
+//        series.setName("Product Count");
         for (Map.Entry<String, Integer> entry : productCounts.entrySet()) {
             String productReference = entry.getKey();
             int count = entry.getValue();
