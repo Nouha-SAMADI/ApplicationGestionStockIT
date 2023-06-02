@@ -559,7 +559,7 @@ public class AdminController implements Initializable {
             references = paramRefDAO.getAllReferences();
 
 
-            TextFields.bindAutoCompletion(searchField, references).setOnAutoCompleted(event -> {
+            TextFields.bindAutoCompletion(searchField_sortie, references).setOnAutoCompleted(event -> {
                 String selectedReference = event.getCompletion();
 
                 try {
@@ -894,22 +894,22 @@ public class AdminController implements Initializable {
 
     }
 
-
     @FXML
     private void setTypeSelectionListener() {
         type_comboBox.setOnAction(event -> {
-            Type selectedType = type_comboBox.getSelectionModel().getSelectedItem();
-            if (selectedType != null) {
-                if (!selectedType.getName().equalsIgnoreCase("consommable")) {
-                    num_serie.setDisable(true);
-                } else {
-                    num_serie.setDisable(false);
+            try {
+                Type selectedType = type_comboBox.getSelectionModel().getSelectedItem();
+                if (selectedType != null) {
+                    Type selecType = this.typeDAO.getByName(selectedType.getName());
+                    if (!selectedType.getName().equalsIgnoreCase("matériel")) {
+                        num_serie.setDisable(true);
+                    } else {
+                        num_serie.setDisable(false);
+                    }
+                    populateCategoryComboBox(selecType);
                 }
-                try {
-                    populateCategoryComboBox(selectedType);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -1056,7 +1056,7 @@ public class AdminController implements Initializable {
                 selectedRef.setReference(reference.getText());
                 selectedRef.setBrand(marque.getText());
 
-                if (type_comboBox.getValue() != null && !type_comboBox.getValue().getName().equalsIgnoreCase("consommable")) {
+                if (type_comboBox.getValue() != null && !type_comboBox.getValue().getName().equalsIgnoreCase("matériel")) {
                     selectedRef.setSerialNumber(null);
                 } else {
                     // Otherwise, update the serial number from the text field
@@ -1128,23 +1128,24 @@ public class AdminController implements Initializable {
     @FXML
     protected void addTypeScene(){
         try {
-            // Load the addType_view.fxml file
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("addType_view.fxml"));
             Parent root = fxmlLoader.load();
-
-            // Get the controller instance
             AddTypeController addTypeController = fxmlLoader.getController();
             setAddTypeController(addTypeController);
-
-            // Set the ComboBox reference
             this.addTypeController.setComboBox(type_comboBox);
-
-            // Create a new stage for the prompt scene
             Stage promptStage = new Stage();
             promptStage.setScene(new Scene(root));
             promptStage.setTitle("Add type");
-            promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
-            promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
+            promptStage.initModality(Modality.APPLICATION_MODAL);
+            promptStage.showAndWait();
+
+            // Check if the type was added successfully
+            if (addTypeController.isTypeAdded()) {
+                // Close the prompt stage
+                promptStage.close();
+
+                // Add any other necessary logic here
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1153,32 +1154,31 @@ public class AdminController implements Initializable {
     @FXML
     protected void addCategoryScene(){
         try {
-            // Load the addType_view.fxml file
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("addCategory_view.fxml"));
             Parent root = fxmlLoader.load();
-
-            // Get the controller instance
             AddCategoryController addCategoryController = fxmlLoader.getController();
             setAddCategoryController(addCategoryController);
-
-            // Set the ComboBox reference
             this.addCategoryController.setTypeComboBox(type_comboBox);
             this.addCategoryController.setComboBox(category_comboBox);
-
-
-            // Create a new stage for the prompt scene
             Stage promptStage = new Stage();
             promptStage.setScene(new Scene(root));
             promptStage.setTitle("Add category");
-            promptStage.initModality(Modality.APPLICATION_MODAL); // Prevent interaction with other windows
-            promptStage.showAndWait(); // Show the prompt scene and wait for it to be closed
+            promptStage.initModality(Modality.APPLICATION_MODAL);
+            promptStage.showAndWait();
 
+            // Check if the category was added successfully
+            if (addCategoryController.isCategoryAdded()) {
+                // Close the prompt stage
+                promptStage.close();
 
-
+                // Add any other necessary logic here
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
 
 

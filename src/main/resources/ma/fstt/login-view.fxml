@@ -20,10 +20,15 @@
          </image>
       </ImageView>
       <TextField fx:id="username" layoutX="282.0" layoutY="225.0" prefHeight="19.0" prefWidth="260.0" promptText="Username" styleClass="input-label" stylesheets="@style.css" />
-      <PasswordField fx:id="password" layoutX="282.0" layoutY="284.0" prefHeight="41.0" prefWidth="260.0" promptText="Password" styleClass="input-label" stylesheets="@style.css" />
+      <PasswordField fx:id="password" layoutX="282.0" layoutY="284.0" onKeyPressed="#onKeyPressed" prefHeight="41.0" prefWidth="260.0" promptText="Password" styleClass="input-label" stylesheets="@style.css" />
       <Button fx:id="loginButton" layoutX="368.0" layoutY="342.0" mnemonicParsing="false" onAction="#onLoginClickButton" prefHeight="41.0" prefWidth="102.0" styleClass="login-button" stylesheets="@style.css" text="Login">
          <font>
             <Font size="11.0" />
          </font></Button>
+      <ImageView fitHeight="60.0" fitWidth="188.0" layoutX="325.0" layoutY="421.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../polydesign.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

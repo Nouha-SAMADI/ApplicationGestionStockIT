@@ -19,6 +19,7 @@ public class AddCategoryController {
 
     @FXML
     private TextField category;
+    private boolean categoryAdded;
     private TypeDAO typeDAO;
     public AddCategoryController() {
         try {
@@ -87,14 +88,18 @@ public class AddCategoryController {
             }
 
             category.setText("");
-
+            // Set the categoryAdded flag to true
+            categoryAdded = true;
             // Print the selected type
             System.out.println("Selected Type: " + selectedType);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
+    // Method to check if the category was added successfully
+    public boolean isCategoryAdded() {
+        return categoryAdded;
+    }
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

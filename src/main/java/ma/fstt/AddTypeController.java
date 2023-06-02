@@ -19,6 +19,8 @@ public class AddTypeController {
 
     private Type newType;
 
+    private boolean typeAdded;
+
     @FXML
     private ComboBox<Type> typeComboBox; // Reference to the ComboBox
 
@@ -53,12 +55,19 @@ public class AddTypeController {
             Type newType = new Type(0L, typeName);
             typeDao.save(newType);
 
+
             // Add the new type to the ComboBox
             typeComboBox.getItems().add(newType);
             type.setText("");
+            // Set the typeAdded flag to true
+            typeAdded = true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    // Method to check if the type was added successfully
+    public boolean isTypeAdded() {
+        return typeAdded;
     }
 
 

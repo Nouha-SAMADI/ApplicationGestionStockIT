@@ -1,5 +1,6 @@
 package ma.fstt;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import model.LoginDAO;
 
 import java.io.IOException;
@@ -23,7 +26,18 @@ public class LoginController {
 
 
     @FXML
-    public void onLoginClickButton() {
+    public void onLoginClickButton(ActionEvent event) {
+        handleLogin();
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            handleLogin();
+        }
+    }
+
+    private void handleLogin() {
         try {
             LoginDAO ldao = new LoginDAO();
             if (ldao.authentifier(username.getText(), password.getText())) {
@@ -59,6 +73,7 @@ public class LoginController {
             showErrorMessage("Error", "Database Connection", e.toString());
         }
     }
+
     private void showErrorMessage(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(HelloApplication.getStage());

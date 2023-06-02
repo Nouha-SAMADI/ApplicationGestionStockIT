@@ -3,6 +3,7 @@ package ma.fstt;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -16,7 +17,11 @@ public class HelloApplication extends Application {
         myStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 789, 516);
-//        stage.setTitle("Hello!");
+
+
+
+
+        stage.setTitle("StockTrack");
 
         // stage.initStyle(StageStyle.TRANSPARENT);
 

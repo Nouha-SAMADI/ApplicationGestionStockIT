@@ -126,9 +126,7 @@ public class LoginDAO extends BaseDAO<Login>{
         this.resultSet = this.preparedStatement.executeQuery();
 
         while(this.resultSet.next()){
-            System.out.println(this.resultSet.getString(1));
-            System.out.println(this.resultSet.getString(2));
-            System.out.println(this.resultSet.getString(3));
+
              userType = this.resultSet.getString(3);
             if (password.equals(this.resultSet.getString(2))){
                 return true;
