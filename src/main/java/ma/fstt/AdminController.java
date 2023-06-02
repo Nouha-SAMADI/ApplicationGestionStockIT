@@ -54,6 +54,17 @@ public class AdminController implements Initializable {
 
     @FXML
     private Button userButton;
+    @FXML
+    private Button dashboardUser_button;
+    @FXML
+    private Button paramUserButton;
+    @FXML
+    private Button entryUser_button;
+    @FXML
+    private Button sortieUser_button;
+    @FXML
+    private Button historyUserButton;
+
 
     @FXML
     private TableColumn<ParametrageDeReference, String> category_col;
@@ -1177,6 +1188,7 @@ public class AdminController implements Initializable {
     public void switchForm(ActionEvent event){
 
 
+
         if(event.getSource() == paramButton){
             parametrageRef_form.setVisible(true);
             historique_form.setVisible(false);
@@ -1264,6 +1276,93 @@ public class AdminController implements Initializable {
             entry_button.setStyle("-fx-background-color:transparent;");
             sortie_button.setStyle("-fx-background-color:transparent;");
             dashboard_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            configureTableColumns();
+
+            lastArrivals();
+            fillProductChart();
+        }
+
+
+    }
+    public void switchFormUser(ActionEvent event){
+
+
+
+        if(event.getSource() == paramUserButton){
+            parametrageRef_form.setVisible(true);
+            historique_form.setVisible(false);
+            user_form.setVisible(false);
+            entry_form.setVisible(false);
+            sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
+
+            paramUserButton.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            historyUserButton.setStyle("-fx-background-color:transparent;");
+
+            entryUser_button.setStyle("-fx-background-color:transparent;");
+            sortieUser_button.setStyle("-fx-background-color:transparent;");
+            dashboardUser_button.setStyle("-fx-background-color:transparent;");
+
+            UpdateTable();
+        } else if (event.getSource() == historyUserButton) {
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(true);
+            user_form.setVisible(false);
+            entry_form.setVisible(false);
+            sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
+            UpdateHistoryTable();
+            paramUserButton.setStyle("-fx-background-color:transparent;");
+            historyUserButton.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+
+            entryUser_button.setStyle("-fx-background-color:transparent;");
+            sortieUser_button.setStyle("-fx-background-color:transparent;");
+            dashboardUser_button.setStyle("-fx-background-color:transparent;");
+
+
+        }else if(event.getSource() == entryUser_button){
+            user_form.setVisible(false);
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            entry_form.setVisible(true);
+            sortie_form.setVisible(false);
+            dashboard_form.setVisible(false);
+            UpdateEntriesTable();
+            paramUserButton.setStyle("-fx-background-color:transparent;");
+            historyUserButton.setStyle("-fx-background-color:transparent;");
+
+            entryUser_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            sortieUser_button.setStyle("-fx-background-color:transparent;");
+            dashboardUser_button.setStyle("-fx-background-color:transparent;");
+
+        }else if(event.getSource() == sortieUser_button) {
+            user_form.setVisible(false);
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            entry_form.setVisible(false);
+            sortie_form.setVisible(true);
+            dashboard_form.setVisible(false);
+            UpdateSortieTable();
+            paramUserButton.setStyle("-fx-background-color:transparent;");
+            historyUserButton.setStyle("-fx-background-color:transparent;");
+
+            entryUser_button.setStyle("-fx-background-color:transparent;");
+            sortieUser_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+            dashboardUser_button.setStyle("-fx-background-color:transparent;");
+        }else if (event.getSource() == dashboardUser_button) {
+            parametrageRef_form.setVisible(false);
+            historique_form.setVisible(false);
+            user_form.setVisible(false);
+            entry_form.setVisible(false);
+            sortie_form.setVisible(false);
+            dashboard_form.setVisible(true);
+
+            paramUserButton.setStyle("-fx-background-color:transparent;");
+            historyUserButton.setStyle("-fx-background-color:transparent;");
+
+            entryUser_button.setStyle("-fx-background-color:transparent;");
+            sortieUser_button.setStyle("-fx-background-color:transparent;");
+            dashboardUser_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
             configureTableColumns();
 
             lastArrivals();

@@ -38,9 +38,9 @@ public class LoginController {
                         showErrorMessage("Error", "Operation could not be performed", e.toString());
                     }
                 } else if (loggedInUser.getUserType().equals("user")) {
-                    FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+                    FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("user-view.fxml"));
                     try {
-                        Scene myScene = new Scene(loader.load(), 750, 470);
+                        Scene myScene = new Scene(loader.load(), 1125, 616);
                         HelloApplication.setScene(myScene);
                     } catch (IOException e) {
                         showErrorMessage("Error", "Operation could not be performed", e.toString());

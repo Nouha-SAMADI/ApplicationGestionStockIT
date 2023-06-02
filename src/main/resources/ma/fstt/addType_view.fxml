@@ -6,15 +6,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="63.0" prefWidth="463.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AddTypeController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Entrez le type : ">
+      <Label layoutX="14.0" layoutY="14.0" text="Add a type : ">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
       <TextField fx:id="type" layoutX="181.0" layoutY="15.0" />
-      <Button fx:id="add_button" layoutX="375.0" layoutY="15.0" mnemonicParsing="false" onAction="#onAddButtonClick" text="Ajouter" />
+      <Button fx:id="add_button" layoutX="375.0" layoutY="15.0" mnemonicParsing="false" onAction="#onAddButtonClick" text="Add" />
    </children>
 </AnchorPane>

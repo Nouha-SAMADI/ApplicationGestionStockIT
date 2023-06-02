@@ -92,3 +92,7 @@
     -fx-cursor:hand;
 
 }
+.button-user:disabled {
+    pointer-events: none;
+    opacity: 0.65;
+}
