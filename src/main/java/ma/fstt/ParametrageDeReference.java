@@ -11,36 +11,42 @@ public class ParametrageDeReference {
     private String brand;
     private String serialNumber;
 
-    public ParametrageDeReference(long id, Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, String serialNumber) {
-        this.id = id;
-        this.type = type;
-        this.category = category;
-        this.quantity = quantity;
-        this.stockMax = stockMax;
-        this.stockMin = stockMin;
-        this.reference = reference;
-        this.brand = brand;
-        this.serialNumber = serialNumber;
-    }
 
-    public ParametrageDeReference(long id, Type type, Category categorie, int quantity, int stockMax, int stockMin, String reference, String brand) {
-        this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,null);
-    }
 
-    public ParametrageDeReference(Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, String serialNumber) {
-        this.type = type;
-        this.category = category;
-        this.quantity = quantity;
-        this.stockMax = stockMax;
-        this.stockMin = stockMin;
-        this.reference = reference;
-        this.brand = brand;
-        this.serialNumber = serialNumber;
-    }
 
-    public ParametrageDeReference() {
 
-    }
+
+        public ParametrageDeReference(long id, Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, String serialNumber) {
+            this.id = id;
+            this.type = type;
+            this.category = category;
+            this.quantity = quantity;
+            this.stockMax = stockMax;
+            this.stockMin = stockMin;
+            this.reference = reference;
+            this.brand = brand;
+            this.serialNumber = serialNumber;
+        }
+
+        public ParametrageDeReference(long id, Type type, Category categorie, int quantity, int stockMax, int stockMin, String reference, String brand) {
+            this(id,type,categorie,quantity,stockMax,stockMin,reference,brand,null);
+        }
+
+        public ParametrageDeReference(Type type, Category category, int quantity, int stockMax, int stockMin, String reference, String brand, String serialNumber) {
+            this.type = type;
+            this.category = category;
+            this.quantity = quantity;
+            this.stockMax = stockMax;
+            this.stockMin = stockMin;
+            this.reference = reference;
+            this.brand = brand;
+            this.serialNumber = serialNumber;
+        }
+
+        public ParametrageDeReference() {
+
+        }
+
 
 
     public long getId() {
@@ -114,4 +120,5 @@ public class ParametrageDeReference {
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
+
 }

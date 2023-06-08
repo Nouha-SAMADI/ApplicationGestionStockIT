@@ -21,9 +21,14 @@ public class HelloApplication extends Application {
 
 
 
-        stage.setTitle("StockTrack");
+        stage.setTitle("StockTrack Polydesign Systems version 1.0.1");
 
         // stage.initStyle(StageStyle.TRANSPARENT);
+        Image icon = new Image(getClass().getResourceAsStream("/icons/icon.ico"));
+
+        // Set the application's icon
+        stage.getIcons().add(icon);
+
 
         stage.setScene(scene);
         stage.show();

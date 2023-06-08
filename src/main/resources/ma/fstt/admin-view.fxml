@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="1125.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
+<AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1332.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -97,6 +97,11 @@
                         <Image url="@../../output.png" />
                      </image>
                   </ImageView>
+                  <ImageView fitHeight="116.0" fitWidth="154.0" layoutX="72.0" layoutY="549.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../polydesign.png" />
+                     </image>
+                  </ImageView>
                </children></AnchorPane>
          </left>
          <center>
@@ -126,7 +131,7 @@
                                  </styleClass>
                               </AnchorPane>
                            </children></AnchorPane>
-                        <AnchorPane layoutX="20.0" layoutY="15.0" prefHeight="598.0" prefWidth="186.0" style="-fx-background-color: #f6f6f6;" stylesheets="@style.css">
+                        <AnchorPane layoutX="20.0" layoutY="4.0" prefHeight="609.0" prefWidth="192.0" style="-fx-background-color: #f6f6f6;" stylesheets="@style.css">
                            <children>
                               <ComboBox fx:id="type_comboBox" layoutX="6.0" layoutY="25.0" onAction="#populateTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="choose" />
                               <Label layoutX="5.0" layoutY="6.0" prefHeight="17.0" prefWidth="121.0" text="Type :" />

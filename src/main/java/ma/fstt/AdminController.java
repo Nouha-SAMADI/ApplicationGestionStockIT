@@ -32,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import model.*;
 import org.controlsfx.control.Notifications;
@@ -40,6 +41,9 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
@@ -901,7 +905,7 @@ public class AdminController implements Initializable {
                 Type selectedType = type_comboBox.getSelectionModel().getSelectedItem();
                 if (selectedType != null) {
                     Type selecType = this.typeDAO.getByName(selectedType.getName());
-                    if (!selectedType.getName().equalsIgnoreCase("matériel")) {
+                    if (!selectedType.getName().equalsIgnoreCase("Material")) {
                         num_serie.setDisable(true);
                     } else {
                         num_serie.setDisable(false);
@@ -938,10 +942,35 @@ public class AdminController implements Initializable {
     }
 
 
+    @FXML
+    private ImageView pictureImageView;
+    private File selectPictureFile() {
+        // Create a file chooser dialog
+        FileChooser fileChooser = new FileChooser();
+
+        // Set the title of the dialog
+        fileChooser.setTitle("Select Picture File");
+
+        // Set the initial directory for the dialog (optional)
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        // Set the file extension filters (optional)
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png");
+        fileChooser.getExtensionFilters().add(imageFilter);
+
+        // Show the file chooser dialog
+        Stage stage = (Stage) pictureImageView.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        // Return the selected file
+        return selectedFile;
+    }
+
+
+
 
     @FXML
     protected void onSaveButtonClick() {
-
         // Access the database
 
         try {
@@ -1031,6 +1060,7 @@ public class AdminController implements Initializable {
         }
     }
 
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -1040,60 +1070,62 @@ public class AdminController implements Initializable {
     }
 
 
+
     @FXML
     protected void onUpdateButtonClick() {
         // get the selected item from the table
         ParametrageDeReference selectedRef = parametrageRef_table.getSelectionModel().getSelectedItem();
 
 
-            try {
-                // update the record in the database with the new values from the text fields
-                selectedRef.setType(type_comboBox.getValue());
-                selectedRef.setCategory(category_comboBox.getValue());
-                selectedRef.setQuantity(Integer.parseInt(quantity.getText()));
-                selectedRef.setStockMax(Integer.parseInt(stock_max.getText()));
-                selectedRef.setStockMin(Integer.parseInt(stock_min.getText()));
-                selectedRef.setReference(reference.getText());
-                selectedRef.setBrand(marque.getText());
+        try {
+            // update the record in the database with the new values from the text fields
+            selectedRef.setType(type_comboBox.getValue());
+            selectedRef.setCategory(category_comboBox.getValue());
+            selectedRef.setQuantity(Integer.parseInt(quantity.getText()));
+            selectedRef.setStockMax(Integer.parseInt(stock_max.getText()));
+            selectedRef.setStockMin(Integer.parseInt(stock_min.getText()));
+            selectedRef.setReference(reference.getText());
+            selectedRef.setBrand(marque.getText());
 
-                if (type_comboBox.getValue() != null && !type_comboBox.getValue().getName().equalsIgnoreCase("matériel")) {
-                    selectedRef.setSerialNumber(null);
+            if (type_comboBox.getValue() != null && !type_comboBox.getValue().getName().equalsIgnoreCase("matériel")) {
+                selectedRef.setSerialNumber(null);
+            } else {
+                // Otherwise, update the serial number from the text field
+                if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
+                    selectedRef.setSerialNumber(num_serie.getText());
                 } else {
-                    // Otherwise, update the serial number from the text field
-                    if (num_serie.getText() != null && !num_serie.getText().isEmpty()) {
-                        selectedRef.setSerialNumber(num_serie.getText());
-                    } else {
-                        selectedRef.setSerialNumber(null);
-                    }
+                    selectedRef.setSerialNumber(null);
                 }
-
-
-
-                ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
-                paramDAO.update(selectedRef);
-
-                // update the table view
-                UpdateTable();
-
-
-                num_serie.setText("");
-                type_comboBox.getSelectionModel().clearSelection();
-                category_comboBox.getSelectionModel().clearSelection();
-                quantity.setText("");
-                stock_max.setText("");
-                stock_min.setText("");
-                reference.setText("");
-                marque.setText("");
-
-                showAlert(Alert.AlertType.INFORMATION, "Success", null, "Product modified successfully.");
-
-
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
 
+
+
+            ParametrageDeReferenceDAO paramDAO = new ParametrageDeReferenceDAO();
+            paramDAO.update(selectedRef);
+
+            // update the table view
+            UpdateTable();
+
+
+            num_serie.setText("");
+            type_comboBox.getSelectionModel().clearSelection();
+            category_comboBox.getSelectionModel().clearSelection();
+            quantity.setText("");
+            stock_max.setText("");
+            stock_min.setText("");
+            reference.setText("");
+            marque.setText("");
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "Product modified successfully.");
+
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
 
 
 
@@ -1446,28 +1478,23 @@ public class AdminController implements Initializable {
                 return;
             }
 
-
-
-            String emailPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
-            String enteredEmail = email.getText().trim();
-
-            if (!enteredEmail.matches(emailPattern)) {
-                showAlert(Alert.AlertType.WARNING, "Error", null, "Please enter a valid Gmail address.");
-                return;
-            }
             String profilePicturePath = (String) imageView.getUserData();
-            if (profilePicturePath == null) {
-                showAlert(Alert.AlertType.WARNING, "Error", null, "Please choose a profile picture.");
-                return;
-            }
 
             // Save the Login object in the database
-            Login refe = new Login(0L, username.getText(), password.getText(), userType_comboBox.getValue(), enteredEmail);
-            refe.setProfilePicturePath(profilePicturePath);
+            Login refe = new Login(0L, username.getText(), password.getText(), userType_comboBox.getValue(), null);
+
+            // Set the email if it's not empty
+            if (!email.getText().isEmpty()) {
+                refe.setEmailAddress(email.getText());
+            }
+
+            // Set the profile picture path if it's not null
+            if (profilePicturePath != null) {
+                refe.setProfilePicturePath(profilePicturePath);
+            }
 
             loginDAO.save(refe);
             UpdateUserTable();
-
 
             // Clear the form fields
             username.setText("");
@@ -1482,6 +1509,7 @@ public class AdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 
 
 

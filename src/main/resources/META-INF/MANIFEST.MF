@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
 Main-Class: ma.fstt.Main
+JavaFX-VM-Args: --add-exports=javafx.base/com.sun.javafx.event=org.controlsfx.controls
+
 

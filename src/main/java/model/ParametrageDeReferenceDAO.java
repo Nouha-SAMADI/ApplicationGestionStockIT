@@ -29,6 +29,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         this.preparedStatement.setString(7, object.getBrand());
         this.preparedStatement.setString(8, object.getSerialNumber());
 
+
         this.preparedStatement.execute();
 
     }
@@ -46,11 +47,27 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
         this.preparedStatement.setString(6, object.getReference());
         this.preparedStatement.setString(7, object.getBrand());
         this.preparedStatement.setString(8, object.getSerialNumber());
+
         this.preparedStatement.setLong(9, object.getId());
 
         this.preparedStatement.executeUpdate();
 
     }
+    public String getPictureById(Long id) throws SQLException {
+        String request = "SELECT picture FROM parametrageRef WHERE id = ?";
+
+        this.preparedStatement = this.connection.prepareStatement(request);
+        this.preparedStatement.setLong(1, id);
+
+        this.resultSet = this.preparedStatement.executeQuery();
+
+        if (this.resultSet.next()) {
+            return this.resultSet.getString("picture");
+        }
+
+        return null;
+    }
+
 
     @Override
     public void delete(ParametrageDeReference object) throws SQLException {
@@ -201,6 +218,7 @@ public class ParametrageDeReferenceDAO extends BaseDAO<ParametrageDeReference>{
             String reference = this.resultSet.getString("reference");
             String brand = this.resultSet.getString("brand");
             String serialNumber = this.resultSet.getString("serialNumber");
+
 
             Type type = types.get(typeId);
             Category category = categories.get(categoryId);
