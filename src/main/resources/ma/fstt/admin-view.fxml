@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1332.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
+<AnchorPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1164.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ma.fstt.AdminController">
    <children>
       <BorderPane layoutX="107.0" layoutY="37.0" prefHeight="473.0" prefWidth="791.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -155,11 +155,12 @@
                               <ComboBox fx:id="category_comboBox" layoutX="6.0" layoutY="97.0" prefHeight="25.0" prefWidth="138.0" promptText="choose" />
                               <Label layoutX="11.0" layoutY="134.0" prefHeight="17.0" prefWidth="142.0" text="Serial number :" />
                               <TextField fx:id="num_serie" layoutX="23.0" layoutY="158.0" prefHeight="15.0" prefWidth="139.0" />
-                              <Button fx:id="addCategory_button" layoutX="149.0" layoutY="97.0" mnemonicParsing="false" onAction="#addCategoryScene" prefHeight="25.0" prefWidth="29.0" text="+" />
+                              <Button fx:id="addCategory_button" layoutX="149.0" layoutY="85.0" mnemonicParsing="false" onAction="#addCategoryScene" prefHeight="25.0" prefWidth="29.0" text="+" />
                               <Button fx:id="update_button" layoutX="93.0" layoutY="536.0" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="24.0" prefWidth="66.0" text="Update" />
                               <Button fx:id="delete_button" layoutX="19.0" layoutY="565.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="24.0" prefWidth="61.0" text="Delete" />
                               <Button fx:id="reset_button" layoutX="93.0" layoutY="565.0" mnemonicParsing="false" onAction="#onResetButtonClick" prefHeight="24.0" prefWidth="67.0" text="Reset" />
                               <Button fx:id="add_button" layoutX="20.0" layoutY="536.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="24.0" prefWidth="58.0" text="Save" />
+                              <Button fx:id="deleteCategoryButton" layoutX="149.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="29.0" text="-" />
                            </children>
                            <styleClass>
                               <String fx:value="shadow" />
@@ -437,7 +438,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="dashboard_form" layoutX="80.0" layoutY="94.0" prefHeight="616.0" prefWidth="915.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="dashboard_form" prefHeight="616.0" prefWidth="915.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane layoutX="14.0" layoutY="343.0" prefHeight="259.0" prefWidth="827.0" style="-fx-background-color: #f6f6f6;" stylesheets="@style.css">
                            <children>
@@ -518,6 +519,7 @@
                               <String fx:value="shadow" />
                               <String fx:value="white-bg" />
                            </styleClass></AnchorPane>
+                        <Button fx:id="refreshButton" layoutX="764.0" layoutY="315.0" mnemonicParsing="false" text="Refresh" />
                         
                      </children>
                   </AnchorPane>

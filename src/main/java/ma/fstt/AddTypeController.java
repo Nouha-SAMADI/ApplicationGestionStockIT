@@ -5,6 +5,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import model.TypeDAO;
 
 import java.sql.SQLException;
@@ -19,7 +22,7 @@ public class AddTypeController {
 
     private Type newType;
 
-    private boolean typeAdded;
+
 
     @FXML
     private ComboBox<Type> typeComboBox; // Reference to the ComboBox
@@ -59,16 +62,26 @@ public class AddTypeController {
             // Add the new type to the ComboBox
             typeComboBox.getItems().add(newType);
             type.setText("");
-            // Set the typeAdded flag to true
-            typeAdded = true;
+            // Close the Add Type scene
+            closeScene();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    // Method to check if the type was added successfully
-    public boolean isTypeAdded() {
-        return typeAdded;
+
+
+    @FXML
+    protected void closeScene() {
+        Stage stage = (Stage) add_button.getScene().getWindow();
+        stage.close();
     }
+    @FXML
+    private void handleKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            // Handle the Enter key press event here
+            onAddButtonClick();
+        }
 
-
+    }
 }

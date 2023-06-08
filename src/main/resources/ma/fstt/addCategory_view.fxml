@@ -13,7 +13,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField fx:id="category" layoutX="318.0" layoutY="26.0" />
+      <TextField fx:id="category" layoutX="318.0" layoutY="26.0" onKeyPressed="#handleKeyPress" />
       <Button fx:id="add_button" layoutX="502.0" layoutY="26.0" mnemonicParsing="false" onAction="#onAddButtonClick" text="Add" />
    </children>
 </AnchorPane>

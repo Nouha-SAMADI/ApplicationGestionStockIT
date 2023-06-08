@@ -5,6 +5,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import model.CategoryDAO;
 import model.TypeDAO;
 
@@ -19,7 +22,7 @@ public class AddCategoryController {
 
     @FXML
     private TextField category;
-    private boolean categoryAdded;
+
     private TypeDAO typeDAO;
     public AddCategoryController() {
         try {
@@ -88,17 +91,20 @@ public class AddCategoryController {
             }
 
             category.setText("");
-            // Set the categoryAdded flag to true
-            categoryAdded = true;
+            closeScene();
+
             // Print the selected type
             System.out.println("Selected Type: " + selectedType);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    // Method to check if the category was added successfully
-    public boolean isCategoryAdded() {
-        return categoryAdded;
+
+
+    @FXML
+    protected void closeScene() {
+        Stage stage = (Stage) add_button.getScene().getWindow();
+        stage.close();
     }
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -107,6 +113,13 @@ public class AddCategoryController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    @FXML
+    private void handleKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            // Handle the Enter key press event here
+            onAddButtonClick();
+        }
 
 
+    }
 }

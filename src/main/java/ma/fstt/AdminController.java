@@ -154,6 +154,8 @@ public class AdminController implements Initializable {
     private AddCategoryController addCategoryController;
     @FXML
     private Button addCategory_button;
+    @FXML
+    private Button deleteCategoryButton;
     //---------------------------------User attributes----------------
     @FXML
     private Button ajouter;
@@ -352,6 +354,8 @@ public class AdminController implements Initializable {
 
     @FXML
     private Label lastArrival_reference;
+    @FXML
+    private Button refreshButton;
 
 
 
@@ -553,6 +557,7 @@ public class AdminController implements Initializable {
             e.printStackTrace();
             // Handle any errors that may occur during database operations
         }
+
     }
 
 
@@ -731,6 +736,7 @@ public class AdminController implements Initializable {
             e.printStackTrace();
             // Handle any errors that may occur during database operations
         }
+
     }
 
     @FXML
@@ -880,6 +886,8 @@ public class AdminController implements Initializable {
     }
 
 
+
+
     // Method to set the addCategoryController reference
 
     public void setAddCategoryController(AddCategoryController addCategoryController) {
@@ -919,12 +927,17 @@ public class AdminController implements Initializable {
     }
 
 
-    @FXML
     private void populateCategoryComboBox(Type selectedType) throws SQLException {
-        List<Category> categories = categoryDAO.getByType(selectedType);
+        // Clear the existing items
         category_comboBox.getItems().clear();
+
+        // Retrieve the updated list of categories
+        List<Category> categories = categoryDAO.getByType(selectedType);
+
+        // Add the categories to the combo box
         category_comboBox.getItems().addAll(categories);
     }
+
     @FXML
     void onResetButtonClick() {
         // Clear the text fields
@@ -968,6 +981,24 @@ public class AdminController implements Initializable {
 
 
 
+
+    @FXML
+    private void deleteSelectedCategory() {
+        Category selectedCategory = category_comboBox.getSelectionModel().getSelectedItem();
+        if (selectedCategory == null) {
+            showAlert("Error", "Please select a category to delete.");
+            return;
+        }
+
+        try {
+            categoryDAO.delete(selectedCategory);
+            showAlert(Alert.AlertType.INFORMATION, "Success", null, "Category deleted successfully.");
+            populateCategoryComboBox(type_comboBox.getValue());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to delete category.");
+        }
+    }
 
     @FXML
     protected void onSaveButtonClick() {
@@ -1171,13 +1202,7 @@ public class AdminController implements Initializable {
             promptStage.initModality(Modality.APPLICATION_MODAL);
             promptStage.showAndWait();
 
-            // Check if the type was added successfully
-            if (addTypeController.isTypeAdded()) {
-                // Close the prompt stage
-                promptStage.close();
 
-                // Add any other necessary logic here
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1198,13 +1223,7 @@ public class AdminController implements Initializable {
             promptStage.initModality(Modality.APPLICATION_MODAL);
             promptStage.showAndWait();
 
-            // Check if the category was added successfully
-            if (addCategoryController.isCategoryAdded()) {
-                // Close the prompt stage
-                promptStage.close();
 
-                // Add any other necessary logic here
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1308,10 +1327,11 @@ public class AdminController implements Initializable {
             entry_button.setStyle("-fx-background-color:transparent;");
             sortie_button.setStyle("-fx-background-color:transparent;");
             dashboard_button.setStyle("-fx-background-color:linear-gradient(to right bottom, #1e237c, #2d448e, #48639a, #6a81a4, #2B466F);");
+
+            fillProductChart();
+            lastArrivals();
             configureTableColumns();
 
-            lastArrivals();
-            fillProductChart();
         }
 
 
@@ -1654,7 +1674,7 @@ public class AdminController implements Initializable {
     }
 
 
-    //------------------------------------------- -------------------------------------------
+    //-------------------------------------------Dashboard-------------------------------------------
 
     public void logout(){
         try{
@@ -1784,6 +1804,7 @@ public class AdminController implements Initializable {
             }
         });
 
+
         // Add the strip column to the table
         tableView.getColumns().add(stripColumn);
 
@@ -1804,7 +1825,7 @@ public class AdminController implements Initializable {
             // Iterate over the list and check for low stock
             for (ParametrageDeReference param : paramList) {
                 if (param.getQuantity() == param.getStockMin()) {
-                    String notificationMessage = "Product " + param.getCategory() + " (" + param.getReference() + ") is almost out of stock.";
+                    String notificationMessage =  param.getCategory() + " (" + param.getReference() + ") is almost out of stock.";
                     showNotification(notificationMessage);
                 }
             }
@@ -1907,6 +1928,7 @@ public class AdminController implements Initializable {
     }
 
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -1933,7 +1955,20 @@ public class AdminController implements Initializable {
         checkStockAndShowNotification();
         lastArrivals();
         fillProductChart();
+        // Refresh the dashboard by calling the necessary methodsor
+        refreshButton.setOnAction(event -> {
 
+            tableView.setItems(addDashboardTableList());
+            fillProductChart();
+            lastArrivals();
+            configureTableColumns();
+
+        });
+        //  handle category delete action
+        deleteCategoryButton.setOnAction(event -> {
+
+            deleteSelectedCategory();
+        });
 
 
 
@@ -1959,7 +1994,7 @@ public class AdminController implements Initializable {
             }
         });
 
-        // Assuming you have an ImageView component named 'imageView' in your FXML file
+
 
         gestionutili_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -2046,7 +2081,19 @@ public class AdminController implements Initializable {
         configureStripColumn();
 
 
+        //  key press event handler for newquantity TextField
+        newquantity.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                submitButtonClicked(); // Call submitButtonClicked method on Enter key press
+            }
+        });
 
+        //  key press event handler for newquantity TextField
+        sortie_quantity.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                sortieSubmitButtonClicked(); // Call submitButtonClicked method on Enter key press
+            }
+        });
 
 
 

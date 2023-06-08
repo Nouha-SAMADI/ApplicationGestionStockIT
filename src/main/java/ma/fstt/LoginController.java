@@ -47,6 +47,14 @@ public class LoginController {
                     FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("admin-view.fxml"));
                     try {
                         Scene myScene = new Scene(loader.load(), 1125, 616);
+                        // Calculate the center coordinates
+                        double centerX = (HelloApplication.getStage().getWidth() - myScene.getWidth()) / 2;
+                        double centerY = (HelloApplication.getStage().getHeight() - myScene.getHeight()) / 2;
+
+                        // Position the window at the center
+                        HelloApplication.getStage().setX(centerX);
+                        HelloApplication.getStage().setY(centerY);
+
                         HelloApplication.setScene(myScene);
                     } catch (IOException e) {
                         showErrorMessage("Error", "Operation could not be performed", e.toString());
